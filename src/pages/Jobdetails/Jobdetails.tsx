@@ -148,7 +148,7 @@ export default function JobDetails() {
               <div className="jb-meta mt-2">
                 <span className="jb-meta-item">
                   <Building2 size={13} />
-                  {job?.company}
+                  {job?.company?.name}
                 </span>
                 <span className="jb-meta-item">
                   <MapPin size={13} />
@@ -215,7 +215,7 @@ export default function JobDetails() {
             </span>
           </div>
           <div className="jb-card-body">
-            <p className="jd-prose">{job?.about}</p>
+            <p className="jd-prose">{job?.description}</p>
           </div>
         </div>
 
