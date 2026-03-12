@@ -1,0 +1,500 @@
+/* ═══════════════════════════════════════════════════════════
+   Hakeem — Jobs Shared Stylesheet
+   Used by: JobList, JobDetails, JobApplication
+   Brand tokens consistent with all Hakeem pages
+   ═══════════════════════════════════════════════════════════ */
+
+/* @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"); */
+
+/* ── Tokens ───────────────────────────────────────────────── */
+:root {
+  --primary: #4f46e5;
+  --primary-dk: #3730a3;
+  --primary-lt: #818cf8;
+  --accent: #06b6d4;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --surface: #f8f7ff;
+  --white: #ffffff;
+  --text: #1e1b3a;
+  --muted: #64748b;
+  --border: #e2e0f5;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "DM Sans", sans-serif;
+  color: var(--text);
+  background: var(--surface);
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Syne", sans-serif;
+}
+
+/* ── Animations ───────────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes progFill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--w);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -400% 0;
+  }
+  100% {
+    background-position: 400% 0;
+  }
+}
+@keyframes countIn {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.au {
+  opacity: 0;
+  animation: fadeUp 0.5s ease forwards;
+}
+.ai {
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+}
+.ac {
+  opacity: 0;
+  animation: countIn 0.45s ease forwards;
+}
+.d1 {
+  animation-delay: 0.07s;
+}
+.d2 {
+  animation-delay: 0.14s;
+}
+.d3 {
+  animation-delay: 0.21s;
+}
+.d4 {
+  animation-delay: 0.28s;
+}
+.d5 {
+  animation-delay: 0.35s;
+}
+.d6 {
+  animation-delay: 0.42s;
+}
+
+/* ════════════════════════════════════════════════════════════
+   HEADER (shared across all 3 pages)
+════════════════════════════════════════════════════════════ */
+.jb-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+.jb-header.scrolled {
+  box-shadow: 0 4px 24px rgba(79, 70, 229, 0.09);
+}
+
+.jb-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  color: #fff;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.32);
+}
+.jb-brand {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+/* ════════════════════════════════════════════════════════════
+   PAGE WRAPPER
+════════════════════════════════════════════════════════════ */
+.jb-page {
+  min-height: 100vh;
+  background: var(--surface);
+}
+.jb-main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+}
+
+/* ════════════════════════════════════════════════════════════
+   CARD
+════════════════════════════════════════════════════════════ */
+.jb-card {
+  background: var(--white);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 14px rgba(79, 70, 229, 0.05);
+  overflow: hidden;
+}
+.jb-card-header {
+  padding: 1.3rem 1.6rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.jb-card-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.97rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.jb-card-body {
+  padding: 1.4rem 1.6rem;
+}
+
+/* ════════════════════════════════════════════════════════════
+   BUTTONS
+════════════════════════════════════════════════════════════ */
+.jb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border-radius: 10px;
+  padding: 0.6rem 1.4rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.jb-btn--primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dk));
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.28);
+}
+.jb-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(79, 70, 229, 0.38);
+}
+.jb-btn--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.jb-btn--outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+.jb-btn--outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.jb-btn--ghost {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+.jb-btn--ghost:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.jb-btn--success {
+  background: linear-gradient(135deg, var(--success), #059669);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+.jb-btn--success:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+}
+
+.jb-btn--sm {
+  padding: 0.36rem 0.85rem !important;
+  font-size: 0.8rem !important;
+}
+.jb-btn--lg {
+  padding: 0.75rem 2rem;
+  font-size: 0.95rem;
+}
+.jb-btn--full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ════════════════════════════════════════════════════════════
+   BADGES
+════════════════════════════════════════════════════════════ */
+.jb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.78rem;
+  border-radius: 999px;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.jb-badge--green {
+  background: rgba(16, 185, 129, 0.1);
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.jb-badge--indigo {
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--primary);
+  border: 1px solid rgba(79, 70, 229, 0.18);
+}
+.jb-badge--cyan {
+  background: rgba(6, 182, 212, 0.08);
+  color: #0e7490;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+.jb-badge--gray {
+  background: rgba(100, 116, 139, 0.09);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.jb-badge--dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════════════════════════
+   META ROW (icon + text pairs)
+════════════════════════════════════════════════════════════ */
+.jb-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+}
+.jb-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ════════════════════════════════════════════════════════════
+   SKILL TAG
+════════════════════════════════════════════════════════════ */
+.jb-tag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(79, 70, 229, 0.07);
+  color: var(--primary);
+  border: 1px solid rgba(79, 70, 229, 0.15);
+  border-radius: 999px;
+  padding: 0.24rem 0.82rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ════════════════════════════════════════════════════════════
+   FORM ELEMENTS
+════════════════════════════════════════════════════════════ */
+.jb-label {
+  display: block;
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+.jb-input,
+.jb-select,
+.jb-textarea {
+  width: 100%;
+  padding: 0.63rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: #fff;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.jb-input:focus,
+.jb-select:focus,
+.jb-textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+.jb-input::placeholder,
+.jb-textarea::placeholder {
+  color: #b0b8d0;
+}
+.jb-textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+.jb-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath fill='%2364748b' d='M0 0l5.5 7L11 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  padding-right: 2.2rem;
+}
+
+/* ════════════════════════════════════════════════════════════
+   PROGRESS BAR
+════════════════════════════════════════════════════════════ */
+.jb-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #eee;
+  overflow: hidden;
+}
+.jb-track--md {
+  height: 10px;
+}
+.jb-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  animation: progFill 0.9s ease forwards;
+  width: 0;
+}
+
+/* ════════════════════════════════════════════════════════════
+   CHECK LIST ITEM
+════════════════════════════════════════════════════════════ */
+.jb-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+.jb-check-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.jb-check-text {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* ════════════════════════════════════════════════════════════
+   DIVIDER
+════════════════════════════════════════════════════════════ */
+.jb-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* ════════════════════════════════════════════════════════════
+   SECTION LABEL (inside cards)
+════════════════════════════════════════════════════════════ */
+.jb-section-label {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 0.8rem;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .jb-main {
+    padding: 1.5rem 1rem 4rem;
+  }
+  .jb-card-header,
+  .jb-card-body {
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+  }
+  .jb-btn--lg {
+    padding: 0.65rem 1.3rem;
+    font-size: 0.88rem;
+  }
+}
