@@ -16,7 +16,7 @@ import {
   ClipboardList,
 } from "lucide-react";
 import "./ApplicantDashboard.css";
-import { useUser } from "../../contexts/UserContext";
+// import { useUser } from "../../contexts/UserContext";
 import Loader from "../../components/Loader";
 import {
   getCompletion,
@@ -92,7 +92,7 @@ function getStatusBadge(status: string) {
   switch (status) {
     case "Interview":
       return "dk-badge dk-badge--interview";
-    case "Under Review":
+    case "New":
       return "dk-badge dk-badge--review";
     case "Rejected":
       return "dk-badge dk-badge--rejected";
@@ -106,7 +106,12 @@ export default function ApplicantDashboard() {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   // const [profileCompletion] = useState(75);
-  const { user } = useUser();
+  const user = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user") || "null")
+    : null;
+
+  console.log(user);
+
   const [loading, setLoading] = useState(true);
 
   const [stats, setStats] = useState<any>({});
@@ -165,6 +170,13 @@ export default function ApplicantDashboard() {
               >
                 <User size={13} />
                 Profile
+              </span>
+              <span
+                className="dk-profile-pill"
+                onClick={() => navigate("/applicant/interview")}
+              >
+                <Calendar size={13} />
+                Interviews
               </span>
               <button
                 className="dk-btn-outline dk-btn-sm"
@@ -337,7 +349,9 @@ export default function ApplicantDashboard() {
                         <Calendar size={11} className="me-1" />
                         Applied
                       </div>
-                      <div className="dk-app-meta-value">{formatDate(app.createdAt)}</div>
+                      <div className="dk-app-meta-value">
+                        {formatDate(app.createdAt)}
+                      </div>
                     </div>
                     <div className="col-4">
                       <div className="dk-app-meta-label">
@@ -353,7 +367,9 @@ export default function ApplicantDashboard() {
                         <MapPin size={11} className="me-1" />
                         Location
                       </div>
-                      <div className="dk-app-meta-value">{app.job.location}</div>
+                      <div className="dk-app-meta-value">
+                        {app.job.location}
+                      </div>
                     </div>
                   </div>
 
@@ -369,7 +385,7 @@ export default function ApplicantDashboard() {
                   <div className="d-flex gap-2 flex-wrap">
                     <button
                       className="dk-btn-outline dk-btn-sm"
-                      onClick={() => navigate(`/jobs/${app.id}`)}
+                      onClick={() => navigate(`/jobs/${app.job.id}`)}
                     >
                       View Details
                     </button>

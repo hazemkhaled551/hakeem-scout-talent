@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import "./AuthPage.css";
 
@@ -69,7 +69,7 @@ const statCards = [
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function AuthPage() {
   const navigate = useNavigate();
-  const { login, register } = useAuth();
+  const { login, register, googleLogin } = useAuth();
   const [mode, setMode] = useState<TabMode>("login");
   const [showPw, setShowPw] = useState(false);
   const [showCPw, setShowCPw] = useState(false);
@@ -116,9 +116,19 @@ export default function AuthPage() {
       setLoading(true);
       setAlert(null);
 
-      await login(loginForm.email, loginForm.password, loginForm.remember);
+      const user = await login(
+        loginForm.email,
+        loginForm.password,
+        loginForm.remember,
+      );
 
-      navigate("/dashboard");
+      console.log(user);
+
+      if (user?.role === "Applicant") {
+        navigate("/dashboard");
+      } else if (user?.role === "Company") {
+        navigate("/company/dashboard");
+      }
     } catch (error: any) {
       console.error(error);
       setAlert({
@@ -323,9 +333,14 @@ export default function AuthPage() {
                   />
                   Remember me
                 </label>
-                <a href="#" className="auth-forgot">
-                  Forgot password?
-                </a>
+                <div className="d-flex flex-column ">
+                  <Link to="/forget-password" className="auth-forgot">
+                    Forgot password?
+                  </Link>
+                  <Link to="/request-restore" className="auth-forgot">
+                    Restore Email?
+                  </Link>
+                </div>
               </div>
 
               <button
@@ -340,8 +355,12 @@ export default function AuthPage() {
               <div className="auth-divider">or continue with</div>
 
               <div className="auth-socials">
-                <button type="button" className="auth-social-btn">
-                  Google
+                <button
+                  type="button"
+                  className="auth-social-btn"
+                  onClick={googleLogin}
+                >
+                  Continue with Google
                 </button>
               </div>
             </div>

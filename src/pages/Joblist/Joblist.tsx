@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import "../../styles/Jobs.css";
 import "./JobList.css";
+import { getAllJobs } from "../../services/jobService";
+import Loader from "../../components/Loader";
 
 // ─── Enums & Types ────────────────────────────────────────────────────────────
 const JobType = {
@@ -34,89 +36,100 @@ const WorkMode = {
 type WorkMode = (typeof WorkMode)[keyof typeof WorkMode];
 
 interface Job {
-  id: number;
+  id: string;
   title: string;
-  company: string;
+  company: {
+    name: string;
+  };
   companyInitial: string;
   location: string;
-  salary: string;
-  jobType: JobType;
+  // salary: string;
+  type: JobType;
   workMode: WorkMode;
   tags: string[];
   daysAgo: number;
   matchScore: number;
+  status: string;
+  description: string;
+  responsibilities: string[];
+  skills: string[];
+  requirements: string[];
+  companySize: string;
+  industry: string;
+  growth: string;
+  minSalary: number;
+  maxSalary: number;
 }
+import { fmt } from "../../utils/dateFormat";
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
-const JOBS: Job[] = [
-  {
-    id: 1,
-    title: "Senior Software Engineer",
-    company: "TechCorp Inc.",
-    companyInitial: "T",
-    location: "Remote",
-    salary: "$120k–$180k",
-    jobType: JobType.FULL_TIME,
-    workMode: WorkMode.REMOTE,
-    tags: ["React", "TypeScript", "Node.js"],
-    daysAgo: 2,
-    matchScore: 92,
-  },
-  {
-    id: 2,
-    title: "Product Designer",
-    company: "DesignStudio",
-    companyInitial: "D",
-    location: "New York, NY",
-    salary: "$90k–$130k",
-    jobType: JobType.FULL_TIME,
-    workMode: WorkMode.HYBRID,
-    tags: ["Figma", "UX Research"],
-    daysAgo: 4,
-    matchScore: 85,
-  },
-  {
-    id: 3,
-    title: "Data Scientist",
-    company: "InnovateLabs",
-    companyInitial: "I",
-    location: "San Francisco, CA",
-    salary: "$110k–$160k",
-    jobType: JobType.FULL_TIME,
-    workMode: WorkMode.ONSITE,
-    tags: ["Python", "ML", "SQL"],
-    daysAgo: 1,
-    matchScore: 78,
-  },
-  {
-    id: 4,
-    title: "DevOps Engineer",
-    company: "CloudBase",
-    companyInitial: "C",
-    location: "Remote",
-    salary: "$100k–$150k",
-    jobType: JobType.CONTRACT,
-    workMode: WorkMode.REMOTE,
-    tags: ["Docker", "K8s", "AWS"],
-    daysAgo: 7,
-    matchScore: 88,
-  },
-  {
-    id: 5,
-    title: "Frontend Developer",
-    company: "MediaGroup",
-    companyInitial: "M",
-    location: "Austin, TX",
-    salary: "$80k–$110k",
-    jobType: JobType.FULL_TIME,
-    workMode: WorkMode.HYBRID,
-    tags: ["Vue", "CSS", "A11y"],
-    daysAgo: 3,
-    matchScore: 81,
-  },
-];
-
-const fmt = (v: string) => v.replace("_", " ");
+// const JOBS: Job[] = [
+//   {
+//     id: 1,
+//     title: "Senior Software Engineer",
+//     company: "TechCorp Inc.",
+//     companyInitial: "T",
+//     location: "Remote",
+//     salary: "$120k–$180k",
+//     jobType: JobType.FULL_TIME,
+//     workMode: WorkMode.REMOTE,
+//     tags: ["React", "TypeScript", "Node.js"],
+//     daysAgo: 2,
+//     matchScore: 92,
+//   },
+//   {
+//     id: 2,
+//     title: "Product Designer",
+//     company: "DesignStudio",
+//     companyInitial: "D",
+//     location: "New York, NY",
+//     salary: "$90k–$130k",
+//     jobType: JobType.FULL_TIME,
+//     workMode: WorkMode.HYBRID,
+//     tags: ["Figma", "UX Research"],
+//     daysAgo: 4,
+//     matchScore: 85,
+//   },
+//   {
+//     id: 3,
+//     title: "Data Scientist",
+//     company: "InnovateLabs",
+//     companyInitial: "I",
+//     location: "San Francisco, CA",
+//     salary: "$110k–$160k",
+//     jobType: JobType.FULL_TIME,
+//     workMode: WorkMode.ONSITE,
+//     tags: ["Python", "ML", "SQL"],
+//     daysAgo: 1,
+//     matchScore: 78,
+//   },
+//   {
+//     id: 4,
+//     title: "DevOps Engineer",
+//     company: "CloudBase",
+//     companyInitial: "C",
+//     location: "Remote",
+//     salary: "$100k–$150k",
+//     jobType: JobType.CONTRACT,
+//     workMode: WorkMode.REMOTE,
+//     tags: ["Docker", "K8s", "AWS"],
+//     daysAgo: 7,
+//     matchScore: 88,
+//   },
+//   {
+//     id: 5,
+//     title: "Frontend Developer",
+//     company: "MediaGroup",
+//     companyInitial: "M",
+//     location: "Austin, TX",
+//     salary: "$80k–$110k",
+//     jobType: JobType.FULL_TIME,
+//     workMode: WorkMode.HYBRID,
+//     tags: ["Vue", "CSS", "A11y"],
+//     daysAgo: 3,
+//     matchScore: 81,
+//   },
+// ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function JobList() {
@@ -127,6 +140,29 @@ export default function JobList() {
   const [typeFilter, setTypeFilter] = useState<JobType | "">("");
   const [modeFilter, setModeFilter] = useState<WorkMode | "">("");
 
+  const [loading, setLoading] = useState(false);
+
+  const [jobs, setJobs] = useState<Job[]>([]);
+  async function fetchJobs() {
+    try {
+      setLoading(true);
+      const { data } = await getAllJobs();
+      console.log(data.data);
+
+      setJobs(data.data);
+    } catch (error) {
+      console.error("Failed to fetch jobs:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    async function loadJobs() {
+      await fetchJobs();
+    }
+    loadJobs();
+  }, []);
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 16);
     window.addEventListener("scroll", fn);
@@ -135,18 +171,18 @@ export default function JobList() {
 
   const hasFilters = !!(search || locationFilter || typeFilter || modeFilter);
 
-  const results = JOBS.filter((j) => {
-    const q = search.toLowerCase();
-    return (
-      (!q ||
-        j.title.toLowerCase().includes(q) ||
-        j.company.toLowerCase().includes(q)) &&
-      (!locationFilter ||
-        j.location.toLowerCase().includes(locationFilter.toLowerCase())) &&
-      (!typeFilter || j.jobType === typeFilter) &&
-      (!modeFilter || j.workMode === modeFilter)
-    );
-  });
+  // const results = jobs.filter((j) => {
+  //   const q = search.toLowerCase();
+  //   return (
+  //     (!q ||
+  //       j.title.toLowerCase().includes(q) ||
+  //       j.company.toLowerCase().includes(q)) &&
+  //     (!locationFilter ||
+  //       j.location.toLowerCase().includes(locationFilter.toLowerCase())) &&
+  //     (!typeFilter || j.jobType === typeFilter) &&
+  //     (!modeFilter || j.workMode === modeFilter)
+  //   );
+  // });
 
   const clearFilters = () => {
     setSearch("");
@@ -155,6 +191,9 @@ export default function JobList() {
     setModeFilter("");
   };
 
+  if (loading) {
+    return <Loader text="Loading jobs..." fullPage />;
+  }
   return (
     <div className="jb-page">
       {/* ══ HEADER ══════════════════════════════════════════════ */}
@@ -275,15 +314,15 @@ export default function JobList() {
         <div className="d-flex align-items-center gap-2 mb-3 au d2">
           <SlidersHorizontal size={13} style={{ color: "var(--muted)" }} />
           <span className="jl-count">
-            <strong style={{ color: "var(--text)" }}>{results.length}</strong>{" "}
-            position{results.length !== 1 ? "s" : ""} found
+            <strong style={{ color: "var(--text)" }}>{jobs.length}</strong>{" "}
+            position{jobs.length !== 1 ? "s" : ""} found
           </span>
         </div>
 
         {/* Job Cards */}
-        {results.length > 0 ? (
+        {jobs.length > 0 ? (
           <div className="d-flex flex-column gap-3">
-            {results.map((job, i) => (
+            {jobs.map((job, i) => (
               <div
                 key={job.id}
                 className={`jl-job-card au d${Math.min(i + 2, 6)}`}
@@ -291,23 +330,23 @@ export default function JobList() {
               >
                 <div className="d-flex align-items-start gap-3 mb-3">
                   {/* Company avatar */}
-                  <div className="jl-company-avatar">{job.companyInitial}</div>
+                  {/* <div className="jl-company-avatar">{job.companyInitial}</div> */}
 
                   {/* Title + meta */}
                   <div className="flex-1 min-width-0">
                     <div className="d-flex align-items-start justify-content-between gap-2 mb-1">
                       <div className="jl-job-title">{job.title}</div>
-                      <span
+                      {/* <span
                         className="jb-badge jb-badge--gray"
                         style={{ flexShrink: 0 }}
                       >
                         {job.daysAgo}d ago
-                      </span>
+                      </span> */}
                     </div>
                     <div className="jb-meta">
                       <span className="jb-meta-item">
                         <Building2 size={13} />
-                        {job.company}
+                        {job.company.name}
                       </span>
                       <span className="jb-meta-item">
                         <MapPin size={13} />
@@ -315,11 +354,11 @@ export default function JobList() {
                       </span>
                       <span className="jb-meta-item">
                         <DollarSign size={13} />
-                        {job.salary}
+                        {job.minSalary} - {job.maxSalary}
                       </span>
                       <span className="jb-meta-item">
                         <Clock size={13} />
-                        {fmt(job.jobType)}
+                        {fmt(job.type)}
                       </span>
                     </div>
                   </div>
@@ -327,7 +366,7 @@ export default function JobList() {
 
                 {/* Tags + work mode */}
                 <div className="d-flex flex-wrap gap-2 mb-3">
-                  {job.tags.map((t) => (
+                  {job.skills.map((t) => (
                     <span key={t} className="jb-tag">
                       {t}
                     </span>
@@ -341,13 +380,17 @@ export default function JobList() {
                 <div className="mb-3">
                   <div className="d-flex align-items-center justify-content-between mb-1">
                     <span className="jl-match-label">AI Match</span>
-                    <span className="jl-match-num">{job.matchScore}%</span>
+                    <span className="jl-match-num">
+                      {job?.matchScore || 0}%
+                    </span>
                   </div>
                   <div className="jb-track">
                     <div
                       className="jb-fill"
                       style={
-                        { "--w": `${job.matchScore}%` } as React.CSSProperties
+                        {
+                          "--w": `${job?.matchScore || 0}%`,
+                        } as React.CSSProperties
                       }
                     />
                   </div>

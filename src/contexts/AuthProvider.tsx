@@ -29,21 +29,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     password: string,
     rememberMe?: boolean,
   ) => {
-    const { data } = await api.post("/auth/login", {
+    const res = await api.post("/auth/login", {
       email,
       password,
       rememberMe,
     });
-    console.log(data);
-    
 
-    // setUser(data.user);
-    setToken(data.data.accessToken);
+    const user = res.data.data.user;
+    const token = res.data.data.accessToken;
 
-    // localStorage.setItem("user", JSON.stringify(data.user));
-    localStorage.setItem("token", data.data.accessToken);
+    setUser(user);
+    setToken(token);
+
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", token);
+
+    return user;
   };
-
   /* ================= RESEND EMAIL VERIFY ================= */
 
   const resendEmailVerify = async (email: string) => {
@@ -93,12 +95,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     resetToken: string,
     password: string,
   ) => {
-    const res = await api.post(
-      `/auth/reset_password/${id}/${resetToken}`,
-      { password },
-    );
+    const res = await api.post(`/auth/reset_password/${id}/${resetToken}`, {
+      password,
+    });
 
     return res.data;
+  };
+
+  const googleLogin = () => {
+    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/auth/google`;
+  };
+
+  const handleGoogleCallback = (token: string, user: User) => {
+    setUser(user);
+    setToken(token);
+
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+  };
+
+  const selectRole = async (id: string, role: string) => {
+    const { data } = await api.post(`/auth/select-role/${id}`, { role });
+
+    setUser(data.user);
+    setToken(data.token);
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
   };
 
   return (
@@ -109,6 +132,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         register,
         logout,
+        googleLogin,
+        handleGoogleCallback,
+        selectRole,
         refreshToken,
         resendEmailVerify,
         verifyEmail,

@@ -1,0 +1,578 @@
+/* ═══════════════════════════════════════════════════════════
+   Hakeem — Company Jobs
+   ═══════════════════════════════════════════════════════════ */
+
+
+
+/* ── Keyframes ────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.au {
+  opacity: 0;
+  animation: fadeUp 0.5s ease forwards;
+}
+.ai {
+  opacity: 0;
+  animation: fadeIn 0.4s ease forwards;
+}
+.asd {
+  opacity: 0;
+  animation: slideDown 0.3s ease forwards;
+}
+.d1 {
+  animation-delay: 0.07s;
+}
+.d2 {
+  animation-delay: 0.14s;
+}
+.d3 {
+  animation-delay: 0.21s;
+}
+.d4 {
+  animation-delay: 0.28s;
+}
+.d5 {
+  animation-delay: 0.35s;
+}
+.d6 {
+  animation-delay: 0.42s;
+}
+
+/* ════════════════════════════════════════════════════════════
+   HEADER
+════════════════════════════════════════════════════════════ */
+.cj-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+.cj-header.scrolled {
+  box-shadow: 0 4px 24px rgba(79, 70, 229, 0.09);
+}
+
+.cj-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  color: #fff;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.32);
+}
+.cj-brand {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+/* ════════════════════════════════════════════════════════════
+   PAGE
+════════════════════════════════════════════════════════════ */
+.cj-page {
+  min-height: 100vh;
+  background: var(--surface);
+}
+.cj-main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+}
+
+.cj-page-title {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.2rem;
+}
+.cj-page-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+/* ════════════════════════════════════════════════════════════
+   TABS
+════════════════════════════════════════════════════════════ */
+.cj-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  background: var(--white);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 0.65rem 0.8rem;
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.04);
+}
+
+.cj-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  border-radius: 8px;
+  padding: 0.32rem 0.85rem;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.18s;
+  background: transparent;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.cj-tab:hover {
+  background: rgba(79, 70, 229, 0.05);
+  color: var(--text);
+}
+.cj-tab--active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
+}
+
+/* count bubble on tab */
+.cj-tab-count {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+.cj-tab:not(.cj-tab--active) .cj-tab-count {
+  background: rgba(79, 70, 229, 0.09);
+  color: var(--primary);
+}
+
+/* ════════════════════════════════════════════════════════════
+   BUTTONS
+════════════════════════════════════════════════════════════ */
+.cj-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 600;
+  font-size: 0.84rem;
+  border-radius: 10px;
+  padding: 0.55rem 1.2rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.cj-btn--primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.28);
+}
+.cj-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.36);
+}
+
+.cj-btn--outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+.cj-btn--outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.cj-btn--ghost {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+}
+.cj-btn--ghost:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.cj-btn--danger {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1.5px solid rgba(239, 68, 68, 0.2);
+  color: var(--danger);
+}
+.cj-btn--danger:hover {
+  background: rgba(239, 68, 68, 0.14);
+}
+
+.cj-btn--success-soft {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1.5px solid rgba(16, 185, 129, 0.2);
+  color: var(--success);
+}
+.cj-btn--success-soft:hover {
+  background: rgba(16, 185, 129, 0.14);
+}
+
+.cj-btn--sm {
+  padding: 0.3rem 0.75rem !important;
+  font-size: 0.76rem !important;
+}
+.cj-btn--xs {
+  padding: 0.22rem 0.6rem !important;
+  font-size: 0.72rem !important;
+  border-radius: 7px !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   STATUS BADGE
+════════════════════════════════════════════════════════════ */
+.cj-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.72rem;
+  border-radius: 999px;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.cj-badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cj-badge--published {
+  background: rgba(16, 185, 129, 0.1);
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.cj-badge--draft {
+  background: rgba(100, 116, 139, 0.1);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.cj-badge--paused {
+  background: rgba(245, 158, 11, 0.1);
+  color: #92400e;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.cj-badge--closed {
+  background: rgba(239, 68, 68, 0.08);
+  color: #991b1b;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+.cj-badge--filled {
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--primary);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+}
+.cj-badge--expired {
+  background: rgba(239, 68, 68, 0.06);
+  color: #b91c1c;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.cj-badge--published .cj-badge-dot {
+  background: var(--success);
+}
+.cj-badge--draft .cj-badge-dot {
+  background: var(--muted);
+}
+.cj-badge--paused .cj-badge-dot {
+  background: var(--warning);
+}
+.cj-badge--closed .cj-badge-dot {
+  background: var(--danger);
+}
+.cj-badge--filled .cj-badge-dot {
+  background: var(--primary);
+}
+.cj-badge--expired .cj-badge-dot {
+  background: #f87171;
+}
+
+/* ════════════════════════════════════════════════════════════
+   JOB CARD
+════════════════════════════════════════════════════════════ */
+.cj-job-card {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 12px rgba(79, 70, 229, 0.05);
+  overflow: hidden;
+  transition:
+    box-shadow 0.25s,
+    transform 0.25s,
+    border-color 0.25s;
+}
+.cj-job-card:hover {
+  box-shadow: 0 8px 28px rgba(79, 70, 229, 0.1);
+  transform: translateY(-2px);
+  border-color: rgba(79, 70, 229, 0.18);
+}
+
+/* Left accent stripe per status */
+.cj-job-card--published {
+  border-left: 4px solid var(--success);
+}
+.cj-job-card--draft {
+  border-left: 4px solid var(--muted);
+}
+.cj-job-card--paused {
+  border-left: 4px solid var(--warning);
+}
+.cj-job-card--closed {
+  border-left: 4px solid var(--danger);
+}
+.cj-job-card--filled {
+  border-left: 4px solid var(--primary);
+}
+.cj-job-card--expired {
+  border-left: 4px solid #f87171;
+}
+
+.cj-job-header {
+  padding: 1.2rem 1.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.cj-job-body {
+  padding: 0.9rem 1.5rem 1.2rem;
+}
+
+.cj-job-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+.cj-job-company {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* meta chips */
+.cj-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+}
+.cj-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* skill tags */
+.cj-skill-tag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(79, 70, 229, 0.07);
+  color: var(--primary);
+  border: 1px solid rgba(79, 70, 229, 0.15);
+  border-radius: 999px;
+  padding: 0.18rem 0.65rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+}
+
+/* action toolbar */
+.cj-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+  margin-top: 0.8rem;
+}
+
+/* ════════════════════════════════════════════════════════════
+   FORM CARD
+════════════════════════════════════════════════════════════ */
+.cj-form-card {
+  background: var(--white);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 24px rgba(79, 70, 229, 0.08);
+  overflow: hidden;
+}
+.cj-form-header {
+  padding: 1.2rem 1.6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cj-form-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.cj-form-body {
+  padding: 1.4rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* form label + input */
+.cj-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+.cj-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cj-input,
+.cj-select,
+.cj-textarea {
+  width: 100%;
+  padding: 0.62rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: #fff;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.cj-input:focus,
+.cj-select:focus,
+.cj-textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+.cj-input::placeholder,
+.cj-textarea::placeholder {
+  color: #b0b8d0;
+}
+.cj-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+.cj-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath fill='%2364748b' d='M0 0l5.5 7L11 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  padding-right: 2.2rem;
+}
+
+/* validation error */
+.cj-error {
+  font-size: 0.75rem;
+  color: var(--danger);
+  margin-top: 0.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* form footer */
+.cj-form-footer {
+  padding: 0.9rem 1.6rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ════════════════════════════════════════════════════════════
+   EMPTY STATE
+════════════════════════════════════════════════════════════ */
+.cj-empty {
+  text-align: center;
+  padding: 5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--muted);
+}
+.cj-empty-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(79, 70, 229, 0.07);
+  color: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cj-empty-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+.cj-empty-sub {
+  font-size: 0.85rem;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .cj-main {
+    padding: 1.25rem 1rem 4rem;
+  }
+  .cj-job-header,
+  .cj-job-body {
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+  }
+  .cj-form-body {
+    padding: 1rem 1.1rem;
+  }
+}

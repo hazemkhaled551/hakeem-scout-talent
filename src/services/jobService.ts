@@ -11,13 +11,13 @@ export const getAllJobs = () => {
 };
 
 /* Get Job By Id */
-export const getJobById = (id: number) => {
+export const getJobById = (id: string) => {
   return api.get(`/jobs/jobs/${id}`);
 };
 
 /* Apply To Job */
-export const applyJob = (jobId: string, cvId: string) => {
-  return api.post(`/jobs/applyJob/${jobId}/${cvId}`);
+export const applyJob = (jobId: string, cvId: string, about: string) => {
+  return api.post(`/jobs/applyJob/${jobId}/${cvId}`, { about });
 };
 
 /* Delete Job */

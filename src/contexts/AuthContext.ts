@@ -15,7 +15,13 @@ export type AuthContextType = {
     password: string,
     rememberMe?: boolean,
   ) => Promise<void>;
+
   register: (data: any) => Promise<any>;
+
+  googleLogin: () => void;
+  handleGoogleCallback: (token: string, user: User) => void;
+  selectRole: (id: string, role: string) => Promise<void>;
+
   logout: () => Promise<void>;
   refreshToken: () => Promise<void>;
 
@@ -37,4 +43,3 @@ export const useAuth = () => {
 
   return context;
 };
-        

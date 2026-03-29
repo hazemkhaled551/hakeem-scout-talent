@@ -1,0 +1,171 @@
+/* ═══════════════════════════════════════════════════════════
+   Hakeem — Notifications Component
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Keyframes ────────────────────────────────────────────── */
+@keyframes fadeUp    {from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn   {from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse     {0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.15)}}
+@keyframes badgePop  {from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer   {0%{background-position:-400% 0}100%{background-position:400% 0}}
+
+.au  {opacity:0;animation:fadeUp  .45s ease forwards;}
+.asi {opacity:0;animation:slideIn .3s ease forwards;}
+.d1{animation-delay:.06s}.d2{animation-delay:.12s}
+.d3{animation-delay:.18s}.d4{animation-delay:.24s}
+
+/* ════════════════════════════════════════════════════════════
+   HEADER
+════════════════════════════════════════════════════════════ */
+.nt-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);transition:box-shadow .3s;
+}
+.nt-header.scrolled{box-shadow:0 4px 24px rgba(79,70,229,.09);}
+.nt-logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:1.1rem;box-shadow:0 4px 14px rgba(79,70,229,.32);flex-shrink:0;}
+.nt-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--text);}
+
+/* ════════════════════════════════════════════════════════════
+   PAGE
+════════════════════════════════════════════════════════════ */
+.nt-page{min-height:100vh;background:var(--surface);}
+.nt-main{max-width:760px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
+.nt-page-title{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;letter-spacing:-.03em;margin-bottom:.2rem;}
+.nt-page-sub{font-size:.88rem;color:var(--muted);}
+
+/* ════════════════════════════════════════════════════════════
+   NOTIFICATION BELL (used in header of other pages)
+════════════════════════════════════════════════════════════ */
+.nt-bell-wrap{position:relative;display:inline-flex;}
+
+.nt-bell-btn{
+  width:38px;height:38px;border-radius:10px;
+  background:var(--surface);border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--muted);transition:all .2s;
+}
+.nt-bell-btn:hover{border-color:var(--primary);color:var(--primary);background:rgba(79,70,229,.05);}
+
+.nt-badge{
+  position:absolute;top:-6px;right:-6px;
+  min-width:18px;height:18px;border-radius:999px;
+  background:var(--danger);color:#fff;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:.65rem;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 4px;border:2px solid var(--white);
+  animation:badgePop .3s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+
+/* ════════════════════════════════════════════════════════════
+   DROPDOWN (bell popover)
+════════════════════════════════════════════════════════════ */
+.nt-dropdown{
+  position:absolute;top:calc(100% + 10px);right:0;
+  width:360px;max-height:480px;
+  background:var(--white);border-radius:16px;
+  border:1px solid var(--border);
+  box-shadow:0 16px 48px rgba(79,70,229,.16);
+  overflow:hidden;z-index:200;
+}
+.nt-dropdown-header{
+  padding:.9rem 1.1rem .7rem;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nt-dropdown-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;color:var(--text);}
+.nt-mark-all{font-size:.76rem;font-weight:600;color:var(--primary);background:none;border:none;cursor:pointer;padding:0;}
+.nt-mark-all:hover{text-decoration:underline;}
+
+.nt-dropdown-list{overflow-y:auto;max-height:380px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.nt-dropdown-list::-webkit-scrollbar{width:4px;}
+.nt-dropdown-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:999px;}
+
+.nt-dropdown-footer{
+  padding:.65rem 1.1rem;border-top:1px solid var(--border);text-align:center;
+}
+.nt-see-all{font-size:.8rem;font-weight:600;color:var(--primary);background:none;border:none;cursor:pointer;padding:0;}
+.nt-see-all:hover{text-decoration:underline;}
+
+/* ════════════════════════════════════════════════════════════
+   FILTER TABS
+════════════════════════════════════════════════════════════ */
+.nt-tabs{display:flex;gap:.35rem;flex-wrap:wrap;background:var(--white);border-radius:12px;border:1px solid var(--border);padding:.5rem .65rem;box-shadow:0 2px 10px rgba(79,70,229,.04);}
+.nt-tab{display:inline-flex;align-items:center;gap:.3rem;font-family:'Syne',sans-serif;font-weight:600;font-size:.78rem;border-radius:8px;padding:.28rem .82rem;cursor:pointer;border:1.5px solid transparent;transition:all .18s;background:transparent;color:var(--muted);}
+.nt-tab:hover{background:rgba(79,70,229,.05);color:var(--text);}
+.nt-tab--active{background:var(--primary);color:#fff;box-shadow:0 3px 10px rgba(79,70,229,.3);}
+.nt-tab-count{background:rgba(255,255,255,.25);border-radius:999px;padding:.03rem .4rem;font-size:.67rem;font-weight:700;}
+.nt-tab:not(.nt-tab--active) .nt-tab-count{background:rgba(79,70,229,.09);color:var(--primary);}
+
+/* ════════════════════════════════════════════════════════════
+   NOTIFICATION ITEM
+════════════════════════════════════════════════════════════ */
+.nt-item{
+  display:flex;align-items:flex-start;gap:.85rem;
+  padding:.9rem 1.1rem;border-bottom:1px solid var(--border);
+  position:relative;cursor:pointer;
+  transition:background .18s;
+}
+.nt-item:last-child{border-bottom:none;}
+.nt-item:hover{background:rgba(79,70,229,.025);}
+.nt-item--unread{background:rgba(79,70,229,.04);}
+.nt-item--unread:hover{background:rgba(79,70,229,.07);}
+
+/* unread left bar */
+.nt-item--unread::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;border-radius:0 3px 3px 0;background:var(--primary);
+}
+
+/* icon circle */
+.nt-icon{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.nt-icon--interview  {background:rgba(79,70,229,.1); color:var(--primary);}
+.nt-icon--status     {background:rgba(6,182,212,.1);  color:var(--accent); }
+.nt-icon--feedback   {background:rgba(16,185,129,.1); color:var(--success);}
+.nt-icon--job        {background:rgba(245,158,11,.1); color:var(--warning);}
+.nt-icon--applicant  {background:rgba(139,92,246,.1); color:#8b5cf6;       }
+.nt-icon--offer      {background:rgba(16,185,129,.1); color:var(--success);}
+.nt-icon--rejection  {background:rgba(239,68,68,.08); color:var(--danger); }
+
+/* content */
+.nt-content{flex:1;min-width:0;}
+.nt-title{font-size:.86rem;font-weight:500;color:var(--text);line-height:1.5;margin-bottom:.2rem;}
+.nt-title strong{font-weight:700;}
+.nt-meta{font-size:.75rem;color:var(--muted);display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
+
+/* unread dot */
+.nt-dot{width:7px;height:7px;border-radius:50%;background:var(--primary);flex-shrink:0;margin-top:5px;animation:pulse 2s infinite;}
+
+/* ════════════════════════════════════════════════════════════
+   FULL PAGE — group header
+════════════════════════════════════════════════════════════ */
+.nt-group-label{font-family:'Syne',sans-serif;font-weight:700;font-size:.73rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:.6rem 0 .4rem;}
+
+/* card wrapper on full page */
+.nt-card{background:var(--white);border-radius:14px;border:1px solid var(--border);box-shadow:0 2px 10px rgba(79,70,229,.04);overflow:hidden;margin-bottom:.5rem;}
+
+/* ════════════════════════════════════════════════════════════
+   EMPTY STATE
+════════════════════════════════════════════════════════════ */
+.nt-empty{text-align:center;padding:3.5rem 1rem;display:flex;flex-direction:column;align-items:center;gap:.65rem;color:var(--muted);}
+.nt-empty-icon{width:52px;height:52px;border-radius:50%;background:rgba(79,70,229,.07);color:var(--primary-light);display:flex;align-items:center;justify-content:center;}
+.nt-empty-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--text);}
+
+/* ════════════════════════════════════════════════════════════
+   SHARED BUTTONS
+════════════════════════════════════════════════════════════ */
+.nt-btn{display:inline-flex;align-items:center;gap:.35rem;font-family:'Syne',sans-serif;font-weight:600;font-size:.84rem;border-radius:10px;padding:.52rem 1.1rem;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.nt-btn--outline{background:transparent;border:1.5px solid var(--border);color:var(--text);}
+.nt-btn--outline:hover{border-color:var(--primary);color:var(--primary);}
+.nt-btn--ghost{background:transparent;border:none;color:var(--muted);}
+.nt-btn--ghost:hover{background:var(--surface);color:var(--text);border-radius:10px;}
+.nt-btn--sm{padding:.3rem .75rem !important;font-size:.76rem !important;}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media(max-width:768px){
+  .nt-main{padding:1.25rem 1rem 4rem;}
+  .nt-dropdown{width:calc(100vw - 2rem);right:-1rem;}
+}

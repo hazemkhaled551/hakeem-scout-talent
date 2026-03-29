@@ -8,33 +8,59 @@ import {
   CheckCircle,
   ChevronLeft,
   Briefcase,
-  Globe,
-  Users,
-  TrendingUp,
+  // Globe,
+  // Users,
+  // TrendingUp,
 } from "lucide-react";
 import "../../styles/Jobs.css";
 import "./JobDetails.css";
 import { getJobById } from "../../services/jobService";
 import Loader from "../../components/Loader";
+import { fmt, companyIntiatal } from "../../utils/dateFormat";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+const JobType = {
+  FULL_TIME: "Full_Time",
+  PART_TIME: "Part_Time",
+  CONTRACT: "Contract",
+  FREELANCE: "Freelance",
+  INTERNSHIP: "Internship",
+} as const;
+
+type JobType = (typeof JobType)[keyof typeof JobType];
+
+const WorkMode = {
+  ONSITE: "Onsite",
+  REMOTE: "Remote",
+  HYBRID: "Hybrid",
+} as const;
+
+type WorkMode = (typeof WorkMode)[keyof typeof WorkMode];
 interface Job {
-  id: string | undefined;
+  id: string;
   title: string;
-  company: string;
+  company: {
+    name: string;
+  };
   companyInitial: string;
   location: string;
-  salary: string;
-  type: string;
-  workMode: string;
+  // salary: string;
+  type: JobType;
+  workMode: WorkMode;
+  tags: string[];
+  daysAgo: number;
+  matchScore: number;
   status: string;
-  about: string;
-  skills: string[];
+  description: string;
   responsibilities: string[];
+  skills: string[];
   requirements: string[];
   companySize: string;
   industry: string;
   growth: string;
+  minSalary: number;
+  maxSalary: number;
 }
 
 // ─── Mock ─────────────────────────────────────────────────────────────────────
@@ -79,11 +105,10 @@ export default function JobDetails() {
   console.log(jobId);
   useEffect(() => {
     const fn = async () => {
-
       try {
         setLoading(true);
         if (!jobId) return;
-        const data = await getJobById(Number(jobId));
+        const data = await getJobById(jobId);
         setJob(data.data.data);
         setLoading(false);
       } catch (error) {
@@ -133,17 +158,17 @@ export default function JobDetails() {
         {/* ── Hero block ──────────────────────────────────────── */}
         <div className="jd-hero mb-4 au">
           <div className="d-flex align-items-start gap-3 mb-3">
-            <div className="jd-company-avatar">{job?.companyInitial}</div>
+            <div className="jd-company-avatar">{companyIntiatal(job?.company?.name)}</div>
             <div className="flex-1">
               <div className="d-flex align-items-start justify-content-between gap-2 flex-wrap">
                 <h1 className="jd-title">{job?.title}</h1>
-                <span className="jb-badge jb-badge--green">
+                {/* <span className="jb-badge jb-badge--green">
                   <span
                     className="jb-badge--dot"
                     style={{ background: "var(--success)" }}
                   />
                   {job?.status}
-                </span>
+                </span> */}
               </div>
               <div className="jb-meta mt-2">
                 <span className="jb-meta-item">
@@ -156,18 +181,18 @@ export default function JobDetails() {
                 </span>
                 <span className="jb-meta-item">
                   <DollarSign size={13} />
-                  {job?.salary}
+                  {job?.minSalary} - {job?.maxSalary}
                 </span>
                 <span className="jb-meta-item">
                   <Clock size={13} />
-                  {job?.type}
+                  {fmt(job?.type)}
                 </span>
               </div>
             </div>
           </div>
 
           {/* Company quick stats */}
-          <div className="row g-3 mt-1">
+          {/* <div className="row g-3 mt-1">
             {[
               {
                 icon: <Users size={14} />,
@@ -203,7 +228,7 @@ export default function JobDetails() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* ── About the role ──────────────────────────────────── */}
@@ -263,15 +288,14 @@ export default function JobDetails() {
                 <span className="jb-card-title">Requirements</span>
               </div>
               <div className="jb-card-body d-flex flex-column gap-3">
-             
-                  <div  className="jb-check">
-                    <CheckCircle
-                      size={16}
-                      className="jb-check-icon"
-                      style={{ color: "var(--primary)" }}
-                    />
-                    <span className="jb-check-text">{job?.requirements}</span>
-                  </div>
+                <div className="jb-check">
+                  <CheckCircle
+                    size={16}
+                    className="jb-check-icon"
+                    style={{ color: "var(--primary)" }}
+                  />
+                  <span className="jb-check-text">{job?.requirements}</span>
+                </div>
               </div>
             </div>
           </div>
