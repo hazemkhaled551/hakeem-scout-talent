@@ -171,10 +171,10 @@ export default function AuthPage() {
         email: regForm.email,
         password: regForm.password,
         phone: regForm.phone,
-        jobTitle: regForm.jobTitle,
+        job_title: regForm.jobTitle,
         location: regForm.location,
-        linkedin: regForm.linkedin,
-        type: regForm.type,
+        linkedIn_profile: regForm.linkedin,
+        role: regForm.type === "company" ? "Company" : "Applicant",
       });
 
       setAlert({
@@ -186,7 +186,7 @@ export default function AuthPage() {
     } catch (error: any) {
       setAlert({
         type: "error",
-        msg: error.message || "Registration failed",
+        msg: error?.response?.data?.message || "Registration failed",
       });
     } finally {
       setLoading(false);

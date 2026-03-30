@@ -8,6 +8,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import "./Verifyemail.css";
+import { useAuth } from "../../contexts/AuthContext";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -20,7 +21,9 @@ type VerifyStatus = "loading" | "success" | "error";
 export default function VerifyEmail() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  const token = searchParams.get("verificationToken");
+  const id = searchParams.get("id");
+  const { verifyEmail } = useAuth();
 
   const [status, setStatus] = useState<VerifyStatus>("loading");
   const [message, setMessage] = useState("Verifying your email address…");
@@ -29,38 +32,41 @@ export default function VerifyEmail() {
   /* ── API call ──────────────────────────────────────────── */
   useEffect(() => {
     async function verify() {
-      if (!token) {
+      if (!token || !id) {
         setStatus("error");
-        setMessage("Invalid or missing verification token.");
+        setMessage("Invalid or missing verification data.");
         return;
       }
 
       try {
-        // Animate steps for UX
         setStep("Checking token");
-        await new Promise((r) => setTimeout(r, 600));
-        setStep("Confirming identity");
-        await new Promise((r) => setTimeout(r, 700));
-        setStep("Activating account");
-        await new Promise((r) => setTimeout(r, 600));
 
-        // 🔥 Replace with your real API call:
-        // await verifyEmail({ token });
+        await new Promise((r) => setTimeout(r, 400));
+
+        setStep("Confirming identity");
+
+        await verifyEmail(id, token);
+
+        setStep("Activating account");
+
+        await new Promise((r) => setTimeout(r, 400));
 
         setStatus("success");
         setMessage(
           "Your email has been verified successfully. You can now sign in.",
         );
-      } catch {
+      } catch (error: any) {
         setStatus("error");
+
         setMessage(
-          "Verification failed. The link may have expired or already been used.",
+          error?.response?.data?.message ||
+            "Verification failed. The link may have expired or already been used.",
         );
       }
     }
 
     verify();
-  }, [token]);
+  }, [token, id]);
 
   /* ── Render ─────────────────────────────────────────────── */
   return (

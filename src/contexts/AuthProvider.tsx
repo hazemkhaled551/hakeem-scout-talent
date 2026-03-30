@@ -17,6 +17,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     name: string;
     email: string;
     password: string;
+    phone: string;
+    job_title: string;
+    location: string;
+    linkedIn_profile: string;
+    role: string;
   }) => {
     const res = await api.post("/auth/register", data);
     return res.data;
@@ -55,8 +60,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   /* ================= VERIFY EMAIL ================= */
 
-  const verifyEmail = async (id: string, token: string) => {
-    const res = await api.get(`/auth/verify-email/${id}/${token}`);
+  const verifyEmail = async (id: string, verificationToken: string) => {
+    const res = await api.get(`/auth/verify-email/${id}/${verificationToken}`);
+
     return res.data;
   };
 
@@ -91,12 +97,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   /* ================= RESET PASSWORD ================= */
 
   const resetPassword = async (
-    id: string,
-    resetToken: string,
+    id: string ,
+    resetPasswordToken: string,
     password: string,
   ) => {
-    const res = await api.post(`/auth/reset_password/${id}/${resetToken}`, {
-      password,
+    const res = await api.post(`/auth/reset_password/${id}/${resetPasswordToken}`, {
+      newPassword: password,
     });
 
     return res.data;

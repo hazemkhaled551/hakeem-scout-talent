@@ -92,7 +92,7 @@ export default function RequestRestore() {
         <div className="auth-logo-wrap restore-logo-wrap">
           <div className="restore-logo"><BrainCircuit /></div>
           <span className="restore-brand">Hakeem</span>
-          <p className="restore-subtitle">Password Recovery</p>
+          <p className="restore-subtitle">Restore Your Email </p>
         </div>
 
         <div className="auth-card">
@@ -105,7 +105,7 @@ export default function RequestRestore() {
               </div>
               <div className="auth-sent-title">Check Your Inbox</div>
               <p className="auth-sent-sub">
-                We sent a password reset link to{" "}
+                We sent a Email reset link to{" "}
                 <span className="auth-sent-email">{email}</span>.
                 The link expires in 15 minutes.
               </p>
@@ -148,7 +148,7 @@ export default function RequestRestore() {
             <div className="auth-card-icon auth-card-icon--primary">
               <Mail size={26} color="var(--primary)" strokeWidth={1.8} />
             </div>
-            <div className="auth-card-title">Forgot Password?</div>
+            <div className="auth-card-title">Restore Email?</div>
             <p className="auth-card-sub">
               No worries! Enter your registered email and we'll send you a secure reset link.
             </p>

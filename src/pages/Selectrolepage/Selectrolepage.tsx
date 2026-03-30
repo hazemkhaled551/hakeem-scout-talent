@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {  useSearchParams } from "react-router-dom";
 import {
   BrainCircuit,
   UserSearch,
@@ -8,7 +8,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import "../Forgotpasswordpage/Forgotpasswordpage.css";
-
+import { useAuth } from "../../contexts/AuthContext";
+ 
 type Role = "applicant" | "company" | null;
 
 const roles = [
@@ -29,17 +30,25 @@ const roles = [
 ];
 
 export default function SelectRolePage() {
-  const navigate = useNavigate();
+  
   const [selected, setSelected] = useState<Role>(null);
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const id =  searchParams.get("id") || "";
+
+  const { selectRole } = useAuth();
 
   const handleContinue = async () => {
     if (!selected) return;
-    setLoading(true);
-    // 🔥 Save role and navigate
-    // await saveRole(selected)
-    await new Promise((res) => setTimeout(res, 1200));
-    navigate("/dashboard");
+    try {
+      setLoading(true);
+      await selectRole(id, selected);
+    } catch (e : any) {
+      console.error(e?.response?.data?.message || "Failed to select role. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  
   };
 
   return (

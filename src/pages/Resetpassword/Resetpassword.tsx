@@ -11,6 +11,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import "./Resetpassword.css";
+import { useAuth } from "../../contexts/AuthContext";
 
 /* ════════════════════════════════════════════════════════════
    PASSWORD STRENGTH HELPER
@@ -41,8 +42,10 @@ function getStrength(pwd: string): {
 ════════════════════════════════════════════════════════════ */
 export default function ResetPassword() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  const [searchParams] = useSearchParams(); 
+  const { resetPassword } = useAuth();
+  const token = searchParams.get("resetPasswordToken");
+  const id = searchParams.get("id");
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -60,18 +63,24 @@ export default function ResetPassword() {
 
   /* ── Validate token on mount ────────────────────────────── */
   useEffect(() => {
-    if (!token) setTokenError(true);
-  }, [token]);
+    if (!token || !id) setTokenError(true);
+  }, [token, id]);
 
   /* ── Submit ─────────────────────────────────────────────── */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
+    if (!id || !token) {
+      setError("Invalid or expired reset link.");
+      return;
+    }
+
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
     }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -80,13 +89,14 @@ export default function ResetPassword() {
     try {
       setLoading(true);
 
-      // 🔥 Replace with your real API call:
-      // await resetPassword({ token, newPassword: password });
+      await resetPassword(id, token, password);
 
-      await new Promise((r) => setTimeout(r, 1600));
       setSuccess(true);
-    } catch {
-      setError("Reset failed or link has expired. Please request a new one.");
+    } catch (error: any) {
+      setError(
+        error?.response?.data?.message ||
+          "Reset failed or link has expired. Please request a new one.",
+      );
     } finally {
       setLoading(false);
     }

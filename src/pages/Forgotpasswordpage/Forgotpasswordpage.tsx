@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BrainCircuit, Mail, CheckCircle, ArrowLeft } from "lucide-react";
 import "./Forgotpasswordpage.css";
+import { useAuth } from "../../contexts/AuthContext";
+
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate();
@@ -9,6 +11,7 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+  const {forgetPassword} = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,12 +24,12 @@ export default function ForgotPasswordPage() {
 
     try {
       setLoading(true);
-      // 🔥 Call your API here
-      // await forgotPassword({ email })
-      await new Promise((res) => setTimeout(res, 1500));
+    
+      await forgetPassword(email);
       setSent(true);
-    } catch {
-      setError("Something went wrong. Please try again.");
+
+    } catch (error: any) {
+      setError(error?.response?.data?.message || "Failed to send reset link. Please try again.");
     } finally {
       setLoading(false);
     }
