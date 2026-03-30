@@ -10,7 +10,7 @@ import {
   ArrowRight,
   AlertCircle,
 } from "lucide-react";
-import "./ResetPassword.css";
+import "./Resetpassword.css";
 
 /* ════════════════════════════════════════════════════════════
    PASSWORD STRENGTH HELPER

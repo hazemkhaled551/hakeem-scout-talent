@@ -7,7 +7,7 @@ import {
   Gift, Star, XCircle, ClipboardList, Zap,
 } from "lucide-react";
 import Modal from "../../components/Modal/Modal";
-import "./CandidateEvaluation.css";
+import "./Candidateevaluation.css";
 
 // ── Interview Service ──────────────────────────────────────────────────────────
 import {

@@ -23,7 +23,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import Modal from "../../components/Modal/Modal";
-import "./CompanyJobs.css";
+import "./Companyjobs.css";
 import { getCompanyJobs } from "../../services/companyService";
 import {
   changeJobStatus,

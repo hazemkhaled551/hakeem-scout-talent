@@ -18,7 +18,7 @@ import {
   FileText,
 } from "lucide-react";
 import "../../styles/Jobs.css";
-import "./JobApplication.css";
+import "./Jobapplication.css";
 import { getJobById, applyJob } from "../../services/jobService";
 import { uploadCV } from "../../services/cvService";
 

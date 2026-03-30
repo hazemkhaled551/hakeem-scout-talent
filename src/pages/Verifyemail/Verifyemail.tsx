@@ -7,7 +7,7 @@ import {
   ArrowRight,
   RefreshCw,
 } from "lucide-react";
-import "./VerifyEmail.css";
+import "./Verifyemail.css";
 
 /* ════════════════════════════════════════════════════════════
    TYPES

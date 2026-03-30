@@ -27,7 +27,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Modal from "../../components/Modal/Modal";
-import "./CompanyInterviews.css";
+import "./Companyinterviews.css";
 import {
   getCompanyInterviews,
   completeInterview,

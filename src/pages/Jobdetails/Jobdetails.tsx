@@ -13,7 +13,7 @@ import {
   // TrendingUp,
 } from "lucide-react";
 import "../../styles/Jobs.css";
-import "./JobDetails.css";
+import "./Jobdetails.css";
 import { getJobById } from "../../services/jobService";
 import Loader from "../../components/Loader";
 import { fmt, companyIntiatal } from "../../utils/dateFormat";

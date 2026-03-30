@@ -15,7 +15,7 @@ import {
   Video,
   ClipboardList,
 } from "lucide-react";
-import "./ApplicantDashboard.css";
+import "./Applicantdashboard.css";
 // import { useUser } from "../../contexts/UserContext";
 import Loader from "../../components/Loader";
 import {

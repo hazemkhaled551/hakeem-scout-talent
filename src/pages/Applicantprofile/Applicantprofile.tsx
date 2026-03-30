@@ -13,7 +13,7 @@ import {
   BrainCircuit,
 } from "lucide-react";
 import Modal from "./../../components/Modal/Modal";
-import "./ApplicantProfile.css";
+import "./Applicantprofile.css";
 import {
   getMe,
   updateBasicInfo,

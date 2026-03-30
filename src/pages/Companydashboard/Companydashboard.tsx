@@ -16,7 +16,7 @@ import {
   LogOut,
   ChevronRight,
 } from "lucide-react";
-import "./CompanyDashboard.css";
+import "./Companydashboard.css";
 import { getCompanyDashboardStats } from "../../services/companyService";
 import { getJobsApplicants } from "../../services/candidateService";
 import Loader from "../../components/Loader";

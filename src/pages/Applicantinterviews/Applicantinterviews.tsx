@@ -23,7 +23,7 @@ import {
  
 } from "lucide-react";
 import Modal from "../../components/Modal/Modal";
-import "./ApplicantInterviews.css";
+import "./Applicantinterviews.css";
 import {
   getApplicantInterviews,
   applicantCancelInterview,
