@@ -2,7 +2,10 @@ import api from "../utils/api";
 
 /* Get Jobs Applicants */
 export const getJobsApplicants = () => {
-  return api.get("/candidate/jobsApply");
+  return api.get("/candidate/company/jobsApply");
+};
+export const getJobsApplicationById = (id: string) => {
+  return api.get(`/candidate/applicant/jobsApply/${id}`);
 };
 
 /* Get Candidate Screening */

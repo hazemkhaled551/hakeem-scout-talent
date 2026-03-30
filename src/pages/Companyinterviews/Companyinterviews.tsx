@@ -14,7 +14,6 @@ import {
   XCircle,
   RotateCcw,
   Eye,
-  Plus,
   X,
   Save,
   Link,
@@ -33,17 +32,14 @@ import {
   completeInterview,
   rescheduleInterview,
   cancelInterview,
-  scheduleInterview,
   type InterviewDTO,
-  type CompleteInterviewPayload,
 } from "../../services/interviewService";
-import { companyIntiatal, fmtDate, fmtTime } from "../../utils/dateFormat";
-
 import {
-  interviewCandidate,
-  offerCandidate,
-  rejectCandidate,
-} from "../../services/candidateService";
+  companyIntiatal,
+  fmtDate,
+  fmtTime,
+  formatDateWithTimezone,
+} from "../../utils/dateFormat";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -94,19 +90,19 @@ function firstDay(y: number, m: number) {
 }
 const TODAY = new Date();
 
-function emptyForm() {
-  return {
-    candidateName: "",
-    jobTitle: "",
-    type: "Technical" as InterviewType,
-    scheduledAt: "",
-    durationMins: 60,
-    meetingLink: "",
-    location: "",
-    interviewerName: "",
-    notes: "",
-  };
-}
+// function emptyForm() {
+//   return {
+//     candidateName: "",
+//     jobTitle: "",
+//     type: "Technical" as InterviewType,
+//     scheduledAt: "",
+//     durationMins: 60,
+//     meetingLink: "",
+//     location: "",
+//     interviewerName: "",
+//     notes: "",
+//   };
+// }
 
 /* ════════════════════════════════════════════════════════════
    COMPONENT
@@ -135,10 +131,11 @@ export default function CompanyInterviews() {
   const [offerNotes, setOfferNotes] = useState("");
 
   // Another Interview fields
-  const [nextType, setNextType] = useState("Technical");
+  const [nextType, setNextType] = useState("");
   const [nextScheduledAt, setNextScheduledAt] = useState("");
   const [nextMeetingLink, setNextMeetingLink] = useState("");
   const [newMeetingLink, setNewMeetingLink] = useState("");
+  const [nextDuration, setNextDuration] = useState(60);
 
   // Reschedule form
   const [newDate, setNewDate] = useState("");
@@ -152,7 +149,7 @@ export default function CompanyInterviews() {
   >("Offered");
   const [fbInternal, setFbInternal] = useState("");
   // Add form
-  const [addForm, setAddForm] = useState(emptyForm());
+  // const [addForm, setAddForm] = useState(emptyForm());
 
   useEffect(() => {
     loadInterviews();
@@ -231,7 +228,7 @@ export default function CompanyInterviews() {
     setModalType(null);
     setSelected(null);
     setError(null);
-    setAddForm(emptyForm());
+    // setAddForm(emptyForm());
   }
 
   /* ── API actions ────────────────────────────────────────── */
@@ -269,44 +266,31 @@ export default function CompanyInterviews() {
   }
   type NextStep = "Offered" | "Another Interview" | "Reject";
 
-  /* ── Complete + feedback ─────────────────────────────────
-   * This is the KEY action that feeds ApplicantInterviews.
-   * PATCH /interviews/:id/complete
-   * Body: { publicFeedback, internalNote, rating, nextStep }
-   * Result:
-   *   → interview.status = "Completed"
-   *   → interview.feedback populated (publicFeedback visible to applicant)
-   *   → candidate pipeline status updates automatically via backend
-   ──────────────────────────────────────────────────────── */
   async function handleComplete() {
     if (!selected || !fbPublic) return;
-    setLoading(true);
     try {
-      const payload: CompleteInterviewPayload = {
+      setLoading(true);
+      const payload: any = {
         publicFeedback: fbPublic,
-        // internalNote: fbInternal || undefined,
         rating: fbRating,
         nextStep: fbNextStep,
+        nextInterview: {
+          type: nextType,
+          scheduledAt: formatDateWithTimezone(nextScheduledAt),
+          meetingLink: nextMeetingLink,
+          durationMin: nextDuration,
+        },
+        offer: {
+          offeredSalary: offerSalary,
+          startDate: formatDateWithTimezone(offerStart),
+          notes: offerNotes,
+        },
+        reject: {
+          reason: fbInternal,
+        },
       };
       await completeInterview(selected.id, payload);
 
-      if (fbNextStep === "Offered") {
-        await offerCandidate(selected.application.id, {
-          offeredSalary: offerSalary,
-          startDate: offerStart,
-          notes: offerNotes,
-        });
-      } else if (fbNextStep === "Reject") {
-        await rejectCandidate(selected.application.id, {
-          reason: fbInternal,
-        });
-      } else if (fbNextStep === "Another Interview") {
-        await interviewCandidate(selected.application.id, {
-          interviewType: nextType,
-          scheduledAt: nextScheduledAt,
-          meetingLink: nextMeetingLink || undefined, // optional
-        });
-      }
       await loadInterviews();
       closeModal();
     } catch (e: any) {
@@ -315,57 +299,6 @@ export default function CompanyInterviews() {
       setLoading(false);
     }
   }
-
-  async function handleAdd() {
-    if (!addForm.candidateName || !addForm.scheduledAt) return;
-    setLoading(true);
-    try {
-      // uses candidateId from route context — here we use a stub
-      await scheduleInterview("new", {
-        interviewType: addForm.type,
-        scheduledAt: addForm.scheduledAt,
-        meetingLink: addForm.meetingLink || undefined,
-        durationMins: addForm.durationMins,
-        interviewerName: addForm.interviewerName || undefined,
-        location: addForm.location || undefined,
-        notes: addForm.notes || undefined,
-      });
-      await loadInterviews();
-      closeModal();
-    } catch {
-      // optimistic local update if API not ready
-      const newIv: InterviewDTO = {
-        id: String(Date.now()),
-        candidateId: "",
-        jobId: "",
-        candidateName: addForm.candidateName,
-        candidateInitials: addForm.candidateName
-          .split(" ")
-          .map((n) => n[0])
-          .join("")
-          .slice(0, 2)
-          .toUpperCase(),
-        jobTitle: addForm.jobTitle,
-        company: { name: "TechCorp Inc." },
-        companyInitial: "T",
-        interviewType: addForm.type,
-        status: "Scheduled",
-        scheduledAt: addForm.scheduledAt,
-        durationMins: addForm.durationMins,
-        meetingLink: addForm.meetingLink || undefined,
-        location: addForm.location || undefined,
-        interviewerName: addForm.interviewerName,
-        notes: addForm.notes || undefined,
-      };
-      setInterviews((p) => [newIv, ...p]);
-      closeModal();
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const setAdd = (k: keyof typeof addForm, v: unknown) =>
-    setAddForm((p) => ({ ...p, [k]: v }));
 
   /* ── RENDER ─────────────────────────────────────────────── */
   return (
@@ -396,12 +329,12 @@ export default function CompanyInterviews() {
               Manage and track all candidate interview sessions
             </p>
           </div>
-          <button
+          {/* <button
             className="ci-btn ci-btn--primary"
             onClick={() => openModal("add")}
           >
             <Plus size={15} /> Schedule Interview
-          </button>
+          </button> */}
         </div>
 
         {/* KPIs */}
@@ -1410,6 +1343,7 @@ export default function CompanyInterviews() {
                       value={nextType}
                       onChange={(e) => setNextType(e.target.value)}
                     >
+                      <option value="">Select Interview Type</option>
                       {["Technical", "HR", "Final", "Culture Fit"].map((t) => (
                         <option key={t} value={t}>
                           {t}
@@ -1426,6 +1360,15 @@ export default function CompanyInterviews() {
                       type="datetime-local"
                       value={nextScheduledAt}
                       onChange={(e) => setNextScheduledAt(e.target.value)}
+                    />
+                  </div>
+                  <div className="ci-field">
+                    <label className="ci-label">Duration (minutes)</label>
+                    <input
+                      className="ci-input"
+                      type="number"
+                      value={nextDuration}
+                      onChange={(e) => setNextDuration(Number(e.target.value))}
                     />
                   </div>
                 </div>
@@ -1446,27 +1389,29 @@ export default function CompanyInterviews() {
           )}
 
           {/* Internal note */}
-          <div className="ci-field">
-            <label className="ci-label">
-              Internal Note{" "}
-              <span
-                style={{
-                  color: "var(--muted)",
-                  fontWeight: 400,
-                  textTransform: "none",
-                }}
-              >
-                (recruiter-only)
-              </span>
-            </label>
-            <textarea
-              className="ci-textarea"
-              placeholder="Private notes not shared with the candidate…"
-              value={fbInternal}
-              onChange={(e) => setFbInternal(e.target.value)}
-              style={{ minHeight: 70 }}
-            />
-          </div>
+          {fbNextStep === "Reject" && (
+            <div className="ci-field">
+              <label className="ci-label">
+                Internal Note{" "}
+                <span
+                  style={{
+                    color: "var(--muted)",
+                    fontWeight: 400,
+                    textTransform: "none",
+                  }}
+                >
+                  (recruiter-only)
+                </span>
+              </label>
+              <textarea
+                className="ci-textarea"
+                placeholder="Private notes not shared with the candidate…"
+                value={fbInternal}
+                onChange={(e) => setFbInternal(e.target.value)}
+                style={{ minHeight: 70 }}
+              />
+            </div>
+          )}
 
           {error && (
             <p style={{ color: "var(--danger)", fontSize: ".8rem" }}>{error}</p>
@@ -1606,161 +1551,6 @@ export default function CompanyInterviews() {
       </Modal>
 
       {/* ADD NEW */}
-      <Modal
-        open={modalType === "add"}
-        onClose={closeModal}
-        title="Schedule Interview"
-        icon={<Plus size={15} />}
-        size="lg"
-        footer={
-          <>
-            <button
-              className="ci-btn ci-btn--ghost ci-btn--sm"
-              onClick={closeModal}
-              disabled={loading}
-            >
-              Cancel
-            </button>
-            <button
-              className="ci-btn ci-btn--primary ci-btn--sm"
-              onClick={handleAdd}
-              disabled={
-                !addForm.candidateName || !addForm.scheduledAt || loading
-              }
-              style={{
-                opacity:
-                  addForm.candidateName && addForm.scheduledAt && !loading
-                    ? 1
-                    : 0.45,
-              }}
-            >
-              <Plus size={13} />
-              {loading ? "Scheduling…" : "Schedule"}
-            </button>
-          </>
-        }
-      >
-        <div className="row g-3">
-          <div className="col-12 col-sm-6">
-            <div className="ci-field">
-              <label className="ci-label">
-                Candidate Name <span style={{ color: "var(--danger)" }}>*</span>
-              </label>
-              <input
-                className="ci-input"
-                placeholder="e.g. Alex Johnson"
-                value={addForm.candidateName}
-                onChange={(e) => setAdd("candidateName", e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="col-12 col-sm-6">
-            <div className="ci-field">
-              <label className="ci-label">Job Title</label>
-              <input
-                className="ci-input"
-                placeholder="e.g. Senior Software Engineer"
-                value={addForm.jobTitle}
-                onChange={(e) => setAdd("jobTitle", e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="col-12 col-sm-6">
-            <div className="ci-field">
-              <label className="ci-label">Interview Type</label>
-              <select
-                className="ci-select"
-                value={addForm.type}
-                onChange={(e) =>
-                  setAdd("type", e.target.value as InterviewType)
-                }
-              >
-                {(
-                  ["Technical", "HR", "Final", "Culture Fit"] as InterviewType[]
-                ).map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="col-12 col-sm-6">
-            <div className="ci-field">
-              <label className="ci-label">Duration</label>
-              <select
-                className="ci-select"
-                value={addForm.durationMins}
-                onChange={(e) => setAdd("durationMins", Number(e.target.value))}
-              >
-                {[30, 45, 60, 90, 120].map((d) => (
-                  <option key={d} value={d}>
-                    {d} min
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="col-12 col-sm-6">
-            <div className="ci-field">
-              <label className="ci-label">
-                Date & Time <span style={{ color: "var(--danger)" }}>*</span>
-              </label>
-              <input
-                className="ci-input"
-                type="datetime-local"
-                value={addForm.scheduledAt}
-                onChange={(e) => setAdd("scheduledAt", e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="col-12 col-sm-6">
-            <div className="ci-field">
-              <label className="ci-label">Interviewer</label>
-              <input
-                className="ci-input"
-                placeholder="e.g. Sarah Chen"
-                value={addForm.interviewerName}
-                onChange={(e) => setAdd("interviewerName", e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="col-12">
-            <div className="ci-field">
-              <label className="ci-label">Meeting Link</label>
-              <input
-                className="ci-input"
-                type="url"
-                placeholder="https://meet.google.com/…"
-                value={addForm.meetingLink}
-                onChange={(e) => setAdd("meetingLink", e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="col-12">
-            <div className="ci-field">
-              <label className="ci-label">Or Physical Location</label>
-              <input
-                className="ci-input"
-                placeholder="e.g. Office — Room 4B"
-                value={addForm.location}
-                onChange={(e) => setAdd("location", e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="col-12">
-            <div className="ci-field">
-              <label className="ci-label">Notes</label>
-              <textarea
-                className="ci-textarea"
-                placeholder="Internal notes…"
-                value={addForm.notes}
-                onChange={(e) => setAdd("notes", e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 }

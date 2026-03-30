@@ -21,6 +21,7 @@ import ForgotPasswordPage from "./pages/Forgotpasswordpage/Forgotpasswordpage";
 import SelectRolePage from "./pages/Selectrolepage/Selectrolepage";
 import RestoreAccount from "./pages/RestoreAccount/RestoreAccount";
 import RequestRestore from "./pages/RestoreAccount/RestoreAccountRequest";
+import ApplicationStatus from "./pages/Applicationstatus/Applicationstatus";
 export default function App() {
   return (
     <AuthProvider>
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/dashboard" element={<ApplicantDashboard />} />
             <Route path="/applicant/profile" element={<ApplicantProfile />} />
             <Route path="/applicant/interview" element={<ApplicantInterviews />} />
+            <Route path="/applicant/app-status/:id" element={<ApplicationStatus />} />
             <Route path="/jobs" element={<JobList />} />
             <Route path="/jobs/:jobId" element={<JobDetails />} />
             <Route path="/jobs/:jobId/apply" element={<JobApplication />} />

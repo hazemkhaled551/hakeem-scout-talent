@@ -90,12 +90,14 @@ const profileChecks = [
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function getStatusBadge(status: string) {
   switch (status) {
-    case "Interview":
+    case "interview":
       return "dk-badge dk-badge--interview";
     case "New":
       return "dk-badge dk-badge--review";
     case "Rejected":
       return "dk-badge dk-badge--rejected";
+      case "Offered":
+        return "dk-badge dk-badge--green";
     default:
       return "dk-badge dk-badge--default";
   }
@@ -385,7 +387,7 @@ export default function ApplicantDashboard() {
                   <div className="d-flex gap-2 flex-wrap">
                     <button
                       className="dk-btn-outline dk-btn-sm"
-                      onClick={() => navigate(`/jobs/${app.job.id}`)}
+                      onClick={() => navigate(`/applicant/app-status/${app.id}`)}
                     >
                       View Details
                     </button>

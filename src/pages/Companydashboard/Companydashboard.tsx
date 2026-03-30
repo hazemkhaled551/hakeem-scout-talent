@@ -197,6 +197,25 @@ export default function CompanyDashboard() {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
+  const mapStatus = (status: string): CandidateStatus => {
+    const s = status.trim().toLowerCase();
+
+    switch (s) {
+      case "new":
+        return "New";
+      case "interview":
+        return "Interview";
+      case "offered":
+        return "Offer";
+      case "screening":
+        return "Screening";
+      case "hired":
+        return "Hired";
+      default:
+        return "New";
+    }
+  };
+
   async function fetchApplicants() {
     try {
       const res = await getJobsApplicants();
@@ -204,14 +223,15 @@ export default function CompanyDashboard() {
       const apps = res.data.data.jobaApply;
 
       const mappedCandidates = apps.map((item: any) => ({
-        id: item.id, // خليها string عادي
+        id: item.id,
         name: item.applicant.name,
         position: item.job.title,
-        aiScore: Math.floor(Math.random() * 30) + 70, // مؤقت لحد ما API يبقى فيه score
+        aiScore: Math.floor(Math.random() * 30) + 70,
         skills: item.job.skills || [],
-        appliedDate: "Recently", // أو تعمل format لو فيه date بعدين
-        status: "New", // default لحد ما يبقى فيه status من backend
+        appliedDate: "Recently",
+        status: mapStatus(item.status), // 👈 الحل النهائي
       }));
+      console.log(mappedCandidates);
 
       setCandidates(mappedCandidates);
     } catch (error) {
@@ -274,8 +294,11 @@ export default function CompanyDashboard() {
     );
   });
 
-  const colCandidates = (status: CandidateStatus) =>
-    filtered.filter((c) => c.status === status);
+  const colCandidates = (status: CandidateStatus) => {
+    const result = filtered.filter((c) => c.status === status);
+    console.log(status, result);
+    return result;
+  };
 
   const resetFilters = () => {
     setSearch("");

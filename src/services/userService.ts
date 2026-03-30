@@ -11,4 +11,4 @@ export const getCompletion = () => api.get("/user/me/completion");
 
 export const getDashboardStats = () => api.get("/user/me/dashboard-stats");
 
-export const getApplicantJobs = () => api.get("/user/me/applicantJob");
+export const getApplicantJobs = () => api.get("/candidate/applicant/jobsApply");

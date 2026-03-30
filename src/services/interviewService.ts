@@ -118,31 +118,13 @@ export interface ApplicantInterviewStats {
   thisWeek: number;
 }
 
-/* ════════════════════════════════════════════════════════════
-   API CALLS
-════════════════════════════════════════════════════════════ */
 
-// ─────────────────────────────────────────────────────────────
-// COMPANY
-// ─────────────────────────────────────────────────────────────
-
-/**
- * GET /api/v1/interview/company
- * جلب كل المقابلات للـ company
- * Called from: CompanyInterviews (on mount + filter change)
- */
 export const getCompanyInterviews = (status?: string) =>
   api.get("/interview/company", {
     params: status ? { status } : {},
   });
 
-/**
- * POST /api/v1/interview/complete/{interviewId}
- * إنهاء المقابلة + إضافة الـ feedback
- * Called from: CompanyInterviews (Complete modal)
- * ⚠️ nextStep = "Offer" → call sendOffer() بعدها
- * ⚠️ nextStep = "Another Interview" → call scheduleInterview() بعدها
- */
+
 export const completeInterview = (
   interviewId: string,
   payload: CompleteInterviewPayload,
