@@ -26,7 +26,7 @@ export interface CompleteInterviewPayload {
   publicFeedback: string;
   internalNote?: string;
   rating: number;
-  nextStep: "Offer" | "Reject" | "Another Interview";
+  nextStep: "Offered" | "Reject" | "Another Interview";
 }
 
 /* ── Reschedule ────────────────────────────────────────── */

@@ -14,7 +14,7 @@ export type AuthContextType = {
     email: string,
     password: string,
     rememberMe?: boolean,
-  ) => Promise<void>;
+  ) => Promise<User>;
 
   register: (data: any) => Promise<any>;
 
