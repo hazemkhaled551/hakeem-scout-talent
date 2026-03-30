@@ -12,7 +12,7 @@ import {
   Briefcase,
 } from "lucide-react";
 import "../../styles/Jobs.css";
-import "./JobList.css";
+import "./Joblist.css";
 import { getAllJobs } from "../../services/jobService";
 import Loader from "../../components/Loader";
 
