@@ -44,8 +44,8 @@ export default function ResetPassword() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams(); 
   const { resetPassword } = useAuth();
-  const token = searchParams.get("resetPasswordToken");
-  const id = searchParams.get("id");
+  const token = searchParams.get("token");
+ 
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -63,15 +63,15 @@ export default function ResetPassword() {
 
   /* ── Validate token on mount ────────────────────────────── */
   useEffect(() => {
-    if (!token || !id) setTokenError(true);
-  }, [token, id]);
+    if (!token) setTokenError(true);
+  }, [token]);
 
   /* ── Submit ─────────────────────────────────────────────── */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
-    if (!id || !token) {
+    if (!token) {
       setError("Invalid or expired reset link.");
       return;
     }
@@ -89,7 +89,7 @@ export default function ResetPassword() {
     try {
       setLoading(true);
 
-      await resetPassword(id, token, password);
+      await resetPassword(token, password);
 
       setSuccess(true);
     } catch (error: any) {

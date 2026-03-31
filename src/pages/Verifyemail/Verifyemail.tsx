@@ -21,8 +21,8 @@ type VerifyStatus = "loading" | "success" | "error";
 export default function VerifyEmail() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const token = searchParams.get("verificationToken");
-  const id = searchParams.get("id");
+  const token = searchParams.get("token");
+  
   const { verifyEmail } = useAuth();
 
   const [status, setStatus] = useState<VerifyStatus>("loading");
@@ -32,7 +32,7 @@ export default function VerifyEmail() {
   /* ── API call ──────────────────────────────────────────── */
   useEffect(() => {
     async function verify() {
-      if (!token || !id) {
+      if (!token) {
         setStatus("error");
         setMessage("Invalid or missing verification data.");
         return;
@@ -45,7 +45,7 @@ export default function VerifyEmail() {
 
         setStep("Confirming identity");
 
-        await verifyEmail(id, token);
+        await verifyEmail(token);
 
         setStep("Activating account");
 
@@ -66,7 +66,7 @@ export default function VerifyEmail() {
     }
 
     verify();
-  }, [token, id]);
+  }, [token]);
 
   /* ── Render ─────────────────────────────────────────────── */
   return (
