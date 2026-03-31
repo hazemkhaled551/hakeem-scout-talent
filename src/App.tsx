@@ -22,6 +22,7 @@ import SelectRolePage from "./pages/Selectrolepage/Selectrolepage";
 import RestoreAccount from "./pages/RestoreAccount/RestoreAccount";
 import RequestRestore from "./pages/RestoreAccount/RestoreAccountRequest";
 import ApplicationStatus from "./pages/Applicationstatus/Applicationstatus";
+import GoogleCallback from "./pages/Googlecallback/Googlecallback";
 export default function App() {
   return (
     <AuthProvider>
@@ -30,6 +31,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/auth/google/callback" element={<GoogleCallback />} />
             <Route path="/verify" element={<VerifyEmail  />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/forget-password" element={<ForgotPasswordPage />} />
