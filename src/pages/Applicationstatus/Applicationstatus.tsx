@@ -21,7 +21,7 @@ import {
   ArrowRight,
   Link,
 } from "lucide-react";
-import "./ApplicationStatus.css";
+import "./Applicationstatus.css";
 
 import {
   getJobsApplicationById,

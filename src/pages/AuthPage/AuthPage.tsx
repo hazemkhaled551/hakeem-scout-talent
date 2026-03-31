@@ -166,7 +166,7 @@ export default function AuthPage() {
       setLoading(true);
       setAlert(null);
 
-      await register({
+     const res = await register({
         name: regForm.fullName,
         email: regForm.email,
         password: regForm.password,
@@ -179,10 +179,10 @@ export default function AuthPage() {
 
       setAlert({
         type: "success",
-        msg: "Account created successfully",
+        msg: res.data.data.message || "Account created successfully",
       });
 
-      setTimeout(() => navigate("/dashboard"), 1000);
+    
     } catch (error: any) {
       setAlert({
         type: "error",
