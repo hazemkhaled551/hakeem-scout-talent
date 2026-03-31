@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {  useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import {
   BrainCircuit,
   UserSearch,
@@ -9,19 +9,19 @@ import {
 } from "lucide-react";
 import "../Forgotpasswordpage/Forgotpasswordpage.css";
 import { useAuth } from "../../contexts/AuthContext";
- 
-type Role = "applicant" | "company" | null;
+
+type Role = "Applicant" | "Company" | null;
 
 const roles = [
   {
-    id: "applicant" as Role,
+    id: "Applicant" as Role,
     icon: UserSearch,
     label: "Applicant",
     desc: "Find opportunities, build your profile, and land your next role",
     badge: "Most Popular",
   },
   {
-    id: "company" as Role,
+    id: "Company" as Role,
     icon: Building2,
     label: "Company",
     desc: "Post jobs, review candidates, and grow your team with AI",
@@ -30,11 +30,10 @@ const roles = [
 ];
 
 export default function SelectRolePage() {
-  
   const [selected, setSelected] = useState<Role>(null);
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
-  const id =  searchParams.get("id") || "";
+  const id = searchParams.get("id") || "";
 
   const { selectRole } = useAuth();
 
@@ -42,13 +41,28 @@ export default function SelectRolePage() {
     if (!selected) return;
     try {
       setLoading(true);
-      await selectRole(id, selected);
-    } catch (e : any) {
-      console.error(e?.response?.data?.message || "Failed to select role. Please try again.");
+      const res = await selectRole(id, selected);
+      console.log(res);
+      
+
+      const user = res.data.user;
+      const token = res.data.accessToken;
+
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", token);
+
+      if (user.role === "Applicant") {
+        window.location.href = "/dashboard";
+      } else if (user.role === "Company") {
+        window.location.href = "/company/dashboard";
+      }
+    } catch (e: any) {
+      console.error(
+        e
+      );
     } finally {
       setLoading(false);
     }
-  
   };
 
   return (
@@ -128,8 +142,6 @@ export default function SelectRolePage() {
               </>
             )}
           </button>
-
-       
         </div>
       </div>
     </div>

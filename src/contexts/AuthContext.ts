@@ -20,7 +20,7 @@ export type AuthContextType = {
 
   googleLogin: () => void;
   handleGoogleCallback: (token: string, user: User) => void;
-  selectRole: (id: string, role: string) => Promise<void>;
+  selectRole: (id: string, role: string) => Promise<any>;
 
   logout: () => Promise<void>;
   refreshToken: () => Promise<void>;

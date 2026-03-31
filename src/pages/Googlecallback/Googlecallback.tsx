@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BrainCircuit, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import "../RestoreAccount/auth-pages.css";
+import api from "../../utils/api";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -23,7 +24,7 @@ const STEPS = [
 ════════════════════════════════════════════════════════════ */
 export default function GoogleCallback() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+
   const [status, setStatus] = useState<CallbackStatus>("loading");
   const [stepIdx, setStepIdx] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
@@ -34,25 +35,6 @@ export default function GoogleCallback() {
     calledRef.current = true;
 
     async function handleCallback() {
-      const code = searchParams.get("code");
-      const error = searchParams.get("error"); // Google sends this on deny
-
-      /* ── User denied Google permission ─────────────────── */
-      if (error) {
-        setStatus("error");
-        setErrorMsg("Google sign-in was cancelled. Please try again.");
-        return;
-      }
-
-      /* ── No code received ───────────────────────────────── */
-      if (code) {
-        setStatus("error");
-        setErrorMsg(
-          "No authorization code received. Please try signing in again.",
-        );
-        return;
-      }
-
       try {
         /* Animate steps */
         for (let i = 0; i < STEPS.length; i++) {
@@ -61,21 +43,22 @@ export default function GoogleCallback() {
         }
 
         // 🔥 Replace with your real API call:
-        // const { data } = await api.get(`/auth/google/callback?code=${code}`);
-        // const { token, role } = data.data;
-        // localStorage.setItem("token", token);
+        const res = await api.get(`/auth/getMe`);
 
-        // Demo — remove in production
-        await new Promise((r) => setTimeout(r, 500));
-        const role = "applicant"; // or "company" — comes from your API
+        const user = res.data.user;
+        const token = res.data.accessToken;
+
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("token", token);
 
         setStatus("success");
-
-        /* Brief success flash then redirect */
-        await new Promise((r) => setTimeout(r, 900));
-        navigate(role === "applicant" ? "/applicant" : "/company", {
-          replace: true,
-        });
+        // Demo — remove in production
+        await new Promise((r) => setTimeout(r, 500));
+        if (user.role === "Applicant") {
+          window.location.href = "/dashboard";
+        } else if (user.role === "Company") {
+          window.location.href = "/company/dashboard";
+        }
       } catch (err: any) {
         setStatus("error");
         setErrorMsg(
@@ -86,7 +69,8 @@ export default function GoogleCallback() {
     }
 
     handleCallback();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
+  // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── Render ─────────────────────────────────────────────── */
   return (

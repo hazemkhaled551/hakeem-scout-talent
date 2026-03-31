@@ -19,7 +19,7 @@ import {
   updateBasicInfo,
   getCompletion,
 } from "../../services/userService";
-import { formatDate } from "../../utils/dateFormat";
+import { formatDate, formatDateWithTimezone } from "../../utils/dateFormat";
 import {
   addSkill,
   deleteSkill,
@@ -176,13 +176,17 @@ export default function ApplicantProfile() {
     setEditingExpId(null);
     setExpModalOpen(true);
   }
+  function formatDateForInput(date: string) {
+    if (!date) return "";
+    return date.split("T")[0];
+  }
 
   function openEditExp(exp: Experience) {
     setExpForm({
       title: exp.title,
       company: exp.company,
-      startDate: exp.startDate,
-      endDate: exp.endDate,
+      startDate:  formatDateForInput(exp.startDate),
+      endDate: formatDateForInput(exp.endDate),
       description: exp.description,
     });
     setEditingExpId(exp.id);
@@ -197,14 +201,19 @@ export default function ApplicantProfile() {
 
   async function saveExperience() {
     if (!expForm.title.trim() || !expForm.company.trim()) return;
+    const payload = {
+      ...expForm,
+      startDate: formatDateWithTimezone(expForm.startDate),
+      endDate: formatDateWithTimezone(expForm.endDate),
+    };
     try {
       if (editingExpId) {
         // تحديث الخبرة
-        await updateExperience(editingExpId, expForm);
+        await updateExperience(editingExpId, payload);
         fetchUser(); // إعادة جلب البيانات لتحديث الواجهة
       } else {
         // اضافة خبرة جديدة
-        await addExperience(expForm);
+        await addExperience(payload);
         fetchUser(); // إعادة جلب البيانات لتحديث الواجهة
       }
       closeExpModal();
@@ -545,7 +554,7 @@ export default function ApplicantProfile() {
                 <label className="pr-label">Start Date</label>
                 <input
                   className="pr-input"
-                  type="text"
+                  type="date"
                   placeholder="e.g. 2021"
                   value={expForm.startDate}
                   onChange={(e) =>
@@ -560,7 +569,7 @@ export default function ApplicantProfile() {
                 <label className="pr-label">End Date</label>
                 <input
                   className="pr-input"
-                  type="text"
+                  type="date"
                   placeholder="e.g. Present"
                   value={expForm.endDate}
                   onChange={(e) =>
