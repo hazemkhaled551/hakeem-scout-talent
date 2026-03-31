@@ -276,6 +276,7 @@ export default function CandidateEvaluation() {
   // ── Offer form ──────────────────────────────────────────
   const [offerSalary, setOfferSalary] = useState("");
   const [offerStartDate, setOfferStartDate] = useState("");
+  const [offerExpiryDate, setOfferExpiryDate] = useState("");
   const [offerNotes, setOfferNotes] = useState("");
 
   // ── Hired form ──────────────────────────────────────────
@@ -324,8 +325,9 @@ export default function CandidateEvaluation() {
         case "offer":
           // POST /candidates/:id/offer
           await offerCandidate(id, {
-            offeredSalary: Number(offerSalary),
-            startDate: offerStartDate,
+            offeredSalary: offerSalary,
+            startDate: formatDateWithTimezone(offerStartDate),
+            expiresAt: formatDateWithTimezone(offerExpiryDate),
             notes: offerNotes || undefined,
           });
           break;
@@ -350,6 +352,7 @@ export default function CandidateEvaluation() {
       setIvDuration(60);
       setOfferSalary("");
       setOfferStartDate("");
+      setOfferExpiryDate("");
       setOfferNotes("");
       setHireStartDate("");
       setRejectReason("");
@@ -956,7 +959,7 @@ export default function CandidateEvaluation() {
               </label>
               <input
                 className="ce-input"
-                type="number"
+                type="text"
                 placeholder="e.g. 150000"
                 value={offerSalary}
                 onChange={(e) => setOfferSalary(e.target.value)}
@@ -973,6 +976,19 @@ export default function CandidateEvaluation() {
                 type="date"
                 value={offerStartDate}
                 onChange={(e) => setOfferStartDate(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="ce-field">
+              <label className="ce-label">
+                End Date <span style={{ color: "var(--danger)" }}>*</span>
+              </label>
+              <input
+                className="ce-input"
+                type="date"
+                value={offerExpiryDate}
+                onChange={(e) => setOfferExpiryDate(e.target.value)}
               />
             </div>
           </div>

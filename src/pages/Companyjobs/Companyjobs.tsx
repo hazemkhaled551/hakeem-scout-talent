@@ -14,7 +14,6 @@ import {
   Play,
   PauseCircle,
   XCircle,
- 
   Send,
   Save,
   AlertCircle,
@@ -81,6 +80,9 @@ interface Job {
   responsibilities: string[];
   skills: string[];
   requirements: string;
+  positions?: number;
+  maxApplications?: number;
+  deadline?: string;
   companySize: string;
   industry: string;
   growth: string;
@@ -103,6 +105,9 @@ interface JobPayload {
   skills: string[];
   responsibilities: string[];
   requirements: string;
+  positions?: number;
+  maxApplications?: number;
+  deadline?: string;
 }
 
 type TabType = "ALL" | JobStatus;
@@ -188,6 +193,9 @@ function toPayload(f: Job, statusOverride?: JobStatus): JobPayload {
     skills: f.skills,
     responsibilities: f.responsibilities,
     requirements: f.requirements, // array → string for API
+    positions: f.positions, // default to 1 position per job post
+    maxApplications: f.maxApplications, // use the value from the job object
+    deadline: f.deadline, // use the value from the job object
   };
 }
 
@@ -694,6 +702,48 @@ export default function CompanyJobs() {
             />
           </div>
 
+          <div className="col-6">
+            <div className="cj-field">
+              <label className="cj-label">Position Availability</label>
+
+              <input
+                className="cj-input w-100"
+                type="number"
+                value={formData.positions}
+                onChange={(e) => set("positions", Number(e.target.value))}
+                style={{ width: 100 }}
+                min={1}
+              />
+            </div>
+          </div>
+
+          <div className="col-6 ">
+            <div className="cj-field">
+              <label className="cj-label">Max Applicants</label>
+              <input
+                className="cj-input w-100"
+                type="number"
+                value={formData.maxApplications}
+                onChange={(e) => set("maxApplications", Number(e.target.value))}
+                style={{ width: 100 }}
+                min={1}
+              />
+            </div>
+          </div>
+
+          <div className="col-12">
+            <div className="cj-field">
+              <label className="cj-label">Application Deadline</label>
+              <input
+                className="cj-input"
+                type="date"
+                value={formData.deadline}
+                onChange={(e) => set("deadline", e.target.value)}
+              />
+            </div>
+          </div>
+
+
           {formData.minSalary !== "" &&
             formData.maxSalary !== "" &&
             !salaryValid && (
@@ -868,9 +918,32 @@ function JobCard({
               {job.workMode}
             </span>
           )}
+          {
+            job.positions !== undefined && (
+              <span className="cj-meta-item">
+                <Briefcase size={13} />
+                {job.positions} positions
+              </span>
+            )
+          }
+          {
+            job.maxApplications !== undefined && (
+              <span className="cj-meta-item">
+                <FileText size={13} />
+                {job.maxApplications} applications
+              </span>
+            )
+          }
+
+          
           {job.postedDays > 0 && (
             <span className="cj-meta-item ms-auto">
               Posted {job.postedDays}d ago
+            </span>
+          )}
+          {job.deadline && (
+            <span className="cj-meta-item ms-auto">
+              Deadline: {new Date(job.deadline).toLocaleDateString()}
             </span>
           )}
         </div>

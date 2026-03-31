@@ -23,7 +23,10 @@ import {
 } from "lucide-react";
 import "./ApplicationStatus.css";
 
-import { getJobsApplicationById } from "../../services/candidateService";
+import {
+  getJobsApplicationById,
+  responseToOffer,
+} from "../../services/candidateService";
 
 /* ════════════════════════════════════════════════════════════
    TYPES — mirror the API response
@@ -73,7 +76,7 @@ interface Offer {
   notes: string;
   expiresAt: string;
   respondedAt: string | null;
-  status: "Pending" | "Accepted" | "Declined";
+  status: "Pending" | "Accepted" | "Rejected";
   createdAt: string;
 }
 
@@ -94,14 +97,6 @@ interface ApplicationData {
   rejectAt: string | null;
 }
 
-/* ════════════════════════════════════════════════════════════
-   DUMMY DATA (from the real API shape)
-════════════════════════════════════════════════════════════ */
-
-
-/* ════════════════════════════════════════════════════════════
-   HELPERS
-════════════════════════════════════════════════════════════ */
 function fmtDate(iso: string | null, opts?: Intl.DateTimeFormatOptions) {
   if (!iso) return "—";
   return new Date(iso).toLocaleDateString(
@@ -272,11 +267,13 @@ export default function ApplicationStatus() {
       try {
         const res = await getJobsApplicationById(id!);
         console.log(res.data.data);
-        
 
         setData(res.data.data);
-      } catch (error : any) {
-        console.error("Failed to load application status:", error?.response?.data?.message || error.message);
+      } catch (error: any) {
+        console.error(
+          "Failed to load application status:",
+          error?.response?.data?.message || error.message,
+        );
       } finally {
         setLoading(false);
       }
@@ -300,6 +297,22 @@ export default function ApplicationStatus() {
   const pipeline = getPipeline(data);
   const progress = timelineProgress(pipeline);
 
+  async function handleOfferResponse(accept: string) {
+    try {
+      await responseToOffer(data?.offer?.id, {
+        status: accept,
+      });
+      // Refresh data to reflect changes
+      const res = await getJobsApplicationById(id!);
+      setData(res.data.data);
+      
+    } catch (error: any) {
+      console.error(
+        "Failed to respond to offer:",
+        error?.response?.data?.message || error.message,
+      );
+    }
+  }
   /* ── Render ─────────────────────────────────────────────── */
   return (
     <div className="as-page">
@@ -557,16 +570,7 @@ export default function ApplicationStatus() {
                       <div className="as-offer-label">Offered Salary</div>
                       <div className="as-offer-salary">
                         ${parseFloat(data.offer.offeredSalary).toLocaleString()}
-                        <span
-                          style={{
-                            fontSize: ".8rem",
-                            fontWeight: 500,
-                            color: "var(--muted)",
-                            marginLeft: ".3rem",
-                          }}
-                        >
-                          /yr
-                        </span>
+                    
                       </div>
                     </div>
                     <span
@@ -576,7 +580,7 @@ export default function ApplicationStatus() {
                       {data.offer.status === "Accepted" && (
                         <CheckCircle size={11} />
                       )}
-                      {data.offer.status === "Declined" && (
+                      {data.offer.status === "Rejected" && (
                         <XCircle size={11} />
                       )}
                       {data.offer.status}
@@ -627,6 +631,7 @@ export default function ApplicationStatus() {
                       <button
                         className="as-btn as-btn--success"
                         style={{ flex: 1 }}
+                        onClick={() => handleOfferResponse("Accepted")}
                       >
                         <CheckCircle size={14} /> Accept
                       </button>
@@ -637,6 +642,7 @@ export default function ApplicationStatus() {
                           color: "var(--danger)",
                           borderColor: "rgba(239,68,68,.3)",
                         }}
+                        onClick={() => handleOfferResponse("Rejected")}
                       >
                         <XCircle size={14} /> Decline
                       </button>
@@ -660,7 +666,7 @@ export default function ApplicationStatus() {
                     </div>
                   )}
 
-                  {data.offer.status === "Declined" && (
+                  {data.offer.status === "Rejected" && (
                     <div
                       className="as-notice as-notice--amber"
                       style={{ fontSize: ".8rem" }}

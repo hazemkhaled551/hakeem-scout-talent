@@ -32,3 +32,7 @@ export const interviewCandidate = (id: string, payload: any) => {
 export const offerCandidate = (id: string, payload: any) => {
   return api.post(`/candidate/offer/${id}`, payload);
 };
+/* Respose To offer */
+export const responseToOffer = (id: string | undefined, payload: any) => {
+  return api.patch(`/candidate/offer/response/${id}`, payload);
+};

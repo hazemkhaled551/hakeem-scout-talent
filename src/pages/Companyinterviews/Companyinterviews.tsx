@@ -128,6 +128,7 @@ export default function CompanyInterviews() {
   // Offer fields
   const [offerSalary, setOfferSalary] = useState("");
   const [offerStart, setOfferStart] = useState("");
+  const [offerExpiryDate, setOfferExpiryDate] = useState("");
   const [offerNotes, setOfferNotes] = useState("");
 
   // Another Interview fields
@@ -283,6 +284,7 @@ export default function CompanyInterviews() {
         offer: {
           offeredSalary: offerSalary,
           startDate: formatDateWithTimezone(offerStart),
+          expiresAt: formatDateWithTimezone(offerExpiryDate),
           notes: offerNotes,
         },
         reject: {
@@ -1292,6 +1294,17 @@ export default function CompanyInterviews() {
                       type="date"
                       value={offerStart}
                       onChange={(e) => setOfferStart(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <div className="ci-field">
+                    <label className="ci-label">End Date</label>
+                    <input
+                      className="ci-input"
+                      type="date"
+                      value={offerExpiryDate}
+                      onChange={(e) => setOfferExpiryDate(e.target.value)}
                     />
                   </div>
                 </div>
