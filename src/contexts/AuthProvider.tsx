@@ -111,6 +111,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return res.data;
   };
 
+  const requestRestoreEmail = async (email: string) => {
+    const res = await api.post("/auth/restore/request", { email });
+    return res.data;
+  }
+
   const googleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_BASE_URL}/auth/google`;
   };
@@ -139,6 +144,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         logout,
         googleLogin,
         handleGoogleCallback,
+        requestRestoreEmail,
         selectRole,
         refreshToken,
         resendEmailVerify,

@@ -45,8 +45,8 @@ export default function GoogleCallback() {
         // 🔥 Replace with your real API call:
         const res = await api.get(`/auth/getMe`);
 
-        const user = res.data.user;
-        const token = res.data.accessToken;
+        const user = res.data.data.user;
+        const token = res.data.data.accessToken;
 
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", token);

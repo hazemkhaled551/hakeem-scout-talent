@@ -1,3 +1,9 @@
+/* ═══════════════════════════════════════════════════════════
+   Hakeem — Applicant Profile Styles
+   Brand tokens identical to LandingPage.css, AuthPage.css,
+   ApplicantDashboard.css
+   ═══════════════════════════════════════════════════════════ */
+
 
 /* ── Keyframes ────────────────────────────────────────────── */
 @keyframes fadeUp {
@@ -433,4 +439,42 @@
 @media (max-width: 640px) {
   .pr-field-grid { grid-template-columns: 1fr; }
   .pr-main { padding: 1.5rem 1rem 4rem; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   DANGER ZONE
+════════════════════════════════════════════════════════════ */
+.pr-danger-card {
+  border-color: rgba(239,68,68,.2) !important;
+  box-shadow: 0 2px 12px rgba(239,68,68,.06) !important;
+}
+.pr-danger-card .pr-card-header {
+  background: rgba(239,68,68,.03);
+  border-bottom-color: rgba(239,68,68,.15);
+}
+
+.pr-btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: .84rem;
+  padding: .5rem 1.1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s;
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  box-shadow: 0 3px 10px rgba(239,68,68,.28);
+}
+.pr-btn-danger:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(239,68,68,.36);
+}
+.pr-btn-danger:disabled {
+  opacity: .45;
+  cursor: not-allowed;
 }

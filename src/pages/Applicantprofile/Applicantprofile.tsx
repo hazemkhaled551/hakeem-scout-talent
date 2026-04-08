@@ -11,6 +11,8 @@ import {
   AlertCircle,
   Save,
   BrainCircuit,
+  Trash2,
+  AlertOctagon,
 } from "lucide-react";
 import Modal from "./../../components/Modal/Modal";
 import "./Applicantprofile.css";
@@ -18,6 +20,7 @@ import {
   getMe,
   updateBasicInfo,
   getCompletion,
+  deleteUser,
 } from "../../services/userService";
 import { formatDate, formatDateWithTimezone } from "../../utils/dateFormat";
 import {
@@ -65,7 +68,6 @@ const profileChecks = [
 export default function ApplicantProfile() {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
-  // const profileCompletion = 75;
   const [loading, setLoading] = useState(false);
 
   // ── Basic Info ──
@@ -92,21 +94,26 @@ export default function ApplicantProfile() {
   // ── Completion ──
   const [completion, setCompletion] = useState<any>({});
 
+  // ── Delete Account ──
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
+  const DELETE_KEYWORD = "DELETE";
+  const deleteConfirmed = deleteConfirmText === DELETE_KEYWORD;
+
   // scroll shadow
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  // const [user, setUser] = useState<any>(null);
 
   const fetchUser = async () => {
     try {
       setLoading(true);
       const res = await getMe();
       const userData = res.data.data;
-
-      // setUser(userData);
 
       setBasicInfo({
         name: userData.name || "",
@@ -170,12 +177,14 @@ export default function ApplicantProfile() {
     }
     fetchCompletion();
   }, []);
+
   // ── Experience Handlers ────────────────────────────────────────────────────
   function openAddExp() {
     setExpForm(EMPTY_EXP_FORM);
     setEditingExpId(null);
     setExpModalOpen(true);
   }
+
   function formatDateForInput(date: string) {
     if (!date) return "";
     return date.split("T")[0];
@@ -185,7 +194,7 @@ export default function ApplicantProfile() {
     setExpForm({
       title: exp.title,
       company: exp.company,
-      startDate:  formatDateForInput(exp.startDate),
+      startDate: formatDateForInput(exp.startDate),
       endDate: formatDateForInput(exp.endDate),
       description: exp.description,
     });
@@ -208,13 +217,11 @@ export default function ApplicantProfile() {
     };
     try {
       if (editingExpId) {
-        // تحديث الخبرة
         await updateExperience(editingExpId, payload);
-        fetchUser(); // إعادة جلب البيانات لتحديث الواجهة
+        fetchUser();
       } else {
-        // اضافة خبرة جديدة
         await addExperience(payload);
-        fetchUser(); // إعادة جلب البيانات لتحديث الواجهة
+        fetchUser();
       }
       closeExpModal();
     } catch (err) {
@@ -225,7 +232,7 @@ export default function ApplicantProfile() {
   async function removeExperience(id: number) {
     try {
       await deleteExperience(id);
-      fetchUser(); // إعادة جلب البيانات لتحديث الواجهة
+      fetchUser();
     } catch (err) {
       console.error("Error deleting experience:", err);
     }
@@ -235,10 +242,9 @@ export default function ApplicantProfile() {
   async function addNewSkill() {
     const trimmed = newSkill.trim();
     if (!trimmed || skills.find((s) => s.name === trimmed)) return;
-
     try {
       await addSkill(trimmed);
-      fetchUser(); // إعادة جلب البيانات لتحديث الواجهة
+      fetchUser();
       setNewSkill("");
     } catch (err) {
       console.error("Error adding skill:", err);
@@ -248,15 +254,35 @@ export default function ApplicantProfile() {
   async function removeSkillById(skillId: number) {
     try {
       await deleteSkill(skillId);
-      fetchUser(); // إعادة جلب البيانات لتحديث الواجهة
+      fetchUser();
     } catch (err) {
       console.error("Error deleting skill:", err);
+    }
+  }
+
+  // ── Delete Account Handler ────────────────────────────────────────────────
+  async function handleDeleteAccount() {
+    if (!deleteConfirmed) return;
+    setDeleteLoading(true);
+    setDeleteError("");
+    try {
+      await deleteUser();
+      localStorage.clear();
+      navigate("/auth", { replace: true });
+    } catch (err: any) {
+      setDeleteError(
+        err?.response?.data?.message ??
+          "Failed to delete account. Please try again.",
+      );
+    } finally {
+      setDeleteLoading(false);
     }
   }
 
   if (loading) {
     return <Loader fullPage text="Loading profile..." />;
   }
+
   return (
     <div className="pr-page">
       {/* ══ HEADER ════════════════════════════════════════════ */}
@@ -444,6 +470,7 @@ export default function ApplicantProfile() {
           </div>
         </div>
 
+        {/* ── Skills ────────────────────────────────────── */}
         <div className="pr-card anim-fade-up delay-4">
           <div className="pr-card-header">
             <span className="pr-card-title">
@@ -485,6 +512,55 @@ export default function ApplicantProfile() {
           </div>
         </div>
 
+        {/* ── Danger Zone ───────────────────────────────── */}
+        <div className="pr-card pr-danger-card anim-fade-up delay-5">
+          <div className="pr-card-header">
+            <span className="pr-card-title" style={{ color: "var(--danger)" }}>
+              <AlertOctagon size={16} />
+              Danger Zone
+            </span>
+          </div>
+          <div className="pr-card-body">
+            <div className="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+              <div>
+                <div
+                  style={{
+                    fontFamily: "Syne",
+                    fontWeight: 700,
+                    fontSize: ".92rem",
+                    color: "var(--text)",
+                    marginBottom: ".25rem",
+                  }}
+                >
+                  Delete Account
+                </div>
+                <p
+                  style={{
+                    fontSize: ".83rem",
+                    color: "var(--muted)",
+                    lineHeight: 1.6,
+                    maxWidth: 420,
+                  }}
+                >
+                  Permanently delete your account and all associated data —
+                  applications, interviews, and profile information. This action
+                  is irreversible.
+                </p>
+              </div>
+              <button
+                className="pr-btn-danger"
+                onClick={() => {
+                  setDeleteModalOpen(true);
+                  setDeleteConfirmText("");
+                  setDeleteError("");
+                }}
+              >
+                <Trash2 size={14} /> Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+
         {isEditing && (
           <div className="pr-save-bar anim-fade-up">
             <button className="pr-btn-primary" onClick={() => saveBasicInfo()}>
@@ -495,6 +571,7 @@ export default function ApplicantProfile() {
         )}
       </main>
 
+      {/* ══ EXPERIENCE MODAL ══════════════════════════════════ */}
       <Modal
         open={expModalOpen}
         onClose={closeExpModal}
@@ -555,7 +632,6 @@ export default function ApplicantProfile() {
                 <input
                   className="pr-input"
                   type="date"
-                  placeholder="e.g. 2021"
                   value={expForm.startDate}
                   onChange={(e) =>
                     setExpForm({ ...expForm, startDate: e.target.value })
@@ -570,7 +646,6 @@ export default function ApplicantProfile() {
                 <input
                   className="pr-input"
                   type="date"
-                  placeholder="e.g. Present"
                   value={expForm.endDate}
                   onChange={(e) =>
                     setExpForm({ ...expForm, endDate: e.target.value })
@@ -593,6 +668,218 @@ export default function ApplicantProfile() {
               </div>
             </div>
           </div>
+        </div>
+      </Modal>
+
+      {/* ══ DELETE ACCOUNT MODAL ══════════════════════════════ */}
+      <Modal
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setDeleteConfirmText("");
+          setDeleteError("");
+        }}
+        title="Delete Account"
+        icon={<Trash2 size={15} />}
+        size="sm"
+        footer={
+          <>
+            <button
+              className="pr-btn-ghost"
+              onClick={() => {
+                setDeleteModalOpen(false);
+                setDeleteConfirmText("");
+              }}
+              disabled={deleteLoading}
+            >
+              Cancel
+            </button>
+            <button
+              className="pr-btn-danger pr-btn-sm"
+              onClick={handleDeleteAccount}
+              disabled={!deleteConfirmed || deleteLoading}
+              style={{ opacity: deleteConfirmed && !deleteLoading ? 1 : 0.45 }}
+            >
+              <Trash2 size={13} />
+              {deleteLoading ? "Deleting…" : "Delete My Account"}
+            </button>
+          </>
+        }
+      >
+        <div className="d-flex flex-column gap-3">
+          {/* Warning */}
+          <div
+            style={{
+              background: "rgba(239,68,68,.06)",
+              border: "1px solid rgba(239,68,68,.2)",
+              borderRadius: 12,
+              padding: "1rem 1.1rem",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: ".5rem",
+                marginBottom: ".5rem",
+              }}
+            >
+              <AlertOctagon
+                size={16}
+                style={{ color: "var(--danger)", flexShrink: 0 }}
+              />
+              <span
+                style={{
+                  fontFamily: "Syne",
+                  fontWeight: 700,
+                  fontSize: ".88rem",
+                  color: "#991b1b",
+                }}
+              >
+                Account scheduled for deletion
+              </span>
+            </div>
+            <p
+              style={{ fontSize: ".82rem", color: "#991b1b", lineHeight: 1.65 }}
+            >
+              Your account will be deactivated and scheduled for permanent
+              deletion. You can restore your account within 15 days. After that,
+              all your data will be permanently removed.
+            </p>
+          </div>
+
+          {/* What gets deleted */}
+          <div
+            style={{
+              background: "var(--surface)",
+              borderRadius: 10,
+              padding: ".85rem 1rem",
+              border: "1px solid var(--border)",
+              fontSize: ".82rem",
+              color: "var(--muted)",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "Syne",
+                fontWeight: 700,
+                fontSize: ".8rem",
+                color: "var(--text)",
+                marginBottom: ".5rem",
+              }}
+            >
+              The following will be deleted after 15 days:
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: ".35rem",
+              }}
+            >
+              {[
+                "Profile & personal information",
+                "All job applications",
+                "Interview history",
+                "Received offers",
+              ].map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: ".5rem",
+                  }}
+                >
+                  <X
+                    size={12}
+                    style={{ color: "var(--danger)", flexShrink: 0 }}
+                  />{" "}
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Confirm input */}
+          <div className="pr-field">
+            <label className="pr-label">
+              Type{" "}
+              <strong
+                style={{
+                  color: "var(--danger)",
+                  fontFamily: "monospace",
+                  letterSpacing: ".05em",
+                }}
+              >
+                DELETE
+              </strong>{" "}
+              to confirm account deletion
+            </label>
+            <input
+              className="pr-input"
+              style={{
+                borderColor: deleteConfirmed
+                  ? "var(--success)"
+                  : deleteConfirmText.length > 0
+                    ? "var(--danger)"
+                    : "",
+              }}
+              type="text"
+              placeholder="Type DELETE to confirm"
+              value={deleteConfirmText}
+              onChange={(e) => {
+                setDeleteConfirmText(e.target.value.toUpperCase());
+                setDeleteError("");
+              }}
+              autoComplete="off"
+              spellCheck={false}
+            />
+            {deleteConfirmText.length > 0 && !deleteConfirmed && (
+              <span
+                style={{
+                  fontSize: ".74rem",
+                  color: "var(--danger)",
+                  marginTop: ".25rem",
+                  display: "block",
+                }}
+              >
+                Keep typing — write DELETE exactly
+              </span>
+            )}
+            {deleteConfirmed && (
+              <span
+                style={{
+                  fontSize: ".74rem",
+                  color: "var(--success)",
+                  marginTop: ".25rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".3rem",
+                }}
+              >
+                <CheckCircle size={12} /> Confirmed
+              </span>
+            )}
+          </div>
+
+          {deleteError && (
+            <div
+              style={{
+                background: "rgba(239,68,68,.07)",
+                border: "1px solid rgba(239,68,68,.2)",
+                borderRadius: 10,
+                padding: ".6rem .9rem",
+                fontSize: ".82rem",
+                color: "#991b1b",
+                display: "flex",
+                alignItems: "center",
+                gap: ".4rem",
+              }}
+            >
+              <AlertOctagon size={13} /> {deleteError}
+            </div>
+          )}
         </div>
       </Modal>
     </div>

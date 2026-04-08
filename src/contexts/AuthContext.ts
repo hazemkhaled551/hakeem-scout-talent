@@ -21,15 +21,16 @@ export type AuthContextType = {
   googleLogin: () => void;
   handleGoogleCallback: (token: string, user: User) => void;
   selectRole: (id: string, role: string) => Promise<any>;
+  requestRestoreEmail: (email: string) => Promise<any>;
 
   logout: () => Promise<void>;
   refreshToken: () => Promise<void>;
 
   resendEmailVerify: (email: string) => Promise<any>;
-  verifyEmail: ( token: string) => Promise<any>;
+  verifyEmail: (token: string) => Promise<any>;
 
   forgetPassword: (email: string) => Promise<any>;
-  resetPassword: ( token: string, password: string) => Promise<any>;
+  resetPassword: (token: string, password: string) => Promise<any>;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);

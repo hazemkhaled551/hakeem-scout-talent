@@ -40,6 +40,8 @@ export default function SelectRolePage() {
   const handleContinue = async () => {
     if (!selected) return;
     try {
+      console.log(selected);
+      
       setLoading(true);
       const res = await selectRole(id, selected);
       console.log(res);

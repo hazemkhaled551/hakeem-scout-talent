@@ -81,11 +81,8 @@ api.interceptors.response.use(
 
         return api(originalRequest);
       } catch (err) {
-        failedQueue.forEach((p) => p.reject(err));
-        failedQueue = [];
-
-        localStorage.removeItem("token");
-        window.location.href = "/auth";
+      console.log(err);
+      
 
         return Promise.reject(err);
       } finally {
