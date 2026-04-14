@@ -2,8 +2,6 @@
    Hakeem — Company Jobs
    ═══════════════════════════════════════════════════════════ */
 
-
-
 /* ── Keyframes ────────────────────────────────────────────── */
 @keyframes fadeUp {
   from {
@@ -31,6 +29,14 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -400% 0;
+  }
+  100% {
+    background-position: 400% 0;
   }
 }
 
@@ -66,52 +72,15 @@
 }
 
 /* ════════════════════════════════════════════════════════════
-   HEADER
-════════════════════════════════════════════════════════════ */
-.cj-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(18px);
-  border-bottom: 1px solid var(--border);
-  transition: box-shadow 0.3s;
-}
-.cj-header.scrolled {
-  box-shadow: 0 4px 24px rgba(79, 70, 229, 0.09);
-}
-
-.cj-logo {
-  width: 38px;
-  height: 38px;
-  border-radius: 11px;
-  flex-shrink: 0;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Syne", sans-serif;
-  font-weight: 800;
-  color: #fff;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.32);
-}
-.cj-brand {
-  font-family: "Syne", sans-serif;
-  font-weight: 800;
-  font-size: 1.2rem;
-  color: var(--text);
-}
-
-/* ════════════════════════════════════════════════════════════
    PAGE
 ════════════════════════════════════════════════════════════ */
 .cj-page {
   min-height: 100vh;
   background: var(--surface);
 }
+
 .cj-main {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 2.5rem 1.5rem 5rem;
 }
@@ -122,9 +91,34 @@
   letter-spacing: -0.03em;
   margin-bottom: 0.2rem;
 }
+
 .cj-page-sub {
   font-size: 0.88rem;
   color: var(--muted);
+}
+
+/* ════════════════════════════════════════════════════════════
+   TWO-COLUMN CONTENT GRID
+════════════════════════════════════════════════════════════ */
+.cj-content-grid {
+  display: grid;
+  /* grid-template-columns: 1fr 320px; */
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.cj-jobs-col {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .cj-content-grid {
+    grid-template-columns: 1fr;
+  }
+  /* On mobile, suggestions panel goes below the jobs list */
+  .sugg-panel {
+    position: static !important;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -167,7 +161,6 @@
   box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
 }
 
-/* count bubble on tab */
 .cj-tab-count {
   background: rgba(255, 255, 255, 0.25);
   border-radius: 999px;
@@ -197,6 +190,7 @@
   transition: all 0.2s;
   text-decoration: none;
 }
+
 .cj-btn--primary {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: #fff;
@@ -244,6 +238,16 @@
 }
 .cj-btn--success-soft:hover {
   background: rgba(16, 185, 129, 0.14);
+}
+
+/* ✅ Pipeline button */
+.cj-btn--pipeline {
+  background: rgba(79, 70, 229, 0.07);
+  border: 1.5px solid rgba(79, 70, 229, 0.2);
+  color: var(--primary);
+}
+.cj-btn--pipeline:hover {
+  background: rgba(79, 70, 229, 0.13);
 }
 
 .cj-btn--sm {
@@ -348,7 +352,7 @@
   border-color: rgba(79, 70, 229, 0.18);
 }
 
-/* Left accent stripe per status */
+/* Left accent stripe */
 .cj-job-card--published {
   border-left: 4px solid var(--success);
 }
@@ -372,6 +376,15 @@
   padding: 1.2rem 1.5rem 0.75rem;
   border-bottom: 1px solid var(--border);
 }
+
+.cj-stats {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
 .cj-job-body {
   padding: 0.9rem 1.5rem 1.2rem;
 }
@@ -383,7 +396,8 @@
   color: var(--text);
   margin-bottom: 0.25rem;
 }
-.cj-job-company {
+
+.cj-sub-title {
   font-size: 0.85rem;
   color: var(--muted);
 }
@@ -426,44 +440,261 @@
 }
 
 /* ════════════════════════════════════════════════════════════
-   FORM CARD
+   CANDIDATE SUGGESTIONS PANEL
 ════════════════════════════════════════════════════════════ */
-.cj-form-card {
+.sugg-panel {
+  position: sticky;
+  top: 1.5rem;
   background: var(--white);
   border-radius: 18px;
   border: 1px solid var(--border);
-  box-shadow: 0 4px 24px rgba(79, 70, 229, 0.08);
+  box-shadow: 0 4px 24px rgba(79, 70, 229, 0.07);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
-.cj-form-header {
-  padding: 1.2rem 1.6rem 1rem;
-  border-bottom: 1px solid var(--border);
+
+/* Header */
+.sugg-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-.cj-form-title {
-  font-family: "Syne", sans-serif;
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.cj-form-body {
-  padding: 1.4rem 1.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  padding: 1.1rem 1.25rem 0.9rem;
+  border-bottom: 1px solid var(--border);
 }
 
-/* form label + input */
+.sugg-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sugg-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.sugg-subtitle {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.sugg-count-badge {
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--primary);
+  border: 1px solid rgba(79, 70, 229, 0.18);
+  border-radius: 999px;
+  padding: 0.18rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-family: "Syne", sans-serif;
+  white-space: nowrap;
+}
+
+/* Filter chips row */
+.sugg-filter-row {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sugg-filter-row::-webkit-scrollbar {
+  display: none;
+}
+
+.sugg-chip {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.22rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-family: "Syne", sans-serif;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.sugg-chip:hover {
+  border-color: rgba(79, 70, 229, 0.3);
+  color: var(--primary);
+}
+.sugg-chip--active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.28);
+}
+
+/* Candidates scrollable list */
+.sugg-list {
+  overflow-y: auto;
+  max-height: 480px;
+  padding: 0.4rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* Individual candidate row */
+.sugg-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 1.1rem;
+  transition: background 0.15s;
+  cursor: default;
+}
+.sugg-row:hover {
+  background: rgba(79, 70, 229, 0.03);
+}
+.sugg-row + .sugg-row {
+  border-top: 1px solid var(--border);
+}
+
+.sugg-row-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sugg-row-name {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sugg-row-role {
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.1rem;
+}
+
+.sugg-row-skills {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.sugg-skill-chip {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(79, 70, 229, 0.06);
+  color: var(--primary);
+  border: 1px solid rgba(79, 70, 229, 0.12);
+  white-space: nowrap;
+}
+
+/* Invite button */
+.sugg-invite-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-family: "Syne", sans-serif;
+  padding: 0.22rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid rgba(79, 70, 229, 0.25);
+  background: transparent;
+  color: var(--primary);
+  transition: all 0.15s;
+}
+.sugg-invite-btn:hover:not(:disabled) {
+  background: rgba(79, 70, 229, 0.08);
+}
+.sugg-invite-btn--sent {
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--success);
+  background: rgba(16, 185, 129, 0.07);
+  cursor: default;
+}
+
+/* Loading skeletons */
+.sugg-loading {
+  padding: 0.5rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.sugg-skeleton {
+  height: 52px;
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    var(--border) 25%,
+    rgba(226, 224, 245, 0.4) 50%,
+    var(--border) 75%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+/* Empty state inside suggestions */
+.sugg-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+/* Footer */
+.sugg-footer {
+  border-top: 1px solid var(--border);
+  padding: 0.75rem 1.1rem;
+  text-align: center;
+}
+
+.sugg-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: "Syne", sans-serif;
+  color: var(--primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+.sugg-view-all:hover {
+  opacity: 1;
+}
+
+/* ════════════════════════════════════════════════════════════
+   FORM ELEMENTS
+════════════════════════════════════════════════════════════ */
 .cj-field {
   display: flex;
   flex-direction: column;
   gap: 0.28rem;
 }
+
 .cj-label {
   font-size: 0.72rem;
   font-weight: 600;
@@ -498,10 +729,12 @@
 .cj-textarea::placeholder {
   color: #b0b8d0;
 }
+
 .cj-textarea {
   resize: vertical;
   min-height: 100px;
 }
+
 .cj-select {
   cursor: pointer;
   appearance: none;
@@ -511,7 +744,6 @@
   padding-right: 2.2rem;
 }
 
-/* validation error */
 .cj-error {
   font-size: 0.75rem;
   color: var(--danger);
@@ -519,15 +751,6 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
-}
-
-/* form footer */
-.cj-form-footer {
-  padding: 0.9rem 1.6rem 1.2rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -542,6 +765,7 @@
   gap: 0.75rem;
   color: var(--muted);
 }
+
 .cj-empty-icon {
   width: 60px;
   height: 60px;
@@ -552,17 +776,21 @@
   align-items: center;
   justify-content: center;
 }
+
 .cj-empty-title {
   font-family: "Syne", sans-serif;
   font-weight: 700;
   font-size: 1.05rem;
   color: var(--text);
 }
+
 .cj-empty-sub {
   font-size: 0.85rem;
 }
 
-/* ── Responsive ───────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
   .cj-main {
     padding: 1.25rem 1rem 4rem;
@@ -572,7 +800,13 @@
     padding-left: 1.1rem;
     padding-right: 1.1rem;
   }
-  .cj-form-body {
-    padding: 1rem 1.1rem;
-  }
+}
+
+.cj-btn--candidates {
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--primary);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+}
+.cj-btn--candidates:hover {
+  background: rgba(79, 70, 229, 0.15);
 }

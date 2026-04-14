@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import {
-  ChevronLeft,
+ 
   MapPin,
   DollarSign,
   Clock,
@@ -27,6 +27,7 @@ import {
   getJobsApplicationById,
   responseToOffer,
 } from "../../services/candidateService";
+import ApplicantNavbar from "../../components/ApplicantNavbar";
 
 /* ════════════════════════════════════════════════════════════
    TYPES — mirror the API response
@@ -129,19 +130,19 @@ function fmtType(t: string) {
 
 function getInitials(name: string) {
   return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+    ?.split(" ")
+    ?.map((n) => n[0])
+    ?.join("")
+    ?.slice(0, 2)
+    ?.toUpperCase();
 }
 
 /* ── Status pipeline config ──────────────────────────────── */
 type PipelineKey =
-  | "Applied"
-  | "Screening"
-  | "Interview"
-  | "Offered"
+  | "New"
+  | "screening"
+  | "interview"
+  | "offered"
   | "Hired"
   | "Rejected";
 
@@ -161,34 +162,34 @@ function getPipeline(data: ApplicationData): Array<{
     label: string;
     date: string | null;
   }> = [
-    { key: "Applied", label: "Applied", date: data.createdAt },
-    { key: "Screening", label: "Screening", date: data.screenAt },
-    { key: "Interview", label: "Interview", date: data.interviewAt },
-    { key: "Offered", label: "Offer Received", date: data.sendOfferAt },
+    { key: "New", label: "New", date: data.createdAt },
+    { key: "screening", label: "Screening", date: data.screenAt },
+    { key: "interview", label: "Interview", date: data.interviewAt },
+    { key: "offered", label: "Offer Received", date: data.sendOfferAt },
     { key: "Hired", label: "Hired", date: data.hiredAt },
   ];
 
   // Priority order for "reached" determination
   const ORDER: PipelineKey[] = [
-    "Applied",
-    "Screening",
-    "Interview",
-    "Offered",
+    "New",
+    "screening",
+    "interview",
+    "offered",
     "Hired",
   ];
   const currentIdx = isRejected
     ? ORDER.findIndex((k) => {
         // which stage were they rejected from?
         if (data.rejectAt) {
-          if (data.interviewAt) return k === "Interview";
-          if (data.screenAt) return k === "Screening";
+          if (data.interviewAt) return k === "interview";
+          if (data.screenAt) return k === "screening";
         }
-        return k === "Applied";
+        return k === "New";
       })
     : ORDER.findIndex(
         (k) =>
           k === s ||
-          (s === "Offered" && k === "Offered") ||
+          (s === "Offered" && k === "offered") ||
           (s === "Hired" && k === "Hired"),
       );
 
@@ -228,7 +229,7 @@ function ivBadgeClass(status: string) {
 
 function statusBadgeClass(s: string) {
   const m: Record<string, string> = {
-    Applied: "as-status--applied",
+    New: "as-status--applied",
     Screening: "as-status--screening",
     Interview: "as-status--interview",
     Offered: "as-status--offered",
@@ -249,17 +250,17 @@ function timelineProgress(pipeline: ReturnType<typeof getPipeline>) {
    COMPONENT
 ════════════════════════════════════════════════════════════ */
 export default function ApplicationStatus() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [scrolled, setScrolled] = useState(false);
+  // const [scrolled, setScrolled] = useState(false);
   const [data, setData] = useState<ApplicationData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
+  // useEffect(() => {
+  //   const fn = () => setScrolled(window.scrollY > 16);
+  //   window.addEventListener("scroll", fn);
+  //   return () => window.removeEventListener("scroll", fn);
+  // }, []);
 
   useEffect(() => {
     async function load() {
@@ -305,7 +306,6 @@ export default function ApplicationStatus() {
       // Refresh data to reflect changes
       const res = await getJobsApplicationById(id!);
       setData(res.data.data);
-      
     } catch (error: any) {
       console.error(
         "Failed to respond to offer:",
@@ -317,24 +317,8 @@ export default function ApplicationStatus() {
   return (
     <div className="as-page">
       {/* HEADER */}
-      <header className={`as-header ${scrolled ? "scrolled" : ""}`}>
-        <div className="container-xl">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="as-logo">H</div>
-              <span className="as-brand">Hakeem</span>
-            </div>
-            <button
-              className="as-btn as-btn--ghost as-btn--sm"
-              style={{ border: "1.5px solid var(--border)", borderRadius: 10 }}
-              onClick={() => navigate("/applicant")}
-            >
-              <ChevronLeft size={14} /> Dashboard
-            </button>
-          </div>
-        </div>
-      </header>
 
+      <ApplicantNavbar />
       <main className="as-main">
         {/* ── HERO ──────────────────────────────────────── */}
         <div className="as-hero mb-4 au">
@@ -570,7 +554,6 @@ export default function ApplicationStatus() {
                       <div className="as-offer-label">Offered Salary</div>
                       <div className="as-offer-salary">
                         ${parseFloat(data.offer.offeredSalary).toLocaleString()}
-                    
                       </div>
                     </div>
                     <span

@@ -7,7 +7,7 @@ import {
   Clock,
   Search,
   X,
-  ChevronLeft,
+
   SlidersHorizontal,
   Briefcase,
 } from "lucide-react";
@@ -61,6 +61,7 @@ interface Job {
   maxSalary: number;
 }
 import { fmt } from "../../utils/dateFormat";
+import ApplicantNavbar from "../../components/ApplicantNavbar";
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 // const JOBS: Job[] = [
@@ -134,7 +135,7 @@ import { fmt } from "../../utils/dateFormat";
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function JobList() {
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
+
   const [search, setSearch] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState<JobType | "">("");
@@ -163,11 +164,7 @@ export default function JobList() {
     }
     loadJobs();
   }, []);
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
+
 
   const hasFilters = !!(search || locationFilter || typeFilter || modeFilter);
 
@@ -197,22 +194,7 @@ export default function JobList() {
   return (
     <div className="jb-page">
       {/* ══ HEADER ══════════════════════════════════════════════ */}
-      <header className={`jb-header ${scrolled ? "scrolled" : ""}`}>
-        <div className="container-xl">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="jb-logo">H</div>
-              <span className="jb-brand">Hakeem</span>
-            </div>
-            <button
-              className="jb-btn jb-btn--outline jb-btn--sm"
-              onClick={() => navigate("/applicant")}
-            >
-              <ChevronLeft size={14} /> Dashboard
-            </button>
-          </div>
-        </div>
-      </header>
+     <ApplicantNavbar />
 
       {/* ══ MAIN ════════════════════════════════════════════════ */}
       <main className="jb-main au">

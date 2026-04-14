@@ -17,7 +17,8 @@ export const getJobById = (id: string) => {
 
 /* Apply To Job */
 export const applyJob = (jobId: string, cvId: string, about: string) => {
-  return api.post(`/jobs/applyJob/${jobId}/${cvId}`, { about });
+  return api.post(`/candidate/applyJob/${jobId}/${cvId}`, { about });
+
 };
 
 /* Delete Job */

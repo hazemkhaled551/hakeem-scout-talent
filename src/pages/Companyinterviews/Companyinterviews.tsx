@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
 import {
   ChevronLeft,
   ChevronRight,
@@ -40,6 +40,7 @@ import {
   fmtTime,
   formatDateWithTimezone,
 } from "../../utils/dateFormat";
+import CompanyNavbar from "../../components/CompanyNavbar";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -108,8 +109,8 @@ const TODAY = new Date();
    COMPONENT
 ════════════════════════════════════════════════════════════ */
 export default function CompanyInterviews() {
-  const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
+  // const navigate = useNavigate();
+  // const [scrolled, setScrolled] = useState(false);
   const [interviews, setInterviews] = useState<any[]>([]);
   const [view, setView] = useState<"list" | "calendar">("list");
   const [search, setSearch] = useState("");
@@ -154,9 +155,8 @@ export default function CompanyInterviews() {
 
   useEffect(() => {
     loadInterviews();
-    const fn = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
+   
+   
   }, [statusFilter]);
 
   async function loadInterviews() {
@@ -306,22 +306,7 @@ export default function CompanyInterviews() {
   return (
     <div className="ci-page">
       {/* HEADER */}
-      <header className={`ci-header ${scrolled ? "scrolled" : ""}`}>
-        <div className="container-xl">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="ci-logo">H</div>
-              <span className="ci-brand">Hakeem</span>
-            </div>
-            <button
-              className="ci-btn ci-btn--outline ci-btn--sm"
-              onClick={() => navigate("/company")}
-            >
-              <ChevronLeft size={14} /> Dashboard
-            </button>
-          </div>
-        </div>
-      </header>
+   <CompanyNavbar />
 
       <main className="ci-main">
         <div className="d-flex align-items-start justify-content-between mb-4 au">
@@ -502,13 +487,13 @@ export default function CompanyInterviews() {
                 >
                   <div className="d-flex align-items-start gap-3">
                     <div className="ci-avatar">
-                      {companyIntiatal(iv.application.applicant.name)}
+                      {companyIntiatal(iv.application.applicant.user.name)}
                     </div>
                     <div className="flex-1 min-width-0">
                       <div className="d-flex align-items-start justify-content-between gap-2 flex-wrap mb-1">
                         <div>
                           <div className="ci-candidate-name">
-                            {iv.application.applicant.name}
+                            {iv.application.applicant.user.name}
                           </div>
                           <div className="ci-job-title">
                             {iv.application.job.title}

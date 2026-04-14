@@ -6,7 +6,6 @@ import {
   Edit2,
   X,
   Plus,
-  ChevronLeft,
   CheckCircle,
   AlertCircle,
   Save,
@@ -31,6 +30,8 @@ import {
   deleteExperience,
 } from "../../services/profileService";
 import Loader from "../../components/Loader";
+import ApplicantNavbar from "../../components/ApplicantNavbar";
+import CVSection from "../../components/Cvsection/Cvsection";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Experience {
@@ -67,7 +68,6 @@ const profileChecks = [
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function ApplicantProfile() {
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // ── Basic Info ──
@@ -103,11 +103,11 @@ export default function ApplicantProfile() {
   const deleteConfirmed = deleteConfirmText === DELETE_KEYWORD;
 
   // scroll shadow
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // useEffect(() => {
+  //   const onScroll = () => setScrolled(window.scrollY > 16);
+  //   window.addEventListener("scroll", onScroll);
+  //   return () => window.removeEventListener("scroll", onScroll);
+  // }, []);
 
   const fetchUser = async () => {
     try {
@@ -116,18 +116,18 @@ export default function ApplicantProfile() {
       const userData = res.data.data;
 
       setBasicInfo({
-        name: userData.name || "",
+        name: userData.user.name || "",
         job_title: userData.job_title || "",
-        email: userData.email || "",
+        email: userData.user.email || "",
         phone: userData.phone || "",
-        location: userData.location || "",
-        linkedIn_profile: userData.linkedIn_profile || "",
+        location: userData.user.location || "",
+        linkedIn_profile: userData.user.linkedIn_profile || "",
       });
 
-      setSkills(userData.skillsORspecializations || []);
+      setSkills(userData.skills || []);
 
       setExperiences(
-        (userData.experience || []).map((exp: any) => ({
+        (userData.experiences || []).map((exp: any) => ({
           id: exp.id,
           title: exp.title,
           company: exp.company,
@@ -285,22 +285,8 @@ export default function ApplicantProfile() {
 
   return (
     <div className="pr-page">
+      <ApplicantNavbar />
       {/* ══ HEADER ════════════════════════════════════════════ */}
-      <header className={`pr-header ${scrolled ? "scrolled" : ""}`}>
-        <div className="container-xl">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="pr-logo-box">H</div>
-              <span className="pr-brand-name">Hakeem</span>
-            </div>
-
-            <button className="pr-back-btn" onClick={() => navigate(-1)}>
-              <ChevronLeft size={14} />
-              Back
-            </button>
-          </div>
-        </div>
-      </header>
 
       {/* ══ MAIN ══════════════════════════════════════════════ */}
       <main className="pr-main">
@@ -406,7 +392,7 @@ export default function ApplicantProfile() {
                     className="pr-input"
                     type={f.type}
                     value={basicInfo[f.key as keyof typeof basicInfo]}
-                    disabled={!isEditing}
+                    disabled={!isEditing && f.key == "email"}
                     onChange={(e) =>
                       setBasicInfo({ ...basicInfo, [f.key]: e.target.value })
                     }
@@ -511,6 +497,8 @@ export default function ApplicantProfile() {
             </div>
           </div>
         </div>
+
+        <CVSection />
 
         {/* ── Danger Zone ───────────────────────────────── */}
         <div className="pr-card pr-danger-card anim-fade-up delay-5">

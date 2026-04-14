@@ -8,6 +8,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 let isRefreshing = false;
@@ -44,7 +45,9 @@ api.interceptors.response.use(
     /* ===== HANDLE TOKEN EXPIRE ===== */
 
     if (
-      (error.response.status === 401 && !originalRequest._retry) ||
+      (error.response.status === 401 &&
+        !originalRequest._retry &&
+        !originalRequest.url?.includes("/auth/refreshToken")) ||
       error.response.data.message ===
         "invalid tokenTokenExpiredError: jwt expired"
     ) {
@@ -62,8 +65,8 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post(
-          `${API_BASE}/auth/refreshToken`,
+        const res = await api.post(
+          "/auth/refreshToken",
           {},
           { withCredentials: true },
         );
@@ -81,8 +84,7 @@ api.interceptors.response.use(
 
         return api(originalRequest);
       } catch (err) {
-      console.log(err);
-      
+        console.log(err);
 
         return Promise.reject(err);
       } finally {

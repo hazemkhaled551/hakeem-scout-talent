@@ -1,5 +1,5 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import {  useParams } from "react-router-dom";
+import { useState } from "react";
 import {
   BrainCircuit,
   Mail,
@@ -10,8 +10,7 @@ import {
   CheckCircle,
   AlertTriangle,
   TrendingUp,
-  ChevronLeft,
-  LogOut,
+
   User,
   Video,
   UserCheck,
@@ -38,6 +37,7 @@ import {
   offerCandidate,
   interviewCandidate,
 } from "../../services/candidateService";
+import CompanyNavbar from "../../components/CompanyNavbar";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -257,10 +257,10 @@ const TABS = [
    COMPONENT
 ════════════════════════════════════════════════════════════ */
 export default function CandidateEvaluation() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const [scrolled, setScrolled] = useState(false);
+  // const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [actionType, setActionType] = useState<ActionType>(null);
   const [status, setStatus] = useState<CandidateStatus>("Under Review");
@@ -285,11 +285,11 @@ export default function CandidateEvaluation() {
   // ── Reject form ─────────────────────────────────────────
   const [rejectReason, setRejectReason] = useState("");
 
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
+  // useEffect(() => {
+  //   const fn = () => setScrolled(window.scrollY > 16);
+  //   window.addEventListener("scroll", fn);
+  //   return () => window.removeEventListener("scroll", fn);
+  // }, []);
 
   // ── Form validation ─────────────────────────────────────
   const interviewValid = ivType && ivDate;
@@ -372,42 +372,7 @@ export default function CandidateEvaluation() {
   return (
     <div className="ce-page">
       {/* HEADER */}
-      <header className={`ce-header ${scrolled ? "scrolled" : ""}`}>
-        <div className="container-fluid px-4">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="ce-logo">H</div>
-              <span className="ce-brand">Hakeem</span>
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <button
-                className="ce-btn ce-btn--ghost"
-                style={{
-                  fontSize: ".82rem",
-                  border: "1.5px solid var(--border)",
-                  borderRadius: 10,
-                  padding: ".4rem .9rem",
-                }}
-                onClick={() => navigate("/company")}
-              >
-                <ChevronLeft size={14} /> Pipeline
-              </button>
-              <button
-                className="ce-btn ce-btn--ghost"
-                style={{
-                  fontSize: ".82rem",
-                  border: "1.5px solid var(--border)",
-                  borderRadius: 10,
-                  padding: ".4rem .9rem",
-                }}
-                onClick={() => navigate("/")}
-              >
-                <LogOut size={14} /> Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+<CompanyNavbar  />
 
       <main className="ce-main">
         {/* Candidate hero */}

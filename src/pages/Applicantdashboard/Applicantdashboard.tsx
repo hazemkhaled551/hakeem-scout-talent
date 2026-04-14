@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  User,
-  LogOut,
+
   Briefcase,
   Clock,
   TrendingUp,
@@ -24,6 +23,7 @@ import {
   getApplicantJobs,
 } from "../../services/userService";
 import { formatDate } from "../../utils/dateFormat";
+import ApplicantNavbar from "../../components/ApplicantNavbar";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 // interface Application {
@@ -106,7 +106,7 @@ function getStatusBadge(status: string) {
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function ApplicantDashboard() {
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
+  // const [scrolled, setScrolled] = useState(false);
   // const [profileCompletion] = useState(75);
   const user = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user") || "null")
@@ -145,11 +145,11 @@ export default function ApplicantDashboard() {
 
   // console.log(user);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // useEffect(() => {
+  //   const onScroll = () => setScrolled(window.scrollY > 16);
+  //   window.addEventListener("scroll", onScroll);
+  //   return () => window.removeEventListener("scroll", onScroll);
+  // }, []);
 
   if (loading) {
     return <Loader fullPage text="Loading dashboard..." />;
@@ -157,40 +157,7 @@ export default function ApplicantDashboard() {
   return (
     <div className="dk-page">
       {/* ══ HEADER ══════════════════════════════════════════════ */}
-      <header className={`dk-header ${scrolled ? "scrolled" : ""}`}>
-        <div className="container-xl">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="dk-logo-box">H</div>
-              <span className="dk-brand-name">Hakeem</span>
-            </div>
-
-            <div className="d-flex align-items-center gap-2">
-              <span
-                className="dk-profile-pill"
-                onClick={() => navigate("/applicant/profile")}
-              >
-                <User size={13} />
-                Profile
-              </span>
-              <span
-                className="dk-profile-pill"
-                onClick={() => navigate("/applicant/interview")}
-              >
-                <Calendar size={13} />
-                Interviews
-              </span>
-              <button
-                className="dk-btn-outline dk-btn-sm"
-                onClick={() => navigate("/")}
-              >
-                <LogOut size={13} className="me-1" />
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+    <ApplicantNavbar />
 
       {/* ══ MAIN ════════════════════════════════════════════════ */}
       <main className="dk-main">

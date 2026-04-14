@@ -2,24 +2,14 @@ import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Plus,
-  ChevronLeft,
   Briefcase,
-  MapPin,
-  DollarSign,
-  Clock,
-  Globe,
-  Edit2,
-  Trash2,
-  Eye,
-  Play,
-  PauseCircle,
-  XCircle,
-  Send,
-  Save,
   AlertCircle,
   FileText,
   X,
   AlertTriangle,
+  Trash2,
+  Save,
+  Send,
 } from "lucide-react";
 import Modal from "../../components/Modal/Modal";
 import "./Companyjobs.css";
@@ -31,6 +21,9 @@ import {
   deleteJob,
 } from "../../services/jobService";
 import Loader from "../../components/Loader";
+import CompanyNavbar from "../../components/CompanyNavbar";
+import JobCard, { type Job, JobStatus } from "../../components/JobCard/JobCard";
+// import CandidateSuggestions from "../../components/Candidatesuggestions/Candidatesuggestions";
 
 /* ════════════════════════════════════════════════════════════
    ENUMS
@@ -51,65 +44,6 @@ const WorkMode = {
 } as const;
 type WorkMode = (typeof WorkMode)[keyof typeof WorkMode];
 
-const JobStatus = {
-  DRAFT: "Draft",
-  PUBLISHED: "Published",
-  PAUSED: "Paused",
-  CLOSED: "Closed",
-  FILLED: "Filled",
-  EXPIRED: "Expired",
-} as const;
-type JobStatus = (typeof JobStatus)[keyof typeof JobStatus];
-
-/* ════════════════════════════════════════════════════════════
-   TYPES
-════════════════════════════════════════════════════════════ */
-interface Job {
-  id: string;
-  title: string;
-  company: { name: string };
-  companyInitial: string;
-  location: string;
-  type: JobType | "";
-  workMode: WorkMode | "";
-  tags: string[];
-  daysAgo: number;
-  matchScore: number;
-  status: string;
-  description: string;
-  responsibilities: string[];
-  skills: string[];
-  requirements: string;
-  positions?: number;
-  maxApplications?: number;
-  deadline?: string;
-  companySize: string;
-  industry: string;
-  growth: string;
-  minSalary: number | "";
-  maxSalary: number | "";
-  applicants: number;
-  postedDays: number;
-}
-
-/* API body — requirements is string (joined by \n) */
-interface JobPayload {
-  title: string;
-  location: string;
-  minSalary: number | "";
-  maxSalary: number | "";
-  type: string;
-  status: string;
-  workMode: string;
-  description: string;
-  skills: string[];
-  responsibilities: string[];
-  requirements: string;
-  positions?: number;
-  maxApplications?: number;
-  deadline?: string;
-}
-
 type TabType = "ALL" | JobStatus;
 
 /* ════════════════════════════════════════════════════════════
@@ -128,30 +62,24 @@ const STATUS_TABS: Array<{ id: TabType; label: string }> = [
 /* ════════════════════════════════════════════════════════════
    HELPERS
 ════════════════════════════════════════════════════════════ */
-function statusBadgeClass(s: string) {
-  const map: Record<string, string> = {
-    [JobStatus.PUBLISHED]: "cj-badge--published",
-    [JobStatus.DRAFT]: "cj-badge--draft",
-    [JobStatus.PAUSED]: "cj-badge--paused",
-    [JobStatus.CLOSED]: "cj-badge--closed",
-    [JobStatus.FILLED]: "cj-badge--filled",
-    [JobStatus.EXPIRED]: "cj-badge--expired",
-  };
-  return map[s] ?? "cj-badge--draft";
-}
-
-function cardStripeClass(s: string) {
-  return `cj-job-card--${s.toLowerCase()}`;
-}
-
-function fmtSalary(min: number | "", max: number | "") {
-  if (min === "" || max === "") return "—";
-  const fmt = (n: number) =>
-    n >= 1000 ? `$${(n / 1000).toFixed(0)}k` : `$${n}`;
-  return `${fmt(Number(min))} – ${fmt(Number(max))}`;
-}
-
 const fmtType = (v: string) => v.replace("_", " ");
+
+interface JobPayload {
+  title: string;
+  location: string;
+  minSalary: number | "";
+  maxSalary: number | "";
+  type: string;
+  status: string;
+  workMode: string;
+  description: string;
+  skills: string[];
+  responsibilities: string[];
+  requirements: string;
+  positions?: number;
+  maxApplications?: number;
+  deadline?: string;
+}
 
 function createEmpty(): Job {
   return {
@@ -160,6 +88,8 @@ function createEmpty(): Job {
     company: { name: "" },
     companyInitial: "",
     location: "",
+    acceptedCount: 0,
+    applicationsCount: 0,
     minSalary: "",
     maxSalary: "",
     type: "",
@@ -192,15 +122,15 @@ function toPayload(f: Job, statusOverride?: JobStatus): JobPayload {
     description: f.description,
     skills: f.skills,
     responsibilities: f.responsibilities,
-    requirements: f.requirements, // array → string for API
-    positions: f.positions, // default to 1 position per job post
-    maxApplications: f.maxApplications, // use the value from the job object
-    deadline: f.deadline, // use the value from the job object
+    requirements: f.requirements,
+    positions: f.positions,
+    maxApplications: f.maxApplications,
+    deadline: f.deadline,
   };
 }
 
 /* ════════════════════════════════════════════════════════════
-   ARRAY-INPUT  (tag-style multi-value input)
+   ARRAY INPUT
 ════════════════════════════════════════════════════════════ */
 interface ArrayInputProps {
   label: string;
@@ -227,7 +157,6 @@ function ArrayInput({ label, items, placeholder, onChange }: ArrayInputProps) {
   return (
     <div className="cj-field">
       <label className="cj-label">{label}</label>
-
       {items.length > 0 && (
         <div className="d-flex flex-wrap gap-2 mb-2">
           {items.map((item, i) => (
@@ -267,7 +196,6 @@ function ArrayInput({ label, items, placeholder, onChange }: ArrayInputProps) {
           ))}
         </div>
       )}
-
       <div className="d-flex gap-2">
         <input
           className="cj-input"
@@ -295,11 +223,10 @@ function ArrayInput({ label, items, placeholder, onChange }: ArrayInputProps) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   MAIN COMPONENT
+   MAIN PAGE COMPONENT
 ════════════════════════════════════════════════════════════ */
 export default function CompanyJobs() {
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("ALL");
   const [jobs, setJobs] = useState<Job[]>([]);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
@@ -308,12 +235,10 @@ export default function CompanyJobs() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
-
-  // delete confirm
   const [deleteTarget, setDeleteTarget] = useState<Job | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  /* ── fetch ──────────────────────────────────────────────── */
+  /* ── fetch ── */
   async function loadJobs() {
     try {
       setLoading(true);
@@ -332,13 +257,7 @@ export default function CompanyJobs() {
     loadJobs();
   }, [activeTab]);
 
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  /* ── counts ─────────────────────────────────────────────── */
+  /* ── counts ── */
   const tabCounts = useMemo(() => {
     const c: Record<string, number> = { ALL: jobs.length };
     Object.values(JobStatus).forEach((s) => {
@@ -353,14 +272,14 @@ export default function CompanyJobs() {
     [jobs, activeTab],
   );
 
-  /* ── validation ─────────────────────────────────────────── */
+  /* ── validation ── */
   const salaryValid =
     formData.minSalary !== "" &&
     formData.maxSalary !== "" &&
     Number(formData.maxSalary) >= Number(formData.minSalary);
   const canSubmit = formData.title.trim().length > 0 && salaryValid;
 
-  /* ── CREATE / UPDATE ────────────────────────────────────── */
+  /* ── create / update ── */
   async function handleSubmit(statusOverride?: JobStatus) {
     if (!canSubmit) return;
     setSubmitting(true);
@@ -396,18 +315,13 @@ export default function CompanyJobs() {
     setFormData({ ...job });
     setModalOpen(true);
   }
-
   function openNew() {
     setFormData(createEmpty());
     setEditingJob(null);
     setModalOpen(true);
   }
 
-  /* ── DELETE ─────────────────────────────────────────────── */
-  function requestDelete(job: Job) {
-    setDeleteTarget(job);
-  }
-
+  /* ── delete ── */
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleteLoading(true);
@@ -422,7 +336,7 @@ export default function CompanyJobs() {
     }
   }
 
-  /* ── STATUS CHANGE ──────────────────────────────────────── */
+  /* ── status change ── */
   async function updateStatus(id: string, status: JobStatus) {
     try {
       await changeJobStatus(id, status);
@@ -432,31 +346,22 @@ export default function CompanyJobs() {
     }
   }
 
+  /* ── invite (dummy — سجّل في الكونسول لحد ما الـ API يكون جاهز) ── */
+  // function handleInviteCandidate(candidateId: string, jobId: string) {
+  //   console.log("Invite candidate:", candidateId, "for job:", jobId);
+  //   // TODO: استبدل بـ API call لما يكون جاهز
+  //   // await axiosInstance.post(`/candidates/${candidateId}/invite`, { jobId });
+  // }
+
   const set = (key: keyof Job, val: unknown) =>
     setFormData((p) => ({ ...p, [key]: val }));
 
-  /* ── RENDER ─────────────────────────────────────────────── */
+  /* ── render ── */
   if (loading) return <Loader text="Loading Jobs..." fullPage />;
 
   return (
     <div className="cj-page">
-      {/* HEADER */}
-      <header className={`cj-header ${scrolled ? "scrolled" : ""}`}>
-        <div className="container-xl">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="cj-logo">H</div>
-              <span className="cj-brand">Hakeem</span>
-            </div>
-            <button
-              className="cj-btn cj-btn--outline cj-btn--sm"
-              onClick={() => navigate("/company/dashboard")}
-            >
-              <ChevronLeft size={14} /> Dashboard
-            </button>
-          </div>
-        </div>
-      </header>
+      <CompanyNavbar />
 
       <main className="cj-main">
         {/* Heading */}
@@ -488,42 +393,58 @@ export default function CompanyJobs() {
           ))}
         </div>
 
-        {/* Job list */}
-        {filtered.length > 0 ? (
-          <div className="d-flex flex-column gap-3">
-            {filtered.map((job, i) => (
-              <JobCard
-                key={job.id}
-                job={job}
-                delay={i}
-                onView={() => navigate(`/jobs/${job.id}`)}
-                onEdit={() => handleEdit(job)}
-                onDelete={() => requestDelete(job)}
-                onUpdateStatus={(s) => updateStatus(job.id, s)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="cj-empty au d2">
-            <div className="cj-empty-icon">
-              <Briefcase size={24} />
-            </div>
-            <div className="cj-empty-title">No jobs in this category</div>
-            <span className="cj-empty-sub">
-              {activeTab === "ALL"
-                ? "Post your first job to get started."
-                : `No ${activeTab.toLowerCase()} jobs found.`}
-            </span>
-            {activeTab === "ALL" && (
-              <button
-                className="cj-btn cj-btn--primary cj-btn--sm mt-2"
-                onClick={openNew}
-              >
-                <Plus size={13} /> Post a Job
-              </button>
+        {/* Two-column layout */}
+        <div className="cj-content-grid">
+          {/* Left: jobs */}
+          <div className="cj-jobs-col">
+            {filtered.length > 0 ? (
+              <div className="d-flex flex-column gap-3">
+                {filtered.map((job, i) => (
+                  <JobCard
+                    key={job.id}
+                    job={job}
+                    delay={i}
+                    onView={() => navigate(`/jobs/${job.id}`)}
+                    onEdit={() => handleEdit(job)}
+                    onDelete={() => setDeleteTarget(job)}
+                    onPipeline={() =>
+                      navigate(`/company/pipeline`)
+                    }
+                    onCandidates={() => navigate(`/company/jobs/candidates`)}
+                    onUpdateStatus={(s) => updateStatus(job.id, s)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="cj-empty au d2">
+                <div className="cj-empty-icon">
+                  <Briefcase size={24} />
+                </div>
+                <div className="cj-empty-title">No jobs in this category</div>
+                <span className="cj-empty-sub">
+                  {activeTab === "ALL"
+                    ? "Post your first job to get started."
+                    : `No ${activeTab.toLowerCase()} jobs found.`}
+                </span>
+                {activeTab === "ALL" && (
+                  <button
+                    className="cj-btn cj-btn--primary cj-btn--sm mt-2"
+                    onClick={openNew}
+                  >
+                    <Plus size={13} /> Post a Job
+                  </button>
+                )}
+              </div>
             )}
           </div>
-        )}
+
+          {/* Right: suggestions */}
+          {/* <CandidateSuggestions
+            jobs={jobs}
+            onInvite={handleInviteCandidate}
+            onViewAll={() => navigate("/company/candidates")}
+          /> */}
+        </div>
       </main>
 
       {/* ══ MODAL — Job Form ════════════════════════════════ */}
@@ -705,19 +626,17 @@ export default function CompanyJobs() {
           <div className="col-6">
             <div className="cj-field">
               <label className="cj-label">Position Availability</label>
-
               <input
                 className="cj-input w-100"
                 type="number"
                 value={formData.positions}
                 onChange={(e) => set("positions", Number(e.target.value))}
-                style={{ width: 100 }}
                 min={1}
               />
             </div>
           </div>
 
-          <div className="col-6 ">
+          <div className="col-6">
             <div className="cj-field">
               <label className="cj-label">Max Applicants</label>
               <input
@@ -725,7 +644,6 @@ export default function CompanyJobs() {
                 type="number"
                 value={formData.maxApplications}
                 onChange={(e) => set("maxApplications", Number(e.target.value))}
-                style={{ width: 100 }}
                 min={1}
               />
             </div>
@@ -742,7 +660,6 @@ export default function CompanyJobs() {
               />
             </div>
           </div>
-
 
           {formData.minSalary !== "" &&
             formData.maxSalary !== "" &&
@@ -826,214 +743,6 @@ export default function CompanyJobs() {
           </p>
         </div>
       </Modal>
-    </div>
-  );
-}
-
-/* ════════════════════════════════════════════════════════════
-   JOB CARD
-════════════════════════════════════════════════════════════ */
-interface JobCardProps {
-  job: Job;
-  delay: number;
-  onView: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
-  onUpdateStatus: (s: JobStatus) => void;
-}
-
-function JobCard({
-  job,
-  delay,
-  onView,
-  onEdit,
-  onDelete,
-  onUpdateStatus,
-}: JobCardProps) {
-  return (
-    <div
-      className={`cj-job-card ${cardStripeClass(job.status)} au d${Math.min(delay + 1, 6)}`}
-    >
-      <div className="cj-job-header">
-        <div className="d-flex align-items-start justify-content-between gap-2 flex-wrap">
-          <div className="cj-job-title">{job.title}</div>
-          <div className="d-flex align-items-center gap-2 flex-wrap">
-            {job.applicants > 0 && (
-              <span
-                style={{
-                  fontSize: ".76rem",
-                  color: "var(--muted)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: ".28rem",
-                }}
-              >
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                  <path d="M21 21v-2a4 4 0 0 0-3-3.87" />
-                </svg>
-                {job.applicants} applicants
-              </span>
-            )}
-            <span className={`cj-badge ${statusBadgeClass(job.status)}`}>
-              <span className="cj-badge-dot" />
-              {job.status}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="cj-job-body">
-        <div className="cj-meta mb-3">
-          {job.location && (
-            <span className="cj-meta-item">
-              <MapPin size={13} />
-              {job.location}
-            </span>
-          )}
-          {job.minSalary !== "" && job.maxSalary !== "" && (
-            <span className="cj-meta-item">
-              <DollarSign size={13} />
-              {fmtSalary(job.minSalary, job.maxSalary)}
-            </span>
-          )}
-          {job.type && (
-            <span className="cj-meta-item">
-              <Clock size={13} />
-              {fmtType(String(job.type))}
-            </span>
-          )}
-          {job.workMode && (
-            <span className="cj-meta-item">
-              <Globe size={13} />
-              {job.workMode}
-            </span>
-          )}
-          {
-            job.positions !== undefined && (
-              <span className="cj-meta-item">
-                <Briefcase size={13} />
-                {job.positions} positions
-              </span>
-            )
-          }
-          {
-            job.maxApplications !== undefined && (
-              <span className="cj-meta-item">
-                <FileText size={13} />
-                {job.maxApplications} applications
-              </span>
-            )
-          }
-
-          
-          {job.postedDays > 0 && (
-            <span className="cj-meta-item ms-auto">
-              Posted {job.postedDays}d ago
-            </span>
-          )}
-          {job.deadline && (
-            <span className="cj-meta-item ms-auto">
-              Deadline: {new Date(job.deadline).toLocaleDateString()}
-            </span>
-          )}
-        </div>
-
-        {job.skills.length > 0 && (
-          <div className="d-flex flex-wrap gap-2 mb-3">
-            {job.skills.slice(0, 5).map((s) => (
-              <span key={s} className="cj-skill-tag">
-                {s}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {job.description && (
-          <p
-            style={{
-              fontSize: ".83rem",
-              color: "var(--muted)",
-              lineHeight: 1.65,
-              marginBottom: ".75rem",
-            }}
-          >
-            {job.description.length > 120
-              ? job.description.slice(0, 120) + "…"
-              : job.description}
-          </p>
-        )}
-
-        <div className="cj-actions">
-          <button
-            className="cj-btn cj-btn--outline cj-btn--xs"
-            onClick={onView}
-          >
-            <Eye size={12} /> View
-          </button>
-          <button
-            className="cj-btn cj-btn--outline cj-btn--xs"
-            onClick={onEdit}
-          >
-            <Edit2 size={12} /> Edit
-          </button>
-
-          {job.status === JobStatus.DRAFT && (
-            <button
-              className="cj-btn cj-btn--success-soft cj-btn--xs"
-              onClick={() => onUpdateStatus(JobStatus.PUBLISHED)}
-            >
-              <Send size={12} /> Publish
-            </button>
-          )}
-          {job.status === JobStatus.PAUSED && (
-            <button
-              className="cj-btn cj-btn--success-soft cj-btn--xs"
-              onClick={() => onUpdateStatus(JobStatus.PUBLISHED)}
-            >
-              <Play size={12} /> Resume
-            </button>
-          )}
-          {job.status === JobStatus.PUBLISHED && (
-            <>
-              <button
-                className="cj-btn cj-btn--outline cj-btn--xs"
-                onClick={() => onUpdateStatus(JobStatus.PAUSED)}
-              >
-                <PauseCircle size={12} /> Pause
-              </button>
-              <button
-                className="cj-btn cj-btn--outline cj-btn--xs"
-                onClick={() => onUpdateStatus(JobStatus.CLOSED)}
-              >
-                <XCircle size={12} /> Close
-              </button>
-              {/* <button
-                className="cj-btn cj-btn--outline cj-btn--xs"
-                onClick={() => onUpdateStatus(JobStatus.FILLED)}
-              >
-                <CheckSquare size={12} /> Mark Filled
-              </button> */}
-            </>
-          )}
-
-          <button
-            className="cj-btn cj-btn--danger cj-btn--xs ms-auto"
-            onClick={onDelete}
-          >
-            <Trash2 size={12} /> Delete
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

@@ -1,0 +1,295 @@
+/* ═══════════════════════════════════════════════════════════
+   Hakeem — Shared Navbar
+   ═══════════════════════════════════════════════════════════ */
+
+/* @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap"); */
+
+/* ── Keyframes ────────────────────────────────────────────── */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   NAV WRAPPER
+════════════════════════════════════════════════════════════ */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border, #e2e0f5);
+  transition: box-shadow 0.3s;
+}
+.navbar.scrolled {
+  box-shadow: 0 4px 24px rgba(79, 70, 229, 0.09);
+}
+
+/* ── Inner container — max-width + side padding ─────────── */
+.navbar__inner {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+/* ════════════════════════════════════════════════════════════
+   LOGO
+════════════════════════════════════════════════════════════ */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.navbar__logo-box {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #4f46e5, #06b6d4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.28);
+  flex-shrink: 0;
+}
+
+.navbar__logo-name {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.03em;
+  color: var(--text, #1e1b3a);
+}
+
+/* ════════════════════════════════════════════════════════════
+   DESKTOP LINKS
+════════════════════════════════════════════════════════════ */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.navbar__link {
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--muted, #64748b);
+  padding: 0.38rem 0.9rem;
+  border-radius: 9px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  letter-spacing: 0.01em;
+}
+.navbar__link:hover {
+  background: var(--surface, #f8f7ff);
+  color: var(--text, #1e1b3a);
+}
+.navbar__link--active {
+  color: var(--primary, #4f46e5) !important;
+  background: rgba(79, 70, 229, 0.08) !important;
+  font-weight: 600;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RIGHT SIDE
+════════════════════════════════════════════════════════════ */
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Notification bell */
+.navbar__notif-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--border, #e2e0f5);
+  border-radius: 9px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted, #64748b);
+  flex-shrink: 0;
+  transition:
+    border-color 0.18s,
+    background 0.18s,
+    color 0.18s;
+}
+.navbar__notif-btn:hover {
+  background: var(--surface, #f8f7ff);
+  border-color: var(--primary, #4f46e5);
+  color: var(--primary, #4f46e5);
+}
+
+/* unread dot */
+.navbar__notif-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 1.5px solid #fff;
+}
+
+/* Avatar */
+.navbar__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Syne", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  flex-shrink: 0;
+  border: 2px solid transparent;
+  transition:
+    border-color 0.18s,
+    box-shadow 0.18s;
+}
+.navbar__avatar:hover {
+  border-color: var(--primary, #4f46e5);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+.navbar__avatar--purple {
+  background: rgba(79, 70, 229, 0.1);
+  color: #3730a3;
+}
+.navbar__avatar--teal {
+  background: #e1f5ee;
+  color: #085041;
+}
+
+/* ════════════════════════════════════════════════════════════
+   HAMBURGER  (hidden on desktop)
+════════════════════════════════════════════════════════════ */
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4.5px;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--border, #e2e0f5);
+  border-radius: 9px;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: border-color 0.18s;
+}
+.navbar__hamburger:hover {
+  border-color: var(--primary, #4f46e5);
+}
+.navbar__hamburger span {
+  display: block;
+  width: 15px;
+  height: 1.5px;
+  background: var(--muted, #64748b);
+  border-radius: 2px;
+  transition:
+    transform 0.22s,
+    opacity 0.22s;
+}
+.navbar__hamburger.open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.navbar__hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.navbar__hamburger.open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ════════════════════════════════════════════════════════════
+   MOBILE DRAWER
+════════════════════════════════════════════════════════════ */
+.navbar__mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border, #e2e0f5);
+  padding: 0.75rem 1.5rem 1.25rem;
+  z-index: 199;
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.1);
+  animation: slideDown 0.22s ease;
+}
+.navbar__mobile-menu.open {
+  display: flex;
+}
+.navbar__mobile-menu .navbar__link {
+  padding: 0.62rem 1rem;
+  border-radius: 10px;
+  font-size: 0.92rem;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .navbar__inner {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar__inner {
+    padding: 0 1.25rem;
+  }
+  .navbar__links {
+    display: none;
+  }
+  .navbar__hamburger {
+    display: flex;
+  }
+  .navbar {
+    position: relative;
+  } /* so drawer positions from navbar */
+}
+
+@media (max-width: 480px) {
+  .navbar__inner {
+    padding: 0 1rem;
+  }
+  .navbar__logo-name {
+    font-size: 1.05rem;
+  }
+}

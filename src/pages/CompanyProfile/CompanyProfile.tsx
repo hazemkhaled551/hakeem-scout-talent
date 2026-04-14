@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import {
   Mail,
   Phone,
@@ -8,7 +8,7 @@ import {
   Edit2,
   Plus,
   X,
-  ChevronLeft,
+
   Save,
   Link,
   User,
@@ -25,6 +25,7 @@ import {
   updateCompanyBasicInfo,
   updateCompanyAbout,
 } from "../../services/companyService";
+import CompanyNavbar from "../../components/CompanyNavbar";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface RecruiterData {
@@ -72,8 +73,8 @@ function calcCompletion(d: RecruiterData) {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function CompanyProfile() {
-  const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
+  // const navigate = useNavigate();
+  // const [scrolled, setScrolled] = useState(false);
   const [data, setData] = useState<RecruiterData>(INITIAL_DATA);
 
   // Modal open states
@@ -89,11 +90,11 @@ export default function CompanyProfile() {
 
   const { sections, overall } = calcCompletion(data);
 
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
+  // useEffect(() => {
+  //   const fn = () => setScrolled(window.scrollY > 16);
+  //   window.addEventListener("scroll", fn);
+  //   return () => window.removeEventListener("scroll", fn);
+  // }, []);
 
   // ── Open helpers (copy current data into draft) ───────────────────────────
   function openInfo() {
@@ -186,22 +187,7 @@ export default function CompanyProfile() {
   return (
     <div className="rp-page">
       {/* ══ HEADER ════════════════════════════════════════════ */}
-      <header className={`rp-header ${scrolled ? "scrolled" : ""}`}>
-        <div className="container-xl">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="rp-logo">H</div>
-              <span className="rp-brand">Hakeem</span>
-            </div>
-            <button
-              className="rp-btn rp-btn--outline rp-btn--sm"
-              onClick={() => navigate(-1)}
-            >
-              <ChevronLeft size={14} /> Back
-            </button>
-          </div>
-        </div>
-      </header>
+  <CompanyNavbar />
 
       {/* ══ MAIN ══════════════════════════════════════════════ */}
       <main className="rp-main">

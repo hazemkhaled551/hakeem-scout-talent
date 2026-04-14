@@ -1,0 +1,217 @@
+/* ════════════════════════════════════════════════════════════
+   CV Section — Hakeem
+   Extends Applicantprofile.css tokens, no overrides needed
+════════════════════════════════════════════════════════════ */
+
+/* ── CV Card ──────────────────────────────────────────────── */
+.cv-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 13px;
+  background: #fff;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.cv-card:hover {
+  border-color: rgba(79, 70, 229, 0.22);
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.07);
+}
+
+.cv-card__icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(79, 70, 229, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cv-card__icon {
+  color: var(--primary);
+}
+
+.cv-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cv-card__name {
+  font-family: "Syne", sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cv-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.76rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+.cv-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.cv-card__confirm {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cv-card__confirm-label {
+  font-size: 0.78rem;
+  color: var(--danger);
+  font-weight: 600;
+  font-family: "Syne", sans-serif;
+}
+
+/* ── Drop Zone ────────────────────────────────────────────── */
+.cv-dropzone {
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  padding: 2rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  background: var(--surface);
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cv-dropzone:hover,
+.cv-dropzone--over {
+  border-color: var(--primary);
+  background: rgba(79, 70, 229, 0.04);
+}
+
+.cv-dropzone--uploading {
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.cv-dropzone__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(79, 70, 229, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  margin-bottom: 0.3rem;
+}
+
+.cv-dropzone__text {
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.cv-dropzone__cta {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.cv-dropzone__hint {
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+/* ── Spinner ──────────────────────────────────────────────── */
+@keyframes cv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cv-dropzone__spinner {
+  width: 22px;
+  height: 22px;
+  border: 2.5px solid rgba(79, 70, 229, 0.2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: cv-spin 0.7s linear infinite;
+}
+
+/* ── Count Badge ──────────────────────────────────────────── */
+.cv-count-badge {
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--primary);
+  border: 1px solid rgba(79, 70, 229, 0.18);
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+/* ── Empty State ──────────────────────────────────────────── */
+.cv-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 2rem 1rem;
+  color: var(--muted);
+}
+
+/* ── Toast ────────────────────────────────────────────────── */
+@keyframes cv-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cv-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.2rem;
+  border-radius: 999px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  z-index: 9999;
+  white-space: nowrap;
+  animation: cv-slide-in 0.25s ease forwards;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+.cv-toast--success {
+  background: var(--success);
+  color: #fff;
+}
+
+.cv-toast--error {
+  background: var(--danger);
+  color: #fff;
+}

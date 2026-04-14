@@ -23,6 +23,10 @@ import RestoreAccount from "./pages/RestoreAccount/RestoreAccount";
 import RequestRestore from "./pages/RestoreAccount/RestoreAccountRequest";
 import ApplicationStatus from "./pages/Applicationstatus/Applicationstatus";
 import GoogleCallback from "./pages/Googlecallback/Googlecallback";
+import CandidatePipeline from "./pages/Candidatepipeline/Candidatepipeline";
+import CompanyOffers from "./pages/Offers/Companyoffers";
+import ApplicantOffers from "./pages/Offers/Applicantoffers";
+import CandidateSuggestions from "./pages/Candidatesuggestions/Candidatesuggestions";
 export default function App() {
   return (
     <AuthProvider>
@@ -32,17 +36,30 @@ export default function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/auth/google/callback" element={<GoogleCallback />} />
-            <Route path="/verify" element={<VerifyEmail  />} />
+            <Route path="/verify" element={<VerifyEmail />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/forget-password" element={<ForgotPasswordPage />} />
             <Route path="/request-restore" element={<RequestRestore />} />
             <Route path="/restore-email" element={<RestoreAccount />} />
             <Route path="/select-role" element={<SelectRolePage />} />
-            <Route path="/notification" element={<NotificationsPage role="company" />} />
+            <Route
+              path="/company/pipeline"
+              element={<CandidatePipeline />}
+            />
+            <Route
+              path="/notification"
+              element={<NotificationsPage role="company" />}
+            />
             <Route path="/dashboard" element={<ApplicantDashboard />} />
             <Route path="/applicant/profile" element={<ApplicantProfile />} />
-            <Route path="/applicant/interview" element={<ApplicantInterviews />} />
-            <Route path="/applicant/app-status/:id" element={<ApplicationStatus />} />
+            <Route
+              path="/applicant/interview"
+              element={<ApplicantInterviews />}
+            />
+            <Route
+              path="/applicant/app-status/:id"
+              element={<ApplicationStatus />}
+            />
             <Route path="/jobs" element={<JobList />} />
             <Route path="/jobs/:jobId" element={<JobDetails />} />
             <Route path="/jobs/:jobId/apply" element={<JobApplication />} />
@@ -50,7 +67,13 @@ export default function App() {
             <Route path="/company/profile" element={<CompanyProfile />} />
             <Route path="/company/jobs" element={<CompanyJobs />} />
             <Route path="/company/interviews" element={<CompanyInterviews />} />
-            <Route path="/company/candidateevaluation/:id" element={<CandidateEvaluation />} />
+            <Route
+              path="/company/candidateevaluation/:id"
+              element={<CandidateEvaluation />}
+            />
+            <Route path="/company/offers" element={<CompanyOffers />} />
+            <Route path="/applicant/offers" element={<ApplicantOffers />} />
+            <Route path="/company/jobs/candidates" element={<CandidateSuggestions />} />
           </Routes>
         </BrowserRouter>
       </UserProvider>

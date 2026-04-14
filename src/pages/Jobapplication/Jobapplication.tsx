@@ -24,6 +24,7 @@ import { uploadCV } from "../../services/cvService";
 
 import Loader from "../../components/Loader";
 import { fmt } from "../../utils/dateFormat";
+import ApplicantNavbar from "../../components/ApplicantNavbar";
 
 // ─── Step config ──────────────────────────────────────────────────────────────
 const STEPS = [
@@ -106,6 +107,8 @@ export default function JobApplication() {
       console.log(uploadRes);
 
       const cvId = uploadRes.data.cvId; // حسب الريسبونس
+      console.log(cvId);
+      
 
       // 2️⃣ apply job
       await applyJob(jobId, cvId, coverLetter);
@@ -260,22 +263,7 @@ export default function JobApplication() {
   return (
     <div className="jb-page">
       {/* ══ HEADER ════════════════════════════════════════════ */}
-      <header className={`jb-header ${scrolled ? "scrolled" : ""}`}>
-        <div className="container-xl">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="jb-logo">H</div>
-              <span className="jb-brand">Hakeem</span>
-            </div>
-            <button
-              className="jb-btn jb-btn--ghost jb-btn--sm"
-              onClick={() => navigate("/applicant")}
-            >
-              <X size={14} /> Exit
-            </button>
-          </div>
-        </div>
-      </header>
+ <ApplicantNavbar />
 
       <main className="jb-main">
         {/* ── Step indicator ────────────────────────────────── */}

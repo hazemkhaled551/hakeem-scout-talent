@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Bell,
-  ChevronLeft,
+
   Video,
   Briefcase,
   MessageSquare,
@@ -15,6 +15,8 @@ import {
   Check,
 } from "lucide-react";
 import "./Notifications.css";
+import ApplicantNavbar from "../../components/ApplicantNavbar";
+import CompanyNavbar from "../../components/CompanyNavbar";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -495,7 +497,7 @@ interface NotificationsPageProps {
 
 export default function NotificationsPage({ role }: NotificationsPageProps) {
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
+  // const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState<FilterTab>("All");
 
   // Use role-specific dummy data (swap with API)
@@ -503,13 +505,13 @@ export default function NotificationsPage({ role }: NotificationsPageProps) {
     role === "applicant" ? DUMMY_APPLICANT : DUMMY_COMPANY,
   );
 
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", fn);
+  // useEffect(() => {
+  //   const fn = () => setScrolled(window.scrollY > 16);
+  //   window.addEventListener("scroll", fn);
     // TODO: replace with API call
     // loadNotifications();
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
+  //   return () => window.removeEventListener("scroll", fn);
+  // }, []);
 
   /* ── Counts ─────────────────────────────────────────────── */
   const unreadCount = notifications.filter((n) => !n.isRead).length;
@@ -547,27 +549,12 @@ export default function NotificationsPage({ role }: NotificationsPageProps) {
   }
 
   /* ── Render ──────────────────────────────────────────────── */
-  const backPath = role === "applicant" ? "/applicant" : "/company";
+  // const backPath = role === "applicant" ? "/applicant" : "/company";
 
   return (
     <div className="nt-page">
       {/* HEADER */}
-      <header className={`nt-header ${scrolled ? "scrolled" : ""}`}>
-        <div className="container-xl">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="nt-logo">H</div>
-              <span className="nt-brand">Hakeem</span>
-            </div>
-            <button
-              className="nt-btn nt-btn--outline nt-btn--sm"
-              onClick={() => navigate(backPath)}
-            >
-              <ChevronLeft size={14} /> Dashboard
-            </button>
-          </div>
-        </div>
-      </header>
+      {role === "applicant" ? <ApplicantNavbar /> : <CompanyNavbar />}
 
       <main className="nt-main">
         {/* Page heading */}

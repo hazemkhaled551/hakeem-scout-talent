@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import {
-  ChevronLeft,
+  
   Video,
   MapPin,
   Clock,
@@ -30,6 +30,7 @@ import {
   type InterviewDTO,
 } from "../../services/interviewService";
 import { companyIntiatal, fmtDate, fmtTime, fmtDateLong } from "../../utils/dateFormat";
+import ApplicantNavbar from "../../components/ApplicantNavbar";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -144,7 +145,7 @@ function nextStepColor(ns?: string) {
    COMPONENT
 ════════════════════════════════════════════════════════════ */
 export default function ApplicantInterviews() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
  
   const [interviews, setInterviews] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
@@ -278,22 +279,7 @@ export default function ApplicantInterviews() {
   return (
     <div className="ai-page">
       {/* HEADER */}
-      <header className={`ai-header`}>
-        <div className="container-xl">
-          <div className="d-flex align-items-center justify-content-between py-3">
-            <div className="d-flex align-items-center gap-2">
-              <div className="ai-logo">H</div>
-              <span className="ai-brand">Hakeem</span>
-            </div>
-            <button
-              className="ai-btn ai-btn--outline ai-btn--sm"
-              onClick={() => navigate("/applicant")}
-            >
-              <ChevronLeft size={14} /> Dashboard
-            </button>
-          </div>
-        </div>
-      </header>
+    <ApplicantNavbar />
 
       <main className="ai-main">
         <div className="mb-4 au">

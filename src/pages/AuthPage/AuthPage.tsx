@@ -166,23 +166,35 @@ export default function AuthPage() {
       setLoading(true);
       setAlert(null);
 
-     const res = await register({
-        name: regForm.fullName,
-        email: regForm.email,
-        password: regForm.password,
-        phone: regForm.phone,
-        job_title: regForm.jobTitle,
-        location: regForm.location,
-        linkedIn_profile: regForm.linkedin,
-        role: regForm.type === "company" ? "Company" : "Applicant",
-      });
+      const payload =
+        regForm.type === "applicant"
+          ? {
+              name: regForm.fullName,
+              email: regForm.email,
+              password: regForm.password,
+              location: regForm.location,
+              linkedIn_profile: regForm.linkedin,
+              role: "Applicant",
+              applicant: {
+                phone: regForm.phone,
+                job_title: regForm.jobTitle,
+              },
+            }
+          : {
+              name: regForm.fullName,
+              email: regForm.email,
+              password: regForm.password,
+              location: regForm.location,
+              linkedIn_profile: regForm.linkedin,
+              role: "Company",
+            };
+
+      const res = await register(payload);
 
       setAlert({
         type: "success",
-        msg: res.data.data.message || "Account created successfully",
+        msg: res.data.message || "Account created successfully",
       });
-
-    
     } catch (error: any) {
       setAlert({
         type: "error",
@@ -407,7 +419,7 @@ export default function AuthPage() {
                     />
                   </div>
                 </div>
-                <div className="auth-field">
+             { regForm.type === "applicant" &&   <div className="auth-field">
                   <label className="auth-label">Phone</label>
                   <div className="auth-input-wrap">
                     <input
@@ -420,7 +432,7 @@ export default function AuthPage() {
                       }
                     />
                   </div>
-                </div>
+                </div>}
               </div>
 
               <div className="auth-field">
@@ -439,7 +451,7 @@ export default function AuthPage() {
               </div>
 
               <div className="auth-row">
-                <div className="auth-field">
+               { regForm.type === "applicant" && <div className="auth-field">
                   <label className="auth-label">Job Title</label>
                   <div className="auth-input-wrap">
                     <input
@@ -452,7 +464,7 @@ export default function AuthPage() {
                       }
                     />
                   </div>
-                </div>
+                </div>}
                 <div className="auth-field">
                   <label className="auth-label">Location</label>
                   <div className="auth-input-wrap">
