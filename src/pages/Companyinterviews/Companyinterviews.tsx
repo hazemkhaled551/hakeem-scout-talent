@@ -32,21 +32,21 @@ import {
   completeInterview,
   rescheduleInterview,
   cancelInterview,
-  type InterviewDTO,
 } from "../../services/interviewService";
 import {
   companyIntiatal,
   fmtDate,
   fmtTime,
   formatDateWithTimezone,
-} from "../../utils/dateFormat";
+} from "../../utils/format";
 import CompanyNavbar from "../../components/CompanyNavbar";
+
+import { type InterviewDTO, type InterviewStatus, type InterviewType } from "../../types/interview";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
 ════════════════════════════════════════════════════════════ */
-type InterviewStatus = "Scheduled" | "Completed" | "Cancelled" | "Rescheduled";
-type InterviewType = "Technical" | "HR" | "Final";
+
 type ModalType = "reschedule" | "cancel" | "complete" | "view" | "add" | null;
 
 /* ════════════════════════════════════════════════════════════
@@ -155,8 +155,6 @@ export default function CompanyInterviews() {
 
   useEffect(() => {
     loadInterviews();
-   
-   
   }, [statusFilter]);
 
   async function loadInterviews() {
@@ -306,7 +304,7 @@ export default function CompanyInterviews() {
   return (
     <div className="ci-page">
       {/* HEADER */}
-   <CompanyNavbar />
+      <CompanyNavbar />
 
       <main className="ci-main">
         <div className="d-flex align-items-start justify-content-between mb-4 au">

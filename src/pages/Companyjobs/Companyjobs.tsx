@@ -22,27 +22,19 @@ import {
 } from "../../services/jobService";
 import Loader from "../../components/Loader";
 import CompanyNavbar from "../../components/CompanyNavbar";
-import JobCard, { type Job, JobStatus } from "../../components/JobCard/JobCard";
+import JobCard from "../../components/JobCard/JobCard";
 // import CandidateSuggestions from "../../components/Candidatesuggestions/Candidatesuggestions";
+import {
+  JobType,
+  WorkMode,
+  JobStatus,
+  type Job,
+  type JobPayload,
+} from "../../types/job";
 
 /* ════════════════════════════════════════════════════════════
    ENUMS
 ════════════════════════════════════════════════════════════ */
-const JobType = {
-  FULL_TIME: "Full_Time",
-  PART_TIME: "Part_Time",
-  CONTRACT: "Contract",
-  FREELANCE: "Freelance",
-  INTERNSHIP: "Internship",
-} as const;
-type JobType = (typeof JobType)[keyof typeof JobType];
-
-const WorkMode = {
-  ONSITE: "Onsite",
-  REMOTE: "Remote",
-  HYBRID: "Hybrid",
-} as const;
-type WorkMode = (typeof WorkMode)[keyof typeof WorkMode];
 
 type TabType = "ALL" | JobStatus;
 
@@ -63,23 +55,6 @@ const STATUS_TABS: Array<{ id: TabType; label: string }> = [
    HELPERS
 ════════════════════════════════════════════════════════════ */
 const fmtType = (v: string) => v.replace("_", " ");
-
-interface JobPayload {
-  title: string;
-  location: string;
-  minSalary: number | "";
-  maxSalary: number | "";
-  type: string;
-  status: string;
-  workMode: string;
-  description: string;
-  skills: string[];
-  responsibilities: string[];
-  requirements: string;
-  positions?: number;
-  maxApplications?: number;
-  deadline?: string;
-}
 
 function createEmpty(): Job {
   return {
@@ -407,9 +382,7 @@ export default function CompanyJobs() {
                     onView={() => navigate(`/jobs/${job.id}`)}
                     onEdit={() => handleEdit(job)}
                     onDelete={() => setDeleteTarget(job)}
-                    onPipeline={() =>
-                      navigate(`/company/pipeline`)
-                    }
+                    onPipeline={() => navigate(`/company/pipeline`)}
                     onCandidates={() => navigate(`/company/jobs/candidates`)}
                     onUpdateStatus={(s) => updateStatus(job.id, s)}
                   />

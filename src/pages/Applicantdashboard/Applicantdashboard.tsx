@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-
   Briefcase,
   Clock,
   TrendingUp,
   BrainCircuit,
-  CheckCircle,
-  AlertCircle,
   MapPin,
   Calendar,
   ChevronRight,
@@ -22,70 +19,9 @@ import {
   getDashboardStats,
   getApplicantJobs,
 } from "../../services/userService";
-import { formatDate } from "../../utils/dateFormat";
+import { formatDate } from "../../utils/format";
 import ApplicantNavbar from "../../components/ApplicantNavbar";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-// interface Application {
-//   id: number;
-//   position: string;
-//   company: string;
-//   status: "Interview" | "Under Review" | "Rejected" | string;
-//   appliedDate: string;
-//   matchScore: number;
-//   location: string;
-//   nextAction: string | null;
-// }
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-// const applications: Application[] = [
-//   {
-//     id: 1,
-//     position: "Senior Software Engineer",
-//     company: "TechCorp Inc.",
-//     status: "Interview",
-//     appliedDate: "Jan 10, 2026",
-//     matchScore: 92,
-//     location: "Remote",
-//     nextAction: "Interview on Jan 20, 2026 at 2:00 PM",
-//   },
-//   {
-//     id: 2,
-//     position: "Full Stack Developer",
-//     company: "InnovateLabs",
-//     status: "Under Review",
-//     appliedDate: "Jan 8, 2026",
-//     matchScore: 88,
-//     location: "San Francisco, CA",
-//     nextAction: null,
-//   },
-//   {
-//     id: 3,
-//     position: "Frontend Engineer",
-//     company: "DesignStudio",
-//     status: "Under Review",
-//     appliedDate: "Jan 5, 2026",
-//     matchScore: 85,
-//     location: "New York, NY",
-//     nextAction: "Complete technical assessment",
-//   },
-//   {
-//     id: 4,
-//     position: "Backend Developer",
-//     company: "DataFlow Systems",
-//     status: "Rejected",
-//     appliedDate: "Dec 28, 2025",
-//     matchScore: 76,
-//     location: "Austin, TX",
-//     nextAction: null,
-//   },
-// ];
-
-const profileChecks = [
-  { label: "Basic Info", done: true },
-  { label: "Work Experience", done: true },
-  { label: "Skills Assessment", done: false },
-];
+import ProfileCompletion from "../../components/ProfileCompletion/ProfileCompletion";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function getStatusBadge(status: string) {
@@ -96,8 +32,8 @@ function getStatusBadge(status: string) {
       return "dk-badge dk-badge--review";
     case "Rejected":
       return "dk-badge dk-badge--rejected";
-      case "Offered":
-        return "dk-badge dk-badge--green";
+    case "Offered":
+      return "dk-badge dk-badge--green";
     default:
       return "dk-badge dk-badge--default";
   }
@@ -106,8 +42,6 @@ function getStatusBadge(status: string) {
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function ApplicantDashboard() {
   const navigate = useNavigate();
-  // const [scrolled, setScrolled] = useState(false);
-  // const [profileCompletion] = useState(75);
   const user = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user") || "null")
     : null;
@@ -123,7 +57,6 @@ export default function ApplicantDashboard() {
   async function loadDashboard() {
     try {
       const statsData = await getDashboardStats();
-      // console.log(statsData.data.data);
 
       setStats(statsData.data.data);
       const appsData = await getApplicantJobs();
@@ -143,21 +76,13 @@ export default function ApplicantDashboard() {
     loadDashboard();
   }, []);
 
-  // console.log(user);
-
-  // useEffect(() => {
-  //   const onScroll = () => setScrolled(window.scrollY > 16);
-  //   window.addEventListener("scroll", onScroll);
-  //   return () => window.removeEventListener("scroll", onScroll);
-  // }, []);
-
   if (loading) {
     return <Loader fullPage text="Loading dashboard..." />;
   }
   return (
     <div className="dk-page">
       {/* ══ HEADER ══════════════════════════════════════════════ */}
-    <ApplicantNavbar />
+      <ApplicantNavbar />
 
       {/* ══ MAIN ════════════════════════════════════════════════ */}
       <main className="dk-main">
@@ -170,45 +95,10 @@ export default function ApplicantDashboard() {
         </div>
 
         {/* ── Profile Completion ──────────────────────────────── */}
-        <div className="dk-card dk-profile-card mb-4 anim-fade-up delay-1">
-          <div className="dk-card-body">
-            <div className="d-flex align-items-start justify-content-between mb-1">
-              <div>
-                <div className="dk-card-title">Complete Your Profile</div>
-                <div className="dk-card-sub">
-                  Complete your profile to get better job matches
-                </div>
-              </div>
-              <span className="dk-profile-badge">{completion.percentage}%</span>
-            </div>
-
-            <div className="dk-progress-track">
-              <div
-                className="dk-progress-fill"
-                style={
-                  {
-                    "--fill": `${completion.percentage}%`,
-                  } as React.CSSProperties
-                }
-              />
-            </div>
-
-            <div className="row g-3 mt-1">
-              {profileChecks.map((item, i) => (
-                <div key={i} className="col-md-4">
-                  <div className="dk-check-item">
-                    {item.done ? (
-                      <CheckCircle size={17} className="dk-check-done" />
-                    ) : (
-                      <AlertCircle size={17} className="dk-check-pending" />
-                    )}
-                    <span>{item.label}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <ProfileCompletion
+          percentage={completion.percentage}
+          sections={completion.sections}
+        />
 
         {/* ── Stats ───────────────────────────────────────────── */}
         <div className="d-flex align-items-center justify-content-between mb-3 anim-fade-up delay-2">
@@ -354,7 +244,9 @@ export default function ApplicantDashboard() {
                   <div className="d-flex gap-2 flex-wrap">
                     <button
                       className="dk-btn-outline dk-btn-sm"
-                      onClick={() => navigate(`/applicant/app-status/${app.id}`)}
+                      onClick={() =>
+                        navigate(`/applicant/app-status/${app.id}`)
+                      }
                     >
                       View Details
                     </button>

@@ -1,4 +1,4 @@
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState } from "react";
 import {
   BrainCircuit,
@@ -10,7 +10,6 @@ import {
   CheckCircle,
   AlertTriangle,
   TrendingUp,
-
   User,
   Video,
   UserCheck,
@@ -22,10 +21,7 @@ import {
 } from "lucide-react";
 import Modal from "../../components/Modal/Modal";
 import "./Candidateevaluation.css";
-import {
-
-  formatDateWithTimezone,
-} from "../../utils/dateFormat";
+import { formatDateWithTimezone } from "../../utils/format";
 // ── Interview Service ──────────────────────────────────────────────────────────
 import { type InterviewType } from "../../services/interviewService";
 
@@ -316,7 +312,7 @@ export default function CandidateEvaluation() {
             type: ivType,
             scheduledAt: formatDateWithTimezone(ivDate),
             meetingLink: ivLink || undefined,
-            durationMin: ivDuration, 
+            durationMin: ivDuration,
           };
           await interviewCandidate(id, payload);
           break;
@@ -334,7 +330,9 @@ export default function CandidateEvaluation() {
 
         case "hired":
           // POST /candidates/:id/hire
-          await hireCandidate(id, { startDate: formatDateWithTimezone(hireStartDate) });
+          await hireCandidate(id, {
+            startDate: formatDateWithTimezone(hireStartDate),
+          });
           break;
 
         case "reject":
@@ -372,7 +370,7 @@ export default function CandidateEvaluation() {
   return (
     <div className="ce-page">
       {/* HEADER */}
-<CompanyNavbar  />
+      <CompanyNavbar />
 
       <main className="ce-main">
         {/* Candidate hero */}
@@ -868,7 +866,6 @@ export default function CandidateEvaluation() {
               <input
                 className="ce-input"
                 type="url"
-               
                 value={ivDuration}
                 onChange={(e) => setIvDuration(Number(e.target.value))}
               />

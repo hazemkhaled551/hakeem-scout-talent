@@ -7,7 +7,6 @@ import {
   X,
   Plus,
   CheckCircle,
-  AlertCircle,
   Save,
   BrainCircuit,
   Trash2,
@@ -21,7 +20,7 @@ import {
   getCompletion,
   deleteUser,
 } from "../../services/userService";
-import { formatDate, formatDateWithTimezone } from "../../utils/dateFormat";
+import { formatDate, formatDateWithTimezone } from "../../utils/format";
 import {
   addSkill,
   deleteSkill,
@@ -32,6 +31,7 @@ import {
 import Loader from "../../components/Loader";
 import ApplicantNavbar from "../../components/ApplicantNavbar";
 import CVSection from "../../components/Cvsection/Cvsection";
+import ProfileCompletion from "../../components/ProfileCompletion/ProfileCompletion";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Experience {
@@ -59,11 +59,11 @@ const EMPTY_EXP_FORM: ExpForm = {
   description: "",
 };
 
-const profileChecks = [
-  { label: "Basic Info", done: true },
-  { label: "Work Experience", done: true },
-  { label: "Skills Assessment", done: false },
-];
+// const profileChecks = [
+//   { label: "Basic Info", done: true },
+//   { label: "Work Experience", done: true },
+//   { label: "Skills Assessment", done: false },
+// ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function ApplicantProfile() {
@@ -152,7 +152,15 @@ export default function ApplicantProfile() {
 
   async function saveBasicInfo() {
     try {
-      await updateBasicInfo(basicInfo);
+      const payload = {
+        name: basicInfo.name,
+        job_title: basicInfo.job_title,
+        phone: basicInfo.phone,
+        location: basicInfo.location,
+        linkedIn_profile: basicInfo.linkedIn_profile,
+      };
+
+      await updateBasicInfo(payload);
       setIsEditing(false);
     } catch (err) {
       console.log(err);
@@ -219,6 +227,7 @@ export default function ApplicantProfile() {
       if (editingExpId) {
         await updateExperience(editingExpId, payload);
         fetchUser();
+        loadCompletion();
       } else {
         await addExperience(payload);
         fetchUser();
@@ -233,6 +242,7 @@ export default function ApplicantProfile() {
     try {
       await deleteExperience(id);
       fetchUser();
+      loadCompletion();
     } catch (err) {
       console.error("Error deleting experience:", err);
     }
@@ -245,6 +255,7 @@ export default function ApplicantProfile() {
     try {
       await addSkill(trimmed);
       fetchUser();
+      loadCompletion();
       setNewSkill("");
     } catch (err) {
       console.error("Error adding skill:", err);
@@ -255,6 +266,7 @@ export default function ApplicantProfile() {
     try {
       await deleteSkill(skillId);
       fetchUser();
+      loadCompletion();
     } catch (err) {
       console.error("Error deleting skill:", err);
     }
@@ -299,56 +311,10 @@ export default function ApplicantProfile() {
         </div>
 
         {/* ── Profile Completion ─────────────────────────── */}
-        <div className="pr-card pr-completion-card anim-fade-up delay-1">
-          <div className="pr-card-body">
-            <div className="d-flex align-items-start justify-content-between mb-1">
-              <div>
-                <div className="pr-card-title" style={{ fontSize: "1rem" }}>
-                  Complete Your Profile
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.83rem",
-                    color: "var(--muted)",
-                    marginTop: "0.15rem",
-                  }}
-                >
-                  Complete your profile to get better job matches
-                </div>
-              </div>
-              <span className="pr-completion-badge">
-                {completion.percentage}%
-              </span>
-            </div>
-
-            <div className="pr-progress-track">
-              <div
-                className="pr-progress-fill"
-                style={
-                  {
-                    "--fill": `${completion.percentage}%`,
-                  } as React.CSSProperties
-                }
-              />
-            </div>
-
-            <div className="row g-2">
-              {profileChecks.map((item, i) => (
-                <div key={i} className="col-auto">
-                  <div className="pr-check-item">
-                    {item.done ? (
-                      <CheckCircle size={15} className="pr-check-done" />
-                    ) : (
-                      <AlertCircle size={15} className="pr-check-pending" />
-                    )}
-                    {item.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
+        <ProfileCompletion
+          percentage={completion.percentage}
+          sections={completion.sections}
+        />
         {/* ── Basic Information ──────────────────────────── */}
         <div className="pr-card anim-fade-up delay-2">
           <div className="pr-card-header">
@@ -392,9 +358,12 @@ export default function ApplicantProfile() {
                     className="pr-input"
                     type={f.type}
                     value={basicInfo[f.key as keyof typeof basicInfo]}
-                    disabled={!isEditing && f.key == "email"}
+                    disabled={!isEditing || f.key === "email"}
                     onChange={(e) =>
-                      setBasicInfo({ ...basicInfo, [f.key]: e.target.value })
+                      setBasicInfo({
+                        ...basicInfo,
+                        [f.key]: e.target.value,
+                      })
                     }
                   />
                 </div>
@@ -530,9 +499,9 @@ export default function ApplicantProfile() {
                     maxWidth: 420,
                   }}
                 >
-                  Permanently delete your account and all associated data —
-                  applications, interviews, and profile information. This action
-                  is irreversible.
+                  Your account will be deactivated and scheduled for permanent
+                  deletion. You can restore your account within 15 days. After
+                  that, all your data will be permanently removed.
                 </p>
               </div>
               <button

@@ -7,7 +7,6 @@ import {
   Clock,
   Search,
   X,
-
   SlidersHorizontal,
   Briefcase,
 } from "lucide-react";
@@ -16,51 +15,9 @@ import "./Joblist.css";
 import { getAllJobs } from "../../services/jobService";
 import Loader from "../../components/Loader";
 
-// ─── Enums & Types ────────────────────────────────────────────────────────────
-const JobType = {
-  FULL_TIME: "Full_Time",
-  PART_TIME: "Part_Time",
-  CONTRACT: "Contract",
-  FREELANCE: "Freelance",
-  INTERNSHIP: "Internship",
-} as const;
+import { JobType, WorkMode, type Job } from "../../types/job";
 
-type JobType = (typeof JobType)[keyof typeof JobType];
-
-const WorkMode = {
-  ONSITE: "Onsite",
-  REMOTE: "Remote",
-  HYBRID: "Hybrid",
-} as const;
-
-type WorkMode = (typeof WorkMode)[keyof typeof WorkMode];
-
-interface Job {
-  id: string;
-  title: string;
-  company: {
-    name: string;
-  };
-  companyInitial: string;
-  location: string;
-  // salary: string;
-  type: JobType;
-  workMode: WorkMode;
-  tags: string[];
-  daysAgo: number;
-  matchScore: number;
-  status: string;
-  description: string;
-  responsibilities: string[];
-  skills: string[];
-  requirements: string[];
-  companySize: string;
-  industry: string;
-  growth: string;
-  minSalary: number;
-  maxSalary: number;
-}
-import { fmt } from "../../utils/dateFormat";
+import { fmt } from "../../utils/format";
 import ApplicantNavbar from "../../components/ApplicantNavbar";
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
@@ -165,7 +122,6 @@ export default function JobList() {
     loadJobs();
   }, []);
 
-
   const hasFilters = !!(search || locationFilter || typeFilter || modeFilter);
 
   // const results = jobs.filter((j) => {
@@ -194,7 +150,7 @@ export default function JobList() {
   return (
     <div className="jb-page">
       {/* ══ HEADER ══════════════════════════════════════════════ */}
-     <ApplicantNavbar />
+      <ApplicantNavbar />
 
       {/* ══ MAIN ════════════════════════════════════════════════ */}
       <main className="jb-main au">

@@ -16,83 +16,8 @@ import "../../styles/Jobs.css";
 import "./Jobdetails.css";
 import { getJobById } from "../../services/jobService";
 import Loader from "../../components/Loader";
-import { fmt, companyIntiatal } from "../../utils/dateFormat";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-const JobType = {
-  FULL_TIME: "Full_Time",
-  PART_TIME: "Part_Time",
-  CONTRACT: "Contract",
-  FREELANCE: "Freelance",
-  INTERNSHIP: "Internship",
-} as const;
-
-type JobType = (typeof JobType)[keyof typeof JobType];
-
-const WorkMode = {
-  ONSITE: "Onsite",
-  REMOTE: "Remote",
-  HYBRID: "Hybrid",
-} as const;
-
-type WorkMode = (typeof WorkMode)[keyof typeof WorkMode];
-interface Job {
-  id: string;
-  title: string;
-  company: {
-    name: string;
-  };
-  companyInitial: string;
-  location: string;
-  // salary: string;
-  type: JobType;
-  workMode: WorkMode;
-  tags: string[];
-  daysAgo: number;
-  matchScore: number;
-  status: string;
-  description: string;
-  responsibilities: string[];
-  skills: string[];
-  requirements: string[];
-  companySize: string;
-  industry: string;
-  growth: string;
-  minSalary: number;
-  maxSalary: number;
-}
-
-// ─── Mock ─────────────────────────────────────────────────────────────────────
-// const MOCK_JOB: Job = {
-//   id: "1",
-//   title: "Senior Software Engineer",
-//   company: "TechCorp Inc.",
-//   companyInitial: "T",
-//   location: "Remote",
-//   salary: "$120k – $180k",
-//   type: "Full-time",
-//   workMode: "Remote",
-//   status: "Actively Hiring",
-//   about:
-//     "We're looking for an experienced Software Engineer to join our growing team. You'll work on cutting-edge products that impact millions of users worldwide. This role requires strong technical skills and a passion for clean, scalable code.",
-//   skills: ["React", "Node.js", "TypeScript", "AWS", "PostgreSQL", "Docker"],
-//   responsibilities: [
-//     "Design and develop scalable web applications",
-//     "Collaborate with cross-functional teams across time zones",
-//     "Mentor junior developers and lead code reviews",
-//     "Participate in architectural decisions and technical planning",
-//   ],
-//   requirements: [
-//     "5+ years of experience in software development",
-//     "Strong knowledge of modern JavaScript frameworks",
-//     "Experience with cloud platforms (AWS preferred)",
-//     "Excellent communication and async collaboration skills",
-//   ],
-//   companySize: "500–1,000",
-//   industry: "SaaS / FinTech",
-//   growth: "Series C",
-// };
+import { fmt, companyIntiatal } from "../../utils/format";
+import { type Job } from "../../types/job";
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function JobDetails() {
@@ -158,7 +83,9 @@ export default function JobDetails() {
         {/* ── Hero block ──────────────────────────────────────── */}
         <div className="jd-hero mb-4 au">
           <div className="d-flex align-items-start gap-3 mb-3">
-            <div className="jd-company-avatar">{companyIntiatal(job?.company?.name)}</div>
+            <div className="jd-company-avatar">
+              {companyIntiatal(job?.company?.name)}
+            </div>
             <div className="flex-1">
               <div className="d-flex align-items-start justify-content-between gap-2 flex-wrap">
                 <h1 className="jd-title">{job?.title}</h1>

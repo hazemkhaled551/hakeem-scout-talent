@@ -7,6 +7,21 @@ import "./AuthPage.css";
 type TabMode = "login" | "register";
 type Strength = "weak" | "medium" | "strong" | "";
 
+const IndustryName = {
+  SOFTWARE_DEVELOPMENT: "Software Development",
+  ARTIFICIAL_INTELLIGENCE: "Artificial Intelligence & Machine Learning",
+  DATA_SCIENCE: "Data Science & Big Data",
+  CYBERSECURITY: "Cybersecurity",
+  CLOUD_COMPUTING: "Cloud Computing",
+  NETWORKING: "Networking & Infrastructure",
+  EMBEDDED_SYSTEMS: "Embedded Systems & IoT",
+  GAME_DEVELOPMENT: "Game Development",
+  UI_UX_DESIGN: "UI/UX Design",
+  BLOCKCHAIN: "Blockchain & FinTech",
+  AR_VR: "AR / VR (Augmented & Virtual Reality)",
+  HARDWARE: "Hardware & Electronics",
+} as const;
+type IndustryName = (typeof IndustryName)[keyof typeof IndustryName];
 interface LoginForm {
   email: string;
   password: string;
@@ -20,6 +35,7 @@ interface RegisterForm {
   jobTitle: string;
   location: string;
   linkedin: string;
+  industry: IndustryName | ""; // 👈 جديد
   password: string;
   confirmPassword: string;
   type: "applicant" | "company";
@@ -93,6 +109,7 @@ export default function AuthPage() {
     location: "",
     linkedin: "",
     password: "",
+    industry: "",
     confirmPassword: "",
     type: "applicant",
   });
@@ -178,6 +195,7 @@ export default function AuthPage() {
               applicant: {
                 phone: regForm.phone,
                 job_title: regForm.jobTitle,
+                industry: regForm.industry,
               },
             }
           : {
@@ -419,20 +437,22 @@ export default function AuthPage() {
                     />
                   </div>
                 </div>
-             { regForm.type === "applicant" &&   <div className="auth-field">
-                  <label className="auth-label">Phone</label>
-                  <div className="auth-input-wrap">
-                    <input
-                      className="auth-input"
-                      type="tel"
-                      placeholder="+20 10 0000 0000"
-                      value={regForm.phone}
-                      onChange={(e) =>
-                        setRegForm({ ...regForm, phone: e.target.value })
-                      }
-                    />
+                {regForm.type === "applicant" && (
+                  <div className="auth-field">
+                    <label className="auth-label">Phone</label>
+                    <div className="auth-input-wrap">
+                      <input
+                        className="auth-input"
+                        type="tel"
+                        placeholder="+20 10 0000 0000"
+                        value={regForm.phone}
+                        onChange={(e) =>
+                          setRegForm({ ...regForm, phone: e.target.value })
+                        }
+                      />
+                    </div>
                   </div>
-                </div>}
+                )}
               </div>
 
               <div className="auth-field">
@@ -450,21 +470,51 @@ export default function AuthPage() {
                 </div>
               </div>
 
-              <div className="auth-row">
-               { regForm.type === "applicant" && <div className="auth-field">
-                  <label className="auth-label">Job Title</label>
+              {regForm.type === "applicant" && (
+                <div className="auth-field">
+                  <label className="auth-label">Industry</label>
                   <div className="auth-input-wrap">
-                    <input
+                    <select
                       className="auth-input"
-                      type="text"
-                      placeholder="Frontend Developer"
-                      value={regForm.jobTitle}
+                      value={regForm.industry}
                       onChange={(e) =>
-                        setRegForm({ ...regForm, jobTitle: e.target.value })
+                        setRegForm({
+                          ...regForm,
+                          industry: e.target.value as IndustryName,
+                        })
                       }
-                    />
+                    >
+                      <option value="" disabled>
+                        Select industry
+                      </option>
+                      {Object.values(IndustryName).map((industry) => (
+                        <option key={industry} value={industry}>
+                          {industry}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                </div>}
+                </div>
+              )}
+
+              <div className="auth-row">
+                {regForm.type === "applicant" && (
+                  <div className="auth-field">
+                    <label className="auth-label">Job Title</label>
+                    <div className="auth-input-wrap">
+                      <input
+                        className="auth-input"
+                        type="text"
+                        placeholder="Frontend Developer"
+                        value={regForm.jobTitle}
+                        onChange={(e) =>
+                          setRegForm({ ...regForm, jobTitle: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <div className="auth-field">
                   <label className="auth-label">Location</label>
                   <div className="auth-input-wrap">

@@ -8,8 +8,16 @@ import {
   Clock,
   X,
   Plus,
+  Download,
+  Eye,
 } from "lucide-react";
-import { uploadCV, getAllCVs, deleteCV } from "../../services/cvService";
+import {
+  uploadCV,
+  getAllCVs,
+  deleteCV,
+  downloadCV,
+  viewCV,
+} from "../../services/cvService";
 
 import "./Cvsection.css";
 /* ────────────────────────────────────────────────────────────
@@ -44,7 +52,17 @@ function formatCVDate(dateStr: string) {
 /* ────────────────────────────────────────────────────────────
    SUB-COMPONENTS
 ──────────────────────────────────────────────────────────── */
-function CVCard({ cv, onDelete }: { cv: CV; onDelete: (id: string) => void }) {
+function CVCard({
+  cv,
+  onDelete,
+  handleView,
+  handleDownload,
+}: {
+  cv: CV;
+  onDelete: (id: string) => void;
+  handleView: (id: string) => void;
+  handleDownload: (id: string) => void;
+}) {
   const [confirming, setConfirming] = useState(false);
 
   return (
@@ -63,15 +81,20 @@ function CVCard({ cv, onDelete }: { cv: CV; onDelete: (id: string) => void }) {
 
       <div className="cv-card__actions">
         {cv.url && (
-          <a
-            href={cv.url}
-            target="_blank"
-            rel="noreferrer"
+          <button
             className="pr-btn-outline pr-btn-sm"
-            style={{ textDecoration: "none" }}
+            onClick={() => handleView(cv.id)}
           >
-            View
-          </a>
+            <Eye size={13} />
+          </button>
+        )}
+        {cv.url && (
+          <button
+            className="pr-btn-outline pr-btn-sm"
+            onClick={() => handleDownload(cv.id)}
+          >
+            <Download size={13} />
+          </button>
         )}
 
         {confirming ? (
@@ -191,7 +214,7 @@ export default function CVSection() {
     try {
       const data = await getAllCVs();
       console.log(data.data);
-      
+
       setCVs(data.data.cvs);
     } catch {
       showToast("error", "Failed to load CVs.");
@@ -222,6 +245,37 @@ export default function CVSection() {
     }
   }
 
+  async function handleDownload(id: string) {
+    try {
+      const cvBlob = await downloadCV(id);
+      const url = window.URL.createObjectURL(cvBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `cv-${id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch {
+      showToast("error", "Failed to download CV.");
+    }
+  }
+
+  async function handleView(id: string) {
+    try {
+      const cvBlob = await viewCV(id);
+      const url = window.URL.createObjectURL(cvBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `cv-${id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch {
+      showToast("error", "Failed to view CV.");
+    }
+  }
   async function handleDelete(id: string) {
     try {
       await deleteCV(id);
@@ -307,7 +361,13 @@ export default function CVSection() {
               }}
             >
               {cvs.map((cv) => (
-                <CVCard key={cv.id} cv={cv} onDelete={handleDelete} />
+                <CVCard
+                  key={cv.id}
+                  cv={cv}
+                  onDelete={handleDelete}
+                  handleView={handleView}
+                  handleDownload={handleDownload}
+                />
               ))}
             </div>
           )}

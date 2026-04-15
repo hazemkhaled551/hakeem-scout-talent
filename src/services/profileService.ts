@@ -3,12 +3,12 @@ import api from "../utils/api";
 /* ================= SKILLS ================= */
 
 export const addSkill = async (name: string) => {
-  const { data } = await api.post("/users/me/skills", { name });
+  const { data } = await api.post("/applicant/me/skills", { name });
   return data;
 };
 
 export const deleteSkill = async (id: number) => {
-  const { data } = await api.delete(`/users/me/skills/${id}`);
+  const { data } = await api.delete(`/applicant/me/skills/${id}`);
   return data;
 };
 
@@ -33,7 +33,7 @@ export const addExperience = async (experience: {
   endDate: string;
   description: string;
 }) => {
-  const { data } = await api.post("/users/me/experiences", experience);
+  const { data } = await api.post("/applicant/me/experiences", experience);
   return data;
 };
 
@@ -47,11 +47,11 @@ export const updateExperience = async (
     description: string;
   },
 ) => {
-  const { data } = await api.put(`/users/me/experiences/${id}`, experience);
+  const { data } = await api.put(`/applicant/me/experiences/${id}`, experience);
   return data;
 };
 
 export const deleteExperience = async (id: number) => {
-  const { data } = await api.delete(`/users/me/experiences/${id}`);
+  const { data } = await api.delete(`/applicant/me/experiences/${id}`);
   return data;
 };

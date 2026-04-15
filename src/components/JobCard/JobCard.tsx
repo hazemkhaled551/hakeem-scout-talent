@@ -16,52 +16,12 @@ import {
   GitBranch,
   Users,
 } from "lucide-react";
+import { type Job, JobStatus } from "../../types/job";
 
 /* ════════════════════════════════════════════════════════════
    ENUMS (re-exported so consumers don't need to re-declare)
 ════════════════════════════════════════════════════════════ */
-export const JobStatus = {
-  DRAFT: "Draft",
-  PUBLISHED: "Published",
-  PAUSED: "Paused",
-  CLOSED: "Closed",
-  FILLED: "Filled",
-  EXPIRED: "Expired",
-} as const;
-export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus];
 
-/* ════════════════════════════════════════════════════════════
-   TYPES
-════════════════════════════════════════════════════════════ */
-export interface Job {
-  id: string;
-  title: string;
-  company: { name: string };
-  companyInitial: string;
-  location: string;
-  type: string;
-  workMode: string;
-  acceptedCount: number;
-  applicationsCount: number;
-  tags: string[];
-  daysAgo: number;
-  matchScore: number;
-  status: string;
-  description: string;
-  responsibilities: string[];
-  skills: string[];
-  requirements: string;
-  positions?: number;
-  maxApplications?: number;
-  deadline?: string;
-  companySize: string;
-  industry: string;
-  growth: string;
-  minSalary: number | "";
-  maxSalary: number | "";
-  applicants: number;
-  postedDays: number;
-}
 
 export interface JobCardProps {
   job: Job;

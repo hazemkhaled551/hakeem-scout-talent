@@ -20,10 +20,10 @@ import {
 import "../../styles/Jobs.css";
 import "./Jobapplication.css";
 import { getJobById, applyJob } from "../../services/jobService";
-import { uploadCV } from "../../services/cvService";
+import { uploadCV, getAllCVs } from "../../services/cvService";
 
 import Loader from "../../components/Loader";
-import { fmt } from "../../utils/dateFormat";
+import { fmt } from "../../utils/format";
 import ApplicantNavbar from "../../components/ApplicantNavbar";
 
 // ─── Step config ──────────────────────────────────────────────────────────────
@@ -43,6 +43,8 @@ export default function JobApplication() {
   const [loading, setLoading] = useState(false);
   const { jobId } = useParams();
   const [job, setJob] = useState<any>(null);
+  const [cvs, setCvs] = useState<any[]>([]);
+  const [selectedCvId, setSelectedCvId] = useState<string | null>(null);
 
   // CV state
   const [file, setFile] = useState<File | null>(null);
@@ -84,6 +86,8 @@ export default function JobApplication() {
         if (!jobId) return;
         const data = await getJobById(jobId);
         setJob(data.data.data);
+        const res = await getAllCVs();
+        setCvs(res.data.cvs);
         // setLoading(false);
       } catch (error) {
         console.error(error);
@@ -98,19 +102,20 @@ export default function JobApplication() {
 
   async function handleSubmitApplication() {
     try {
-      if (!file || !jobId) return;
+      if (!jobId) return;
 
       setLoading(true);
 
-      // 1️⃣ upload cv
-      const uploadRes = await uploadCV(file);
-      console.log(uploadRes);
+      let cvId = selectedCvId;
 
-      const cvId = uploadRes.data.cvId; // حسب الريسبونس
-      console.log(cvId);
-      
+      // لو رفع فايل جديد
+      if (file) {
+        const uploadRes = await uploadCV(file);
+        cvId = uploadRes.data.cvId;
+      }
 
-      // 2️⃣ apply job
+      if (!cvId) return;
+
       await applyJob(jobId, cvId, coverLetter);
 
       setShowAI(true);
@@ -263,7 +268,7 @@ export default function JobApplication() {
   return (
     <div className="jb-page">
       {/* ══ HEADER ════════════════════════════════════════════ */}
- <ApplicantNavbar />
+      <ApplicantNavbar />
 
       <main className="jb-main">
         {/* ── Step indicator ────────────────────────────────── */}
@@ -476,6 +481,46 @@ export default function JobApplication() {
             </div>
             <div className="jb-card-body">
               {/* Drop zone */}
+
+              {cvs.length > 0 && (
+                <div className="mb-3">
+                  <div className="jb-label mb-2">
+                    Choose from your saved CVs
+                  </div>
+
+                  <div className="d-flex flex-column gap-2">
+                    {cvs.map((cv) => (
+                      <div
+                        key={cv.id}
+                        className={`ja-file-pill ${selectedCvId === cv.id ? "active" : ""}`}
+                        onClick={() => {
+                          setSelectedCvId(cv.id);
+                          setFile(null); // مهم
+                        }}
+                        style={{
+                          cursor: "pointer",
+                          border:
+                            selectedCvId === cv.id
+                              ? "2px solid var(--primary)"
+                              : "",
+                        }}
+                      >
+                        <FileText size={16} />
+                        <div className="flex-1">
+                          <div className="ja-file-name">{cv.name}</div>
+                          <div className="ja-file-size">
+                            {new Date(cv.createdAt).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="text-center my-2" style={{ opacity: 0.6 }}>
+                    — OR —
+                  </div>
+                </div>
+              )}
               {!file ? (
                 <div
                   className={`ja-drop mb-3 ${dragActive ? "ja-drop--active" : ""}`}
@@ -537,8 +582,8 @@ export default function JobApplication() {
                 </button>
                 <button
                   className="jb-btn jb-btn--primary"
-                  disabled={!file}
-                  style={{ opacity: file ? 1 : 0.45 }}
+                  disabled={!file && !selectedCvId}
+                  style={{ opacity: file || selectedCvId ? 1 : 0.45 }}
                   onClick={() => setStep(3)}
                 >
                   Continue <ChevronRight size={14} />

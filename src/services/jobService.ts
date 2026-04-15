@@ -12,7 +12,7 @@ export const getAllJobs = () => {
 
 /* Get Job By Id */
 export const getJobById = (id: string) => {
-  return api.get(`/jobs/jobs/${id}`);
+  return api.get(`/jobs/${id}`);
 };
 
 /* Apply To Job */
