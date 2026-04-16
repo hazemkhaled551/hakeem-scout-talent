@@ -23,7 +23,7 @@ import Modal from "../../components/Modal/Modal";
 import "./Candidateevaluation.css";
 import { formatDateWithTimezone } from "../../utils/format";
 // ── Interview Service ──────────────────────────────────────────────────────────
-import { type InterviewType } from "../../services/interviewService";
+import { type InterviewType } from "../../types/interview";
 
 // ── Candidate pipeline services ───────────────────────────────────────────────
 import {
