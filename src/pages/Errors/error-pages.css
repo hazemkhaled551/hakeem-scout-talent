@@ -1,0 +1,69 @@
+/* Container */
+.error-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--surface), var(--surface-alt));
+}
+
+/* Card */
+.error-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(79, 70, 229, 0.15);
+  max-width: 450px;
+  width: 100%;
+  animation: fadeInUp 0.6s ease;
+}
+
+/* Code (401 / 404) */
+.error-code {
+  font-size: 90px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+/* Title */
+.error-title {
+  font-size: 28px;
+  margin-top: 10px;
+  color: var(--dark);
+}
+
+/* Text */
+.error-text {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+/* Buttons */
+.custom-btn {
+  background-color: var(--primary);
+  border: none;
+  padding: 10px 20px;
+  transition: 0.3s;
+}
+
+.custom-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+.custom-outline {
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.custom-outline:hover {
+  background-color: var(--surface);
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

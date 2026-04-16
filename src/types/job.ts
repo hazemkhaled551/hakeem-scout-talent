@@ -8,6 +8,15 @@ export const JobType = {
 
 export type JobType = (typeof JobType)[keyof typeof JobType];
 
+export const Seniority = {
+  FRESH: "Fresh",
+  JUNIOR: "Junior",
+  MID: "Mid-Level",
+  SENIOR: "Senior",
+  LEAD: "Lead",
+};
+export type Seniority = (typeof Seniority)[keyof typeof Seniority];
+
 export const WorkMode = {
   ONSITE: "Onsite",
   REMOTE: "Remote",
@@ -34,6 +43,7 @@ export interface Job {
   company: { name: string };
   companyInitial: string;
   location: string;
+  seniority: string;
   type: string;
   workMode: string;
   acceptedCount: number;
@@ -64,6 +74,7 @@ export interface JobPayload {
   minSalary: number | "";
   maxSalary: number | "";
   type: string;
+  seniority: string;
   status: string;
   workMode: string;
   description: string;

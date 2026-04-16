@@ -1,7 +1,8 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { Bell } from "lucide-react";
+import { Bell, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import "../styles/navbar.css";
+import { useAuth } from "../contexts/AuthContext";
 
 const applicantLinks = [
   { label: "Dashboard", to: "/dashboard" },
@@ -14,6 +15,12 @@ export default function ApplicantNavbar() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { logout } = useAuth();
+
+  const handleLogout = (navigate: ReturnType<typeof useNavigate>) => {
+    logout();
+    navigate("/auth");
+  };
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 8);
@@ -64,6 +71,13 @@ export default function ApplicantNavbar() {
             >
               AP
             </div>
+            <button
+              className="navbar__logout-btn"
+              onClick={() => handleLogout(navigate)}
+              aria-label="Logout"
+            >
+              <LogOut size={16} />
+            </button>
 
             <button
               className={`navbar__hamburger${menuOpen ? " open" : ""}`}

@@ -260,6 +260,20 @@
   border-radius: 10px;
   font-size: 0.92rem;
 }
+.navbar__logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary); /* أو نفس لون notif btn */
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.2s;
+}
+.navbar__logout-btn:hover {
+  color: #e53e3e; /* أحمر خفيف عند hover */
+}
 
 /* ════════════════════════════════════════════════════════════
    RESPONSIVE

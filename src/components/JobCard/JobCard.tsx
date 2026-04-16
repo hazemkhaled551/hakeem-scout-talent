@@ -15,6 +15,7 @@ import {
   Briefcase,
   GitBranch,
   Users,
+  User,
 } from "lucide-react";
 import { type Job, JobStatus } from "../../types/job";
 
@@ -128,6 +129,12 @@ export default function JobCard({
             <span className="cj-meta-item">
               <Globe size={13} />
               {job.workMode}
+            </span>
+          )}
+          {job.seniority && (
+            <span className="cj-meta-item">
+              <User size={13} />
+              {job.seniority}
             </span>
           )}
           {job.positions !== undefined && (

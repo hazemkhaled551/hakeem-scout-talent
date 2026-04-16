@@ -28,6 +28,7 @@ import {
   JobType,
   WorkMode,
   JobStatus,
+  Seniority,
   type Job,
   type JobPayload,
 } from "../../types/job";
@@ -67,6 +68,7 @@ function createEmpty(): Job {
     applicationsCount: 0,
     minSalary: "",
     maxSalary: "",
+    seniority: Seniority.FRESH,
     type: "",
     workMode: "",
     status: JobStatus.DRAFT,
@@ -92,6 +94,7 @@ function toPayload(f: Job, statusOverride?: JobStatus): JobPayload {
     minSalary: f.minSalary,
     maxSalary: f.maxSalary,
     type: f.type,
+    seniority: f.seniority,
     status: statusOverride ?? f.status,
     workMode: f.workMode,
     description: f.description,
@@ -550,6 +553,23 @@ export default function CompanyJobs() {
                 {Object.values(WorkMode).map((m) => (
                   <option key={m} value={m}>
                     {m}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="cj-field">
+              <label className="cj-label">Seniority</label>
+              <select
+                className="cj-select"
+                value={formData.seniority}
+                onChange={(e) => set("seniority", e.target.value as Seniority)}
+              >
+                <option value="">Select seniority</option>
+                {Object.values(Seniority).map((s) => (
+                  <option key={s} value={s}>
+                    {s}
                   </option>
                 ))}
               </select>
