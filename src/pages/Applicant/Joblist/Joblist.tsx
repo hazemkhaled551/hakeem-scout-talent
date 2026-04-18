@@ -11,7 +11,8 @@ import {
   Briefcase,
   Sparkles,
 } from "lucide-react";
-import "../../styles/Jobs.css";
+import "../../../styles/Jobs.css";
+
 import "./Joblist.css";
 import { getAllJobs } from "../../../services/jobService";
 import Loader from "../../../components/Loader";

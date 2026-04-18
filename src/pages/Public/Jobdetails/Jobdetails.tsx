@@ -12,7 +12,7 @@ import {
   // Users,
   // TrendingUp,
 } from "lucide-react";
-import "../../styles/Jobs.css";
+import "../../../styles/Jobs.css";
 import "./Jobdetails.css";
 import { getJobById } from "../../../services/jobService";
 import Loader from "../../../components/Loader";
