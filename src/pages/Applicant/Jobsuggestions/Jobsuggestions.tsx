@@ -16,7 +16,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import "../../styles/Jobs.css";
-import "./JobSuggestions.css";
+import "./Jobsuggestions.css";
 import { fmt } from "../../../utils/format";
 import ApplicantNavbar from "../../../components/ApplicantNavbar";
 import { recommendJobs } from "../../../services/jobService";
