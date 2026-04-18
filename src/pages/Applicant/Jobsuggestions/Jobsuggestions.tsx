@@ -15,7 +15,7 @@ import {
   AlertTriangle,
   TrendingUp,
 } from "lucide-react";
-import "../../styles/Jobs.css";
+import "../../../styles/Jobs.css";
 import "./Jobsuggestions.css";
 import { fmt } from "../../../utils/format";
 import ApplicantNavbar from "../../../components/ApplicantNavbar";
