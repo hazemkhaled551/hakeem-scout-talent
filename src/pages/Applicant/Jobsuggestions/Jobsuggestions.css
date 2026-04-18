@@ -1,0 +1,307 @@
+/* ═══════════════════════════════════════════════════════════
+   Hakeem — AI Job Suggestions  (js-*)
+   ═══════════════════════════════════════════════════════════ */
+
+@keyframes js-fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes js-fillBar {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--w);
+  }
+}
+@keyframes js-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes js-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+  }
+}
+
+/* ── Back button ──────────────────────────────────────────── */
+.js-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--muted, #64748b);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.18s;
+}
+.js-back-btn:hover {
+  color: var(--primary, #4f46e5);
+}
+
+/* ── AI icon ──────────────────────────────────────────────── */
+.js-ai-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: linear-gradient(
+    135deg,
+    var(--primary, #4f46e5),
+    var(--accent, #06b6d4)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.28);
+  flex-shrink: 0;
+  animation: js-pulse 3s ease-in-out infinite;
+}
+
+/* ── Info banner ──────────────────────────────────────────── */
+.js-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: linear-gradient(
+    135deg,
+    rgba(79, 70, 229, 0.06),
+    rgba(6, 182, 212, 0.04)
+  );
+  border: 1px solid rgba(79, 70, 229, 0.16);
+  border-radius: 13px;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.84rem;
+  color: var(--muted, #64748b);
+  line-height: 1.6;
+}
+.js-banner-icon {
+  color: var(--primary, #4f46e5);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+/* ── Refresh button spin ──────────────────────────────────── */
+.js-refresh-btn {
+  transition: all 0.2s;
+}
+.spin {
+  animation: js-spin 0.7s linear infinite;
+}
+
+/* ════════════════════════════════════════════════════════════
+   JOB CARD
+════════════════════════════════════════════════════════════ */
+.js-job-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    box-shadow 0.22s,
+    transform 0.22s,
+    border-color 0.22s;
+}
+.js-job-card:hover {
+  box-shadow: 0 10px 32px rgba(79, 70, 229, 0.12);
+  transform: translateY(-2px);
+  border-color: rgba(79, 70, 229, 0.28);
+}
+/* left accent on hover */
+.js-job-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(
+    180deg,
+    var(--primary, #4f46e5),
+    var(--accent, #06b6d4)
+  );
+  border-radius: 3px 0 0 3px;
+  transition: width 0.22s;
+}
+.js-job-card:hover::before {
+  width: 3.5px;
+}
+
+/* ── AI Pick ribbon ───────────────────────────────────────── */
+.js-ribbon {
+  position: absolute;
+  top: 14px;
+  right: -1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  background: linear-gradient(135deg, var(--primary, #4f46e5), #7c3aed);
+  color: #fff;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.68rem;
+  padding: 0.22rem 0.75rem 0.22rem 0.6rem;
+  border-radius: 999px 0 0 999px;
+  box-shadow: -2px 2px 8px rgba(79, 70, 229, 0.28);
+  letter-spacing: 0.03em;
+}
+
+/* ── Status badge (Closed / ApplicationsFull) ─────────────── */
+.js-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.18rem 0.65rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.js-status--closed {
+  background: rgba(239, 68, 68, 0.08);
+  color: #991b1b;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+.js-status--full {
+  background: rgba(245, 158, 11, 0.08);
+  color: #92400e;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+.js-status--open {
+  background: rgba(16, 185, 129, 0.08);
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* ── Score section ────────────────────────────────────────── */
+.js-score-block {
+  background: var(--surface, #f8f7ff);
+  border: 1px solid var(--border, #e2e0f5);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.85rem;
+}
+.js-score-main-num {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.js-score-sub {
+  font-size: 0.7rem;
+  color: var(--muted, #64748b);
+  margin-top: 0.18rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.js-score-bar-track {
+  height: 6px;
+  background: var(--border, #e2e0f5);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.55rem;
+}
+.js-score-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  width: 0;
+  animation: js-fillBar 0.8s ease forwards;
+}
+
+/* mini sub-scores */
+.js-sub-score {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  padding: 0.22rem 0;
+  border-bottom: 1px solid var(--border, #e2e0f5);
+}
+.js-sub-score:last-child {
+  border-bottom: none;
+}
+.js-sub-score-label {
+  color: var(--muted, #64748b);
+}
+.js-sub-score-val {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+}
+
+/* ── Skills grid ──────────────────────────────────────────── */
+.js-skill-matched {
+  background: rgba(16, 185, 129, 0.08);
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: "DM Sans", sans-serif;
+}
+.js-skill-missing {
+  background: rgba(239, 68, 68, 0.07);
+  color: #991b1b;
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  border-radius: 8px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: "DM Sans", sans-serif;
+  text-decoration: line-through;
+}
+
+/* ── Seniority badge ──────────────────────────────────────── */
+.js-seniority {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(79, 70, 229, 0.07);
+  color: var(--primary, #4f46e5);
+  border: 1px solid rgba(79, 70, 229, 0.16);
+  border-radius: 999px;
+  padding: 0.18rem 0.7rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.js-seniority--match {
+  background: rgba(16, 185, 129, 0.08);
+  color: #065f46;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* ── Deadline ─────────────────────────────────────────────── */
+.js-deadline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--warning, #f59e0b);
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 999px;
+  padding: 0.14rem 0.6rem;
+}
+.js-deadline--urgent {
+  color: var(--danger, #ef4444);
+  background: rgba(239, 68, 68, 0.07);
+  border-color: rgba(239, 68, 68, 0.18);
+}

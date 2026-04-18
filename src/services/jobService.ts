@@ -50,3 +50,8 @@ export const hiredCV = (jobId: string, userId: string) => {
 export const changeJobStatus = (jobId: string, status: string) => {
   return api.post(`/jobs/${jobId}/status`, { status });
 };
+
+/*Recommend Jobs */
+export const recommendJobs = () => {
+  return api.get(`/applicant/recommend/job`);
+};

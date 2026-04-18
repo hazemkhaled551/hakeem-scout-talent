@@ -59,3 +59,10 @@ export const viewCV = async (id: string) => {
 
   return res.data;
 };
+
+
+/*set Primary CV*/
+export const setPrimaryCV = async (id: string) => {
+  const res = await api.get(`/cv/isPrimary/${id}`)
+  return res.data;
+}

@@ -1,0 +1,780 @@
+/* ═══════════════════════════════════════════════════════════
+   Hakeem — Plans & Payment Pages  (pl-* / py-*)
+   ═══════════════════════════════════════════════════════════ */
+
+
+@keyframes pl-fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes pl-scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes pl-shimmer {
+  0% {
+    background-position: -400% 0;
+  }
+  100% {
+    background-position: 400% 0;
+  }
+}
+@keyframes pl-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(79, 70, 229, 0);
+  }
+}
+@keyframes pl-checkPop {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes pl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pl-au {
+  opacity: 0;
+  animation: pl-fadeUp 0.48s ease forwards;
+}
+.pl-d1 {
+  animation-delay: 0.08s;
+}
+.pl-d2 {
+  animation-delay: 0.16s;
+}
+.pl-d3 {
+  animation-delay: 0.24s;
+}
+.pl-d4 {
+  animation-delay: 0.32s;
+}
+.pl-si {
+  opacity: 0;
+  animation: pl-scaleIn 0.4s cubic-bezier(0.34, 1.26, 0.64, 1) forwards;
+}
+
+/* ════════════════════════════════════════════════════════════
+   SHARED LAYOUT
+════════════════════════════════════════════════════════════ */
+.pl-page,
+.py-page {
+  min-height: 100vh;
+  background: var(--surface);
+}
+
+.pl-header,
+.py-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+.pl-header.scrolled,
+.py-header.scrolled {
+  box-shadow: 0 4px 24px rgba(79, 70, 229, 0.09);
+}
+.pl-logo-box {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  color: #fff;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.28);
+  flex-shrink: 0;
+}
+.pl-brand {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+/* ── Shared button ────────────────────────────────────────── */
+.pl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border-radius: 11px;
+  padding: 0.58rem 1.2rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  border: none;
+}
+.pl-btn--primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+}
+.pl-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 22px rgba(79, 70, 229, 0.38);
+}
+.pl-btn--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.pl-btn--outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+.pl-btn--outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.pl-btn--ghost {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+}
+.pl-btn--ghost:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+.pl-btn--sm {
+  padding: 0.34rem 0.8rem !important;
+  font-size: 0.78rem !important;
+}
+.pl-btn--full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ════════════════════════════════════════════════════════════
+   PLANS PAGE
+════════════════════════════════════════════════════════════ */
+.pl-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+/* hero */
+.pl-hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.pl-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(79, 70, 229, 0.18);
+  border-radius: 999px;
+  padding: 0.22rem 0.9rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+.pl-hero-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  letter-spacing: -0.04em;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+}
+.pl-hero-sub {
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto 1.6rem;
+  line-height: 1.65;
+}
+
+/* billing toggle */
+.pl-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 0.45rem;
+}
+.pl-toggle-opt {
+  font-family: "Syne", sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.pl-toggle-opt--active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(79, 70, 229, 0.28);
+}
+.pl-save-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #065f46;
+  border-radius: 999px;
+  padding: 0.14rem 0.6rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+}
+
+/* plan cards grid */
+.pl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+}
+
+/* plan card */
+.pl-card {
+  background: var(--white);
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 2px 14px rgba(79, 70, 229, 0.05);
+  padding: 1.8rem;
+  position: relative;
+  overflow: hidden;
+  transition:
+    box-shadow 0.25s,
+    transform 0.25s,
+    border-color 0.25s;
+}
+.pl-card:hover {
+  box-shadow: 0 12px 36px rgba(79, 70, 229, 0.1);
+  transform: translateY(-3px);
+}
+
+/* popular card */
+.pl-card--popular {
+  border-color: var(--primary);
+  border-width: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(79, 70, 229, 0.03) 0%,
+    var(--white) 80px
+  );
+}
+.pl-popular-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.28rem 1.1rem 0.28rem 0.8rem;
+  border-radius: 0 18px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  letter-spacing: 0.03em;
+}
+
+/* enterprise card */
+.pl-card--enterprise {
+  background: linear-gradient(135deg, #1e1b3a, #2d2760);
+  border-color: rgba(129, 140, 248, 0.3);
+  color: #fff;
+}
+.pl-card--enterprise .pl-card-name {
+  color: #e0e0ff;
+}
+.pl-card--enterprise .pl-card-desc {
+  color: rgba(255, 255, 255, 0.6);
+}
+.pl-card--enterprise .pl-feature-text {
+  color: rgba(255, 255, 255, 0.85);
+}
+.pl-card--enterprise .pl-feature-icon {
+  color: var(--primary-light);
+}
+.pl-card--enterprise .pl-divider {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.pl-card-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.pl-card-icon--free {
+  background: rgba(100, 116, 139, 0.1);
+  color: var(--muted);
+}
+.pl-card-icon--pro {
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--primary);
+  animation: pl-pulse 3s infinite;
+}
+.pl-card-icon--enterprise {
+  background: rgba(129, 140, 248, 0.15);
+  color: var(--primary-light);
+}
+
+.pl-card-name {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+.pl-card-desc {
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 1.2rem;
+}
+
+/* price */
+.pl-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  margin-bottom: 0.35rem;
+}
+.pl-price-amount {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 2.6rem;
+  letter-spacing: -0.04em;
+  color: var(--text);
+}
+.pl-card--enterprise .pl-price-amount {
+  color: #fff;
+}
+.pl-price-currency {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+.pl-price-period {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.pl-price-annual {
+  font-size: 0.76rem;
+  color: var(--success);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.pl-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1.2rem 0;
+}
+
+/* features list */
+.pl-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+.pl-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+.pl-feature-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.08rem;
+}
+.pl-feature-icon--check {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--success);
+}
+.pl-feature-icon--cross {
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--danger);
+}
+.pl-feature-text {
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.pl-feature-text--strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* cta button full-width variants */
+.pl-btn--plan-free {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+.pl-btn--plan-free:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.pl-btn--plan-enterprise {
+  background: rgba(129, 140, 248, 0.18);
+  border: 1.5px solid rgba(129, 140, 248, 0.3);
+  color: #e0e0ff;
+}
+.pl-btn--plan-enterprise:hover {
+  background: rgba(129, 140, 248, 0.28);
+}
+
+/* current plan badge */
+.pl-current {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1.5px solid rgba(16, 185, 129, 0.25);
+  color: #065f46;
+  border-radius: 11px;
+  padding: 0.6rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+/* FAQ strip */
+.pl-faq {
+  max-width: 720px;
+  margin: 3rem auto 0;
+}
+.pl-faq-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.pl-faq-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 1.1rem 1.3rem;
+  cursor: pointer;
+  margin-bottom: 0.6rem;
+  transition: box-shadow 0.2s;
+}
+.pl-faq-item:hover {
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.07);
+}
+.pl-faq-q {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.pl-faq-a {
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 0.65rem;
+}
+
+/* ════════════════════════════════════════════════════════════
+   PAYMENT PAGE
+════════════════════════════════════════════════════════════ */
+.py-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+}
+
+/* summary card (right) */
+.py-summary {
+  background: linear-gradient(
+    135deg,
+    rgba(79, 70, 229, 0.06),
+    rgba(6, 182, 212, 0.04)
+  );
+  border: 1px solid rgba(79, 70, 229, 0.16);
+  border-radius: 18px;
+  padding: 1.5rem;
+  position: sticky;
+  top: 88px;
+}
+.py-plan-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.22rem 0.85rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
+}
+.py-amount {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 2.4rem;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  line-height: 1;
+}
+.py-amount-period {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+.py-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.84rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.py-line:last-child {
+  border-bottom: none;
+}
+.py-line-label {
+  color: var(--muted);
+}
+.py-line-val {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  color: var(--text);
+}
+.py-total {
+  font-size: 1rem !important;
+  padding-top: 0.6rem !important;
+}
+.py-total .py-line-val {
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+
+/* secure badges */
+.py-secure {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.74rem;
+  color: var(--muted);
+  margin-top: 1rem;
+}
+
+/* payment form card */
+.py-form-card {
+  background: var(--white);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 14px rgba(79, 70, 229, 0.05);
+  padding: 2rem;
+}
+.py-section-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.py-step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* field */
+.py-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.85rem;
+}
+.py-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.py-input {
+  width: 100%;
+  padding: 0.68rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 11px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: #fff;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.py-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.09);
+}
+.py-input--error {
+  border-color: var(--danger) !important;
+}
+.py-input::placeholder {
+  color: #b0b8d0;
+}
+
+/* card input with icon */
+.py-input-wrap {
+  position: relative;
+}
+.py-input-icon {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* card brand logos */
+.py-card-brands {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.py-card-brand {
+  width: 44px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 800;
+  font-family: "Syne", sans-serif;
+  letter-spacing: 0.03em;
+}
+.py-card-brand--visa {
+  color: #1a1f71;
+}
+.py-card-brand--mc {
+  color: #eb001b;
+}
+.py-card-brand--amex {
+  color: #007bc1;
+}
+
+/* error msg */
+.py-error {
+  font-size: 0.76rem;
+  color: var(--danger);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+}
+
+/* spinner */
+.py-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: pl-spin 0.65s linear infinite;
+}
+
+/* success screen */
+.py-success {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+.py-success-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.2rem;
+  animation: pl-scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@media (max-width: 768px) {
+  .pl-main {
+    padding: 1.5rem 1rem 4rem;
+  }
+  .py-main {
+    padding: 1.5rem 1rem 4rem;
+  }
+  .py-summary {
+    position: static;
+    margin-bottom: 1.5rem;
+  }
+}

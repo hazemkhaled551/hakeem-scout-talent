@@ -2,7 +2,7 @@ import { CheckCircle, AlertCircle } from "lucide-react";
 
 interface CompletionProps {
   percentage: number;
-  sections: Record<string, boolean>;
+  sections: Record<string, boolean> | null;
   title?: string;
   subtitle?: string;
 }
@@ -13,6 +13,8 @@ export default function ProfileCompletion({
   title = "Complete Your Profile",
   subtitle = "Complete your profile to get better results",
 }: CompletionProps) {
+  console.log(sections);
+
   function formatLabel(key: string) {
     switch (key) {
       case "basicInfo":
@@ -62,7 +64,7 @@ export default function ProfileCompletion({
 
         {/* Sections */}
         <div className="row g-2">
-          {Object.entries(sections).map(([key, value]) => (
+          {Object?.entries(sections || {})?.map(([key, value]) => (
             <div key={key} className="col-auto">
               <div className="pr-check-item">
                 {value ? (

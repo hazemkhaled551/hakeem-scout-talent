@@ -66,6 +66,7 @@ export interface Job {
   maxSalary: number | "";
   applicants: number;
   postedDays: number;
+  
 }
 
 export interface JobPayload {

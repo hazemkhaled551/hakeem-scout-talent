@@ -17,6 +17,7 @@ import {
   deleteCV,
   downloadCV,
   viewCV,
+  setPrimaryCV,
 } from "../../services/cvService";
 
 import "./Cvsection.css";
@@ -28,6 +29,7 @@ interface CV {
   name: string;
   createdAt: string;
   url?: string;
+  isPrimary?: boolean;
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -57,11 +59,13 @@ function CVCard({
   onDelete,
   handleView,
   handleDownload,
+  onSetPrimary,
 }: {
   cv: CV;
   onDelete: (id: string) => void;
   handleView: (id: string) => void;
   handleDownload: (id: string) => void;
+  onSetPrimary: (id: string) => void;
 }) {
   const [confirming, setConfirming] = useState(false);
 
@@ -72,7 +76,22 @@ function CVCard({
       </div>
 
       <div className="cv-card__info">
-        <div className="cv-card__name">{cv.name}</div>
+        <div className="d-flex align-items-center gap-2">
+          {/* PRIMARY CHECK */}
+          <label className="cv-primary-check">
+            <input
+              type="checkbox"
+              checked={cv.isPrimary}
+              onChange={() => onSetPrimary(cv.id)}
+            />
+            <span className="cv-primary-indicator" />
+          </label>
+
+          <div className="cv-card__name">{cv.name}</div>
+
+          {cv.isPrimary && <span className="cv-primary-badge">Primary</span>}
+        </div>
+
         <div className="cv-card__meta">
           <Clock size={11} />
           {formatCVDate(cv.createdAt)}
@@ -208,6 +227,15 @@ export default function CVSection() {
   function showToast(type: "success" | "error", msg: string) {
     setToast({ type, msg });
     setTimeout(() => setToast(null), 3500);
+  }
+
+  async function handleSetPrimary(id: string) {
+    try {
+      await setPrimaryCV(id);
+      await fetchCVs();
+    } catch {
+      showToast("error", "Failed to set primary CV.");
+    }
   }
 
   async function fetchCVs() {
@@ -367,6 +395,7 @@ export default function CVSection() {
                   onDelete={handleDelete}
                   handleView={handleView}
                   handleDownload={handleDownload}
+                  onSetPrimary={handleSetPrimary}
                 />
               ))}
             </div>
