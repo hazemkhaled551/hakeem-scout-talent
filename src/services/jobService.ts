@@ -55,3 +55,9 @@ export const changeJobStatus = (jobId: string, status: string) => {
 export const recommendJobs = () => {
   return api.get(`/applicant/recommend/job`);
 };
+
+
+/* recommend Candidates */
+export const recommendCandidates = (jobId: string) => {
+  return api.get(`/jobs/recommend/candidate/${jobId}`);
+};

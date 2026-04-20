@@ -378,17 +378,19 @@ export default function CompanyJobs() {
             {filtered.length > 0 ? (
               <div className="d-flex flex-column gap-3">
                 {filtered.map((job, i) => (
-                  <JobCard
-                    key={job.id}
-                    job={job}
-                    delay={i}
-                    onView={() => navigate(`/jobs/${job.id}`)}
-                    onEdit={() => handleEdit(job)}
-                    onDelete={() => setDeleteTarget(job)}
-                    onPipeline={() => navigate(`/company/pipeline`)}
-                    onCandidates={() => navigate(`/company/jobs/candidates`)}
-                    onUpdateStatus={(s) => updateStatus(job.id, s)}
-                  />
+                    <JobCard
+                      key={job.id}
+                      job={job}
+                      delay={i}
+                      onView={() => navigate(`/jobs/${job.id}`)}
+                      onEdit={() => handleEdit(job)}
+                      onDelete={() => setDeleteTarget(job)}
+                      onPipeline={() => navigate(`/company/pipeline`)}
+                      onCandidates={() =>
+                        navigate(`/company/jobs/candidates/${job.id}`)
+                      }
+                      onUpdateStatus={(s) => updateStatus(job.id, s)}
+                    />
                 ))}
               </div>
             ) : (

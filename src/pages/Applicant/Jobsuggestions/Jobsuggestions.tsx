@@ -25,6 +25,7 @@ import { recommendJobs } from "../../../services/jobService";
    TYPE  (mirrors real API response)
 ════════════════════════════════════════════════════════════ */
 interface SuggestedJob {
+  job: any;
   id: string;
   title: string;
   location: string;
@@ -103,7 +104,7 @@ export default function JobSuggestions() {
   async function fetchJobs() {
     try {
       const { data } = await recommendJobs();
-      setJobs(data.data ?? []);
+      setJobs(data.data.recommendation ?? []);
     } catch (err) {
       console.error("Failed to fetch suggestions:", err);
     }
@@ -224,8 +225,8 @@ export default function JobSuggestions() {
         ) : (
           <div className="d-flex flex-column gap-3">
             {jobs.map((job, i) => {
-              const badge = statusBadge(job.status);
-              const days = daysLeft(job.deadline);
+              const badge = statusBadge(job.job.status);
+              const days = daysLeft(job.job.deadline);
               const score = job.final_score; // 0–1
 
               return (
@@ -245,7 +246,7 @@ export default function JobSuggestions() {
                     style={{ paddingRight: "5rem" }}
                   >
                     <div className="flex-1 min-width-0">
-                      <div className="jl-job-title mb-1">{job.title}</div>
+                      <div className="jl-job-title mb-1">{job.job.title}</div>
                       <div className="jb-meta">
                         <span className="jb-meta-item">
                           <Building2 size={13} />
@@ -253,11 +254,11 @@ export default function JobSuggestions() {
                         </span>
                         <span className="jb-meta-item">
                           <MapPin size={13} />
-                          {job.location}
+                          {job.job.location}
                         </span>
                         <span className="jb-meta-item">
                           <DollarSign size={13} />
-                          {fmtSalary(job.minSalary, job.maxSalary)}
+                          {fmtSalary(job.job.minSalary, job.job.maxSalary)}
                         </span>
                         <span className="jb-meta-item">
                           <Clock size={13} />
@@ -280,10 +281,10 @@ export default function JobSuggestions() {
                       ) : (
                         <TrendingUp size={11} />
                       )}
-                      {job.seniority}
+                      {job.job.seniority}
                     </span>
                     <span className="jb-badge jb-badge--indigo">
-                      {job.workMode}
+                      {job.job.workMode}
                     </span>
                     {days > 0 && (
                       <span

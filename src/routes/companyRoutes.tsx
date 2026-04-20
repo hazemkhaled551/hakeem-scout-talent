@@ -23,7 +23,7 @@ export const CompanyRoutes = () => (
       />
       <Route path="/company/offers" element={<CompanyOffers />} />
       <Route
-        path="/company/jobs/candidates"
+        path="/company/jobs/candidates/:id"
         element={<CandidateSuggestions />}
       />
       <Route path="/company/pipeline" element={<CandidatePipeline />} />

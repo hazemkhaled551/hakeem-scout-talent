@@ -86,7 +86,7 @@ export default function ApplicantDashboard() {
 
       setApps(appsData.data.data);
       const { data } = await recommendJobs();
-      setAISuggestions(data.data ?? []);
+      setAISuggestions(data.data.recommendation ?? []);
     } catch (error) {
       console.error("Failed to load dashboard:", error);
     } finally {
@@ -213,26 +213,26 @@ export default function ApplicantDashboard() {
                     </div>
 
                     {/* Title + company */}
-                    <div className="dk-suggestion-title">{job.title}</div>
+                    <div className="dk-suggestion-title">{job.job.title}</div>
                     <div className="dk-suggestion-meta">
                       <span>
                         <Building2 size={11} />
-                        {job.company.name}
+                        {job.company?.name}
                       </span>
                       <span>
                         <MapPin size={11} />
-                        {job.location}
+                        {job.job.location}
                       </span>
                       <span>
                         <DollarSign size={11} />
-                        {job.minSalary.toLocaleString()} –{" "}
-                        {job.maxSalary.toLocaleString()}
+                        {job.job.minSalary.toLocaleString()} –{" "}
+                        {job.job.maxSalary.toLocaleString()}
                       </span>
                     </div>
 
                     {/* Skills */}
                     <div className="dk-suggestion-tags">
-                      {job.skills.slice(0, 3).map((s: string) => (
+                      {job.job.skills.slice(0, 3).map((s: string) => (
                         <span key={s} className="jb-tag">
                           {s}
                         </span>
