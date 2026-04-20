@@ -9,6 +9,7 @@ import { CompanyRoutes } from "./routes/companyRoutes";
 import NotificationsPage from "./pages/Public/Notifications/Notifications";
 import NotFound from "./pages/Public/Errors/NotFound";
 import Unauthorized from "./pages/Public/Errors/Unauthorized";
+import { AdminRoutes } from "./routes/adminRoutes";
 
 export default function App() {
   return (
@@ -20,7 +21,7 @@ export default function App() {
 
             {ApplicantRoutes()}
             {CompanyRoutes()}
-
+            {AdminRoutes()}
             <Route
               path="/notification"
               element={<NotificationsPage role="company" />}

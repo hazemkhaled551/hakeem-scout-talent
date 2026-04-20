@@ -176,7 +176,7 @@ export default function Plans() {
         </div>
       </header>
 
-      <main className="pl-main">
+      <main className="pl-main w-100">
         {/* Hero */}
         <div className="pl-hero pl-au">
           <div className="pl-hero-eyebrow">
