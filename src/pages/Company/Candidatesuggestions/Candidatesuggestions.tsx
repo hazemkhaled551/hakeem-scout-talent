@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import CompanyNavbar from "../../../components/CompanyNavbar";
 import "./CandidateSuggestions.css";
 import { recommendCandidates } from "../../../services/jobService";
+import Loader from "../../../components/Loader";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -409,6 +410,10 @@ export default function CandidateSuggestions() {
   /* split for divider */
   const topCandidates = sorted.filter((c) => topIds.has(c.id));
   const restCandidates = sorted.filter((c) => !topIds.has(c.id));
+
+  if (loading) {
+    <Loader text="Loading candidates..." fullPage />;
+  }
 
   return (
     <div className="cs-page">
