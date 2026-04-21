@@ -1,34 +1,22 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { BrainCircuit, CheckCircle, XCircle, AlertCircle } from "lucide-react";
-import "../RestoreAccount/auth-pages.css";
 import api from "../../../utils/api";
+import "../AuthPage/AuthPage.css";
 
-/* ════════════════════════════════════════════════════════════
-   TYPES
-════════════════════════════════════════════════════════════ */
-type CallbackStatus = "loading" | "success" | "error";
+type Status = "loading" | "success" | "error";
 
-/* ════════════════════════════════════════════════════════════
-   STEPS
-════════════════════════════════════════════════════════════ */
 const STEPS = [
   "Verifying with Google",
   "Authenticating account",
   "Loading your profile",
 ];
 
-/* ════════════════════════════════════════════════════════════
-   COMPONENT
-   URL shape: /auth/google/callback?code=...&state=...
-════════════════════════════════════════════════════════════ */
 export default function GoogleCallback() {
   const navigate = useNavigate();
-
-  const [status, setStatus] = useState<CallbackStatus>("loading");
+  const [status, setStatus] = useState<Status>("loading");
   const [stepIdx, setStepIdx] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
-  const calledRef = useRef(false); // prevent double-fire in StrictMode
+  const calledRef = useRef(false);
 
   useEffect(() => {
     if (calledRef.current) return;
@@ -36,17 +24,12 @@ export default function GoogleCallback() {
 
     async function handleCallback() {
       try {
-        /* Animate steps */
         for (let i = 0; i < STEPS.length; i++) {
           setStepIdx(i);
           await new Promise((r) => setTimeout(r, 700));
         }
 
-        // 🔥 Replace with your real API call:
-        const res = await api.post(`/auth/getMe`);
-
-        console.log(res);
-
+        const res = await api.post("/auth/getMe");
         const user = res.data.data.u;
         const token = res.data.data.accessToken;
 
@@ -54,13 +37,12 @@ export default function GoogleCallback() {
         localStorage.setItem("token", token);
 
         setStatus("success");
-        // Demo — remove in production
-        await new Promise((r) => setTimeout(r, 500));
-        if (user.role === "Applicant") {
-          window.location.href = "/dashboard";
-        } else if (user.role === "Company") {
+        await new Promise((r) => setTimeout(r, 600));
+
+        if (user.role === "Applicant") window.location.href = "/dashboard";
+        else if (user.role === "Company")
           window.location.href = "/company/dashboard";
-        }
+        else window.location.href = `/auth/select-role?id=${user._id}`;
       } catch (err: any) {
         setStatus("error");
         setErrorMsg(
@@ -71,63 +53,68 @@ export default function GoogleCallback() {
     }
 
     handleCallback();
-  }, []);
-  // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line
 
-  /* ── Render ─────────────────────────────────────────────── */
   return (
-    <div className="auth-page">
-      <div className="auth-blob auth-blob--1" />
-      <div className="auth-blob auth-blob--2" />
-      <div className="auth-blob auth-blob--3" />
+    <div className="ap-root">
+      <div className="ap-bg">
+        <div className="ap-orb ap-orb--1" />
+        <div className="ap-orb ap-orb--2" />
+        <div className="ap-orb ap-orb--3" />
+        <div className="ap-orb ap-orb--4" />
+        <div className="ap-mesh" />
+      </div>
 
-      <div className="auth-wrap">
-        {/* Logo */}
-        <div className="restore-logo-wrap">
-          <div className="restore-logo">
-            <BrainCircuit />
-          </div>
-          <span className="restore-brand">Hakeem</span>
-          <p className="restore-subtitle">
+      <nav className="ap-nav">
+        <a href="/" className="ap-logo">
+          <div className="ap-logo-icon">H</div>
+          <span className="ap-logo-name">Hakeem</span>
+        </a>
+      </nav>
+
+      <main className="ap-main">
+        <div className="ap-headline">
+          <span className="ap-eyebrow">
+            {status === "loading"
+              ? "⏳ Authenticating"
+              : status === "success"
+                ? "✓ Signed in"
+                : "✕ Failed"}
+          </span>
+          <h1 className="ap-title">
             {status === "loading"
               ? "Signing you in…"
               : status === "success"
-                ? "Almost there!"
+                ? "You're in!"
                 : "Sign-in failed"}
+          </h1>
+          <p className="ap-subtitle">
+            {status === "loading"
+              ? "Please wait while we verify your Google account."
+              : status === "success"
+                ? "Redirecting you to your dashboard…"
+                : "Something went wrong during authentication."}
           </p>
         </div>
 
-        <div className="auth-card" style={{ textAlign: "center" }}>
-          {/* ══ LOADING ══ */}
+        <div className="ap-card ap-card--sm">
+          {/* ── LOADING ── */}
           {status === "loading" && (
-            <>
-              {/* Google icon + spinner ring */}
-              <div
-                style={{
-                  position: "relative",
-                  width: 72,
-                  height: 72,
-                  margin: "0 auto 1.2rem",
-                }}
-              >
-                {/* spinner ring */}
+            <div className="ap-callback-loading">
+              {/* Google G + spinner ring */}
+              <div className="ap-google-ring">
                 <svg
                   width="72"
                   height="72"
                   viewBox="0 0 72 72"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    animation: "spin .9s linear infinite",
-                  }}
+                  className="ap-ring-svg"
                 >
                   <circle
                     cx="36"
                     cy="36"
                     r="32"
                     fill="none"
-                    stroke="rgba(79,70,229,.15)"
+                    stroke="rgba(91,80,240,.12)"
                     strokeWidth="3"
                   />
                   <circle
@@ -135,148 +122,78 @@ export default function GoogleCallback() {
                     cy="36"
                     r="32"
                     fill="none"
-                    stroke="var(--primary)"
+                    stroke="var(--p)"
                     strokeWidth="3"
                     strokeDasharray="50 150"
                     strokeLinecap="round"
                   />
                 </svg>
-                {/* Google G */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <GoogleG size={32} />
+                <div className="ap-google-g">
+                  <GoogleG size={30} />
                 </div>
               </div>
 
               {/* Step chips */}
-              <div
-                className="auth-steps-strip"
-                style={{ marginBottom: "1rem" }}
-              >
+              <div className="ap-step-chips">
                 {STEPS.map((s, i) => (
                   <span
                     key={s}
-                    className={`auth-step-chip ${
-                      i < stepIdx
-                        ? "auth-step-chip--done"
-                        : i === stepIdx
-                          ? "auth-step-chip--active"
-                          : "auth-step-chip--idle"
+                    className={`ap-step-chip ${
+                      i < stepIdx ? "done" : i === stepIdx ? "active" : ""
                     }`}
                   >
-                    {i < stepIdx && <CheckCircle size={11} />}
+                    {i < stepIdx ? "✓ " : i === stepIdx ? "◌ " : "○ "}
                     {s}
                   </span>
                 ))}
               </div>
 
-              <div className="auth-dots" style={{ marginBottom: ".6rem" }}>
-                <span className="auth-dot" />
-                <span className="auth-dot" />
-                <span className="auth-dot" />
+              <div className="ap-dots">
+                <span />
+                <span />
+                <span />
               </div>
-
-              <p
-                style={{
-                  fontSize: ".87rem",
-                  color: "var(--muted)",
-                  lineHeight: 1.6,
-                }}
-              >
-                {STEPS[stepIdx]}… please wait.
-              </p>
-            </>
+              <p className="ap-callback-sub">{STEPS[stepIdx]}… please wait.</p>
+            </div>
           )}
 
-          {/* ══ SUCCESS ══ */}
+          {/* ── SUCCESS ── */}
           {status === "success" && (
-            <>
-              <div
-                className="auth-verify-icon auth-verify-icon--success"
-                style={{ margin: "0 auto 1rem" }}
-              >
-                <CheckCircle
-                  size={38}
-                  color="var(--success)"
-                  strokeWidth={1.8}
-                />
-              </div>
-              <div
-                className="auth-card-title"
-                style={{ marginBottom: ".4rem" }}
-              >
-                Signed in!
-              </div>
-              <p style={{ fontSize: ".87rem", color: "var(--muted)" }}>
-                Redirecting you to your dashboard…
-              </p>
-            </>
+            <div className="ap-state-block">
+              <div className="ap-state-icon ap-state-icon--success">✓</div>
+              <p className="ap-state-hint">Taking you to your dashboard now…</p>
+            </div>
           )}
 
-          {/* ══ ERROR ══ */}
+          {/* ── ERROR ── */}
           {status === "error" && (
-            <>
+            <div className="ap-state-block">
+              <div className="ap-state-icon ap-state-icon--error">✕</div>
               <div
-                className="auth-verify-icon auth-verify-icon--error"
-                style={{ margin: "0 auto 1rem" }}
+                className="ap-alert ap-alert--error"
+                style={{ textAlign: "left" }}
               >
-                <XCircle size={38} color="var(--danger)" strokeWidth={1.8} />
-              </div>
-              <div
-                className="auth-card-title"
-                style={{ marginBottom: ".5rem" }}
-              >
-                Sign-in Failed
-              </div>
-
-              <div
-                className="auth-notice auth-notice--amber"
-                style={{ textAlign: "left", marginBottom: "1.3rem" }}
-              >
-                <AlertCircle
-                  size={14}
-                  style={{
-                    flexShrink: 0,
-                    float: "left",
-                    marginRight: ".5rem",
-                    marginTop: 2,
-                  }}
-                />
+                <span className="ap-alert-icon">!</span>
                 {errorMsg}
               </div>
-
               <button
-                className="auth-btn auth-btn--primary"
+                className="ap-btn-primary"
                 onClick={() => navigate("/auth", { replace: true })}
               >
-                Try Again
+                ← Try Again
               </button>
-            </>
+            </div>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }
 
-/* ════════════════════════════════════════════════════════════
-   INLINE GOOGLE "G" SVG  (no external dep)
-════════════════════════════════════════════════════════════ */
+/* ── Inline Google G SVG ── */
 function GoogleG({ size = 24 }: { size?: number }) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width={size} height={size} viewBox="0 0 24 24">
       <path
         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
         fill="#4285F4"

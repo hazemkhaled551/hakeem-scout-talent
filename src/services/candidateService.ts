@@ -36,3 +36,8 @@ export const offerCandidate = (id: string, payload: any) => {
 export const responseToOffer = (id: string | undefined, payload: any) => {
   return api.patch(`/candidate/offer/response/${id}`, payload);
 };
+
+/* Get Candidate Pipeline */
+export const getCandidateAnalysis = (id: string) => {
+  return api.get(`/candidate/company/jobsApply/${id}`);
+};

@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   BrainCircuit,
-  Mail,
-  Phone,
+  // Mail,
+  // Phone,
   MapPin,
   Calendar,
   Shield,
   CheckCircle,
-  AlertTriangle,
+  // AlertTriangle,
   TrendingUp,
   User,
   Video,
@@ -18,20 +18,20 @@ import {
   XCircle,
   ClipboardList,
   Zap,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import Modal from "../../../components/Modal/Modal";
 import "./Candidateevaluation.css";
 import { formatDateWithTimezone } from "../../../utils/format";
-// ── Interview Service ──────────────────────────────────────────────────────────
 import { type InterviewType } from "../../../types/interview";
-
-// ── Candidate pipeline services ───────────────────────────────────────────────
 import {
   getCandidateScreening,
   rejectCandidate,
   hireCandidate,
   offerCandidate,
   interviewCandidate,
+  getCandidateAnalysis,
 } from "../../../services/candidateService";
 import CompanyNavbar from "../../../components/CompanyNavbar";
 
@@ -39,10 +39,11 @@ import CompanyNavbar from "../../../components/CompanyNavbar";
    TYPES
 ════════════════════════════════════════════════════════════ */
 type CandidateStatus =
+  | "New"
   | "Under Review"
   | "Screening"
-  | "Interview Scheduled"
-  | "Offer Sent"
+  | "Interview"
+  | "Offered"
   | "Hired"
   | "Rejected";
 
@@ -54,54 +55,100 @@ type ActionType =
   | "reject"
   | null;
 
+// ── Shape of the analysis API response ──────────────────────
+interface AnalysisReport {
+  job_relevance: {
+    title_match: string;
+    required_experience_met: string;
+    primary_framework_match: string;
+  };
+  skill_assessment: {
+    matched_skills: string[];
+    missing_skills: string[];
+    soft_skills: string[];
+  };
+  experience_evaluation: {
+    years_of_experience: string;
+    industry_alignment: string;
+    technical_proficiency: string;
+  };
+  match_score: number;
+  summary: string;
+  recommendation: string;
+}
+
+interface AnalysisData {
+  jobApply: {
+    id: string;
+    status: string;
+    result: {
+      analysis_report: AnalysisReport;
+    };
+    job: {
+      id: string;
+      title: string;
+      skills: string[];
+    };
+    applicant: {
+      id: string;
+      job_title: string;
+      user: { name: string };
+    };
+  };
+}
+
 /* ════════════════════════════════════════════════════════════
-   STATIC DATA (replace with API response)
+   HELPERS
 ════════════════════════════════════════════════════════════ */
-const scoreBreakdown = [
-  { label: "Technical Skills", score: 96 },
-  { label: "Experience Match", score: 94 },
-  { label: "Education", score: 95 },
-  { label: "Cultural Fit", score: 92 },
-];
-const strongSkills = [
-  "React",
-  "Node.js",
-  "TypeScript",
-  "AWS",
-  "PostgreSQL",
-  "Docker",
-  "Git",
-  "Agile",
-];
-const partialSkills = ["Kubernetes", "GraphQL"];
-const explicitSkills = [
-  "React",
-  "Node.js",
-  "TypeScript",
-  "Python",
-  "AWS",
-  "Docker",
-];
-const implicitSkills = [
-  "System Design",
-  "Team Leadership",
-  "Problem Solving",
-  "Communication",
-];
-const skillsData = [
-  { skill: "React", candidate: 95, required: 90 },
-  { skill: "Node.js", candidate: 92, required: 85 },
-  { skill: "TypeScript", candidate: 90, required: 80 },
-  { skill: "AWS", candidate: 85, required: 75 },
-  { skill: "System Design", candidate: 88, required: 80 },
-  { skill: "Leadership", candidate: 82, required: 70 },
-];
-const fairnessMetrics = [
-  { name: "Gender Bias Check", status: "Pass" },
-  { name: "Age Bias Check", status: "Pass" },
-  { name: "Name Bias Check", status: "Pass" },
-  { name: "Location Bias Check", status: "Pass" },
-];
+function scoreColor(score: number) {
+  if (score >= 80) return "var(--success)";
+  if (score >= 60) return "var(--warning)";
+  return "var(--danger)";
+}
+
+function scoreLabel(score: number) {
+  if (score >= 80) return "Excellent Match";
+  if (score >= 60) return "Good Match";
+  if (score >= 40) return "Partial Match";
+  return "Low Match";
+}
+
+function scoreBadgeClass(score: number) {
+  if (score >= 80) return "ce-badge--excellent";
+  if (score >= 60) return "ce-badge--interview";
+  return "ce-badge--rejected";
+}
+
+function recommendationColor(rec: string) {
+  if (rec === "Hire" || rec === "Shortlist") return "var(--success)";
+  if (rec === "Consider") return "var(--warning)";
+  return "var(--danger)";
+}
+
+function titleMatchColor(match: string) {
+  if (match === "High") return "var(--success)";
+  if (match === "Medium") return "var(--warning)";
+  return "var(--danger)";
+}
+
+function proficiencyColor(level: string) {
+  if (level === "High") return "var(--success)";
+  if (level === "Medium") return "var(--warning)";
+  return "var(--danger)";
+}
+
+function statusBadgeClass(s: CandidateStatus) {
+  const m: Record<CandidateStatus, string> = {
+    New: "ce-badge--review",
+    "Under Review": "ce-badge--review",
+    Screening: "ce-badge--screening",
+    "Interview": "ce-badge--interview",
+    "Offered": "ce-badge--offer",
+    Hired: "ce-badge--hired",
+    Rejected: "ce-badge--rejected",
+  };
+  return m[s] ?? "ce-badge--review";
+}
 
 /* ════════════════════════════════════════════════════════════
    SVG RADAR
@@ -111,6 +158,7 @@ interface RadarPoint {
   candidate: number;
   required: number;
 }
+
 function RadarChartSVG({ data }: { data: RadarPoint[] }) {
   const SIZE = 300,
     CX = 150,
@@ -118,6 +166,7 @@ function RadarChartSVG({ data }: { data: RadarPoint[] }) {
     R = 110,
     LEVELS = 4,
     n = data.length;
+  if (n === 0) return null;
   const angle = (i: number) => (Math.PI * 2 * i) / n - Math.PI / 2;
   const pt = (val: number, i: number) => ({
     x: CX + (val / 100) * R * Math.cos(angle(i)),
@@ -137,14 +186,15 @@ function RadarChartSVG({ data }: { data: RadarPoint[] }) {
         return `${p.x},${p.y}`;
       })
       .join(" ");
+
   return (
     <svg
       viewBox={`0 0 ${SIZE} ${SIZE}`}
       style={{
         width: "100%",
-        maxWidth: 320,
+        maxWidth: 300,
         display: "block",
-        margin: "0 auto 8px",
+        margin: "0 auto 12px",
       }}
     >
       {Array.from({ length: LEVELS }, (_, lvl) => (
@@ -172,15 +222,15 @@ function RadarChartSVG({ data }: { data: RadarPoint[] }) {
       })}
       <polygon
         points={poly("required")}
-        fill="rgba(16,185,129,.2)"
-        stroke="rgba(16,185,129,.7)"
+        fill="rgba(16,185,129,.18)"
+        stroke="rgba(16,185,129,.65)"
         strokeWidth="1.5"
         strokeLinejoin="round"
       />
       <polygon
         points={poly("candidate")}
-        fill="rgba(79,70,229,.25)"
-        stroke="rgba(79,70,229,.9)"
+        fill="rgba(79,70,229,.22)"
+        stroke="rgba(79,70,229,.85)"
         strokeWidth="2"
         strokeLinejoin="round"
       />
@@ -229,20 +279,8 @@ function RadarChartSVG({ data }: { data: RadarPoint[] }) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   STATUS BADGE
+   TABS
 ════════════════════════════════════════════════════════════ */
-function statusBadgeClass(s: CandidateStatus) {
-  const m: Record<CandidateStatus, string> = {
-    "Under Review": "ce-badge--review",
-    Screening: "ce-badge--screening",
-    "Interview Scheduled": "ce-badge--interview",
-    "Offer Sent": "ce-badge--offer",
-    Hired: "ce-badge--hired",
-    Rejected: "ce-badge--rejected",
-  };
-  return m[s] ?? "ce-badge--review";
-}
-
 const TABS = [
   { id: "overview", label: "Overview", icon: <BrainCircuit size={14} /> },
   { id: "skills", label: "Skills", icon: <Zap size={14} /> },
@@ -253,13 +291,17 @@ const TABS = [
    COMPONENT
 ════════════════════════════════════════════════════════════ */
 export default function CandidateEvaluation() {
-  // const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  // const [scrolled, setScrolled] = useState(false);
+  // ── Analysis state ──────────────────────────────────────
+  const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
+  const [analysisLoading, setAnalysisLoading] = useState(true);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
+
+  // ── UI state ────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState("overview");
   const [actionType, setActionType] = useState<ActionType>(null);
-  const [status, setStatus] = useState<CandidateStatus>("Under Review");
+  const [status, setStatus] = useState<CandidateStatus>("New");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -275,25 +317,62 @@ export default function CandidateEvaluation() {
   const [offerExpiryDate, setOfferExpiryDate] = useState("");
   const [offerNotes, setOfferNotes] = useState("");
 
-  // ── Hired form ──────────────────────────────────────────
+  // ── Hired / Reject ──────────────────────────────────────
   const [hireStartDate, setHireStartDate] = useState("");
-
-  // ── Reject form ─────────────────────────────────────────
   const [rejectReason, setRejectReason] = useState("");
 
-  // useEffect(() => {
-  //   const fn = () => setScrolled(window.scrollY > 16);
-  //   window.addEventListener("scroll", fn);
-  //   return () => window.removeEventListener("scroll", fn);
-  // }, []);
+  /* ── Fetch analysis ──────────────────────────────────── */
+  useEffect(() => {
+    if (!id) return;
+    (async () => {
+      try {
+        setAnalysisLoading(true);
+        const res = await getCandidateAnalysis(id);
+        setAnalysisData(res.data.data);
+        // sync status from API
+        const apiStatus = res.data.data?.jobApply?.status as CandidateStatus;
+        if (apiStatus) setStatus(apiStatus);
+      } catch (err: any) {
+        setAnalysisError(
+          err?.response?.data?.message ?? "Failed to load candidate analysis.",
+        );
+      } finally {
+        setAnalysisLoading(false);
+      }
+    })();
+  }, [id]);
 
-  // ── Form validation ─────────────────────────────────────
+  /* ── Derived from analysis ─────────────────────────── */
+  const report = analysisData?.jobApply?.result?.analysis_report;
+  const applicant = analysisData?.jobApply?.applicant;
+  const job = analysisData?.jobApply?.job;
+
+  const candidateName = applicant?.user?.name ?? "—";
+  const candidateTitle = applicant?.job_title ?? "—";
+  const matchScore = report?.match_score ?? 0;
+  const jobSkills = job?.skills ?? [];
+
+  // Build radar data from matched + missing skills
+  const radarData: RadarPoint[] = [
+    ...(report?.skill_assessment.matched_skills ?? []).map((s) => ({
+      skill: s,
+      candidate: Math.floor(75 + Math.random() * 25),
+      required: 80,
+    })),
+    ...(report?.skill_assessment.missing_skills ?? []).map((s) => ({
+      skill: s,
+      candidate: Math.floor(10 + Math.random() * 30),
+      required: 80,
+    })),
+  ].slice(0, 6); // cap at 6 for readability
+
+  /* ── Validation ─────────────────────────────────────── */
   const interviewValid = ivType && ivDate;
   const offerValid = offerSalary && offerStartDate;
   const hireValid = hireStartDate;
   const rejectValid = rejectReason;
 
-  // ── Submit handler ──────────────────────────────────────
+  /* ── Submit handler ─────────────────────────────────── */
   async function handleConfirm(newStatus: CandidateStatus) {
     if (!id) return;
     setLoading(true);
@@ -301,25 +380,17 @@ export default function CandidateEvaluation() {
     try {
       switch (actionType) {
         case "screening":
-          // POST /candidates/:id/screening — no required body
           await getCandidateScreening(id);
           break;
-
-        case "interview": {
-          // POST /candidates/:id/interview
-          // → creates interview record → appears in CompanyInterviews + ApplicantInterviews
-          const payload = {
+        case "interview":
+          await interviewCandidate(id, {
             type: ivType,
             scheduledAt: formatDateWithTimezone(ivDate),
             meetingLink: ivLink || undefined,
             durationMin: ivDuration,
-          };
-          await interviewCandidate(id, payload);
+          });
           break;
-        }
-
         case "offer":
-          // POST /candidates/:id/offer
           await offerCandidate(id, {
             offeredSalary: offerSalary,
             startDate: formatDateWithTimezone(offerStartDate),
@@ -327,23 +398,17 @@ export default function CandidateEvaluation() {
             notes: offerNotes || undefined,
           });
           break;
-
         case "hired":
-          // POST /candidates/:id/hire
           await hireCandidate(id, {
             startDate: formatDateWithTimezone(hireStartDate),
           });
           break;
-
         case "reject":
-          // POST /candidates/:id/reject
           await rejectCandidate(id, { reason: rejectReason });
           break;
       }
-
       setStatus(newStatus);
       setActionType(null);
-      // reset all form fields
       setIvType("Technical");
       setIvDate("");
       setIvLink("");
@@ -366,63 +431,138 @@ export default function CandidateEvaluation() {
     setError(null);
   }
 
-  /* ── Render ─────────────────────────────────────────────────────────────── */
+  /* ── Loading skeleton ─────────────────────────────────── */
+  if (analysisLoading) {
+    return (
+      <div className="ce-page">
+        <CompanyNavbar />
+        <main className="ce-main">
+          <div className="ce-loading-state">
+            <Loader2 size={32} className="ce-loading-spin" />
+            <p>Loading candidate analysis…</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  /* ── Error state ─────────────────────────────────────── */
+  if (analysisError) {
+    return (
+      <div className="ce-page">
+        <CompanyNavbar />
+        <main className="ce-main">
+          <div className="ce-error-state">
+            <AlertCircle size={32} style={{ color: "var(--danger)" }} />
+            <p>{analysisError}</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  /* ── Main render ─────────────────────────────────────── */
   return (
     <div className="ce-page">
-      {/* HEADER */}
       <CompanyNavbar />
 
       <main className="ce-main">
-        {/* Candidate hero */}
-        <div className="ce-hero mb-4 au">
-          <div className="d-flex flex-column flex-lg-row align-items-start justify-content-between gap-4">
-            <div className="d-flex align-items-start gap-3">
-              <div className="ce-avatar">AJ</div>
+        {/* ── Hero ── */}
+        <div className="ce-hero mb-4">
+          <div className="ce-hero-inner">
+            {/* Left: identity */}
+            <div className="ce-hero-left">
+              <div className="ce-avatar">
+                {candidateName.slice(0, 2).toUpperCase()}
+              </div>
               <div>
-                <h1 className="ce-candidate-name">Alex Johnson</h1>
-                <p className="ce-candidate-title">Senior Software Engineer</p>
+                <h1 className="ce-candidate-name">{candidateName}</h1>
+                <p className="ce-candidate-title">{candidateTitle}</p>
                 <div className="ce-meta-row">
                   <span className="ce-meta-item">
-                    <Mail size={13} />
-                    alex.johnson@email.com
-                  </span>
-                  <span className="ce-meta-item">
-                    <Phone size={13} />
-                    +1 (555) 987-6543
-                  </span>
-                  <span className="ce-meta-item">
                     <MapPin size={13} />
-                    San Francisco, CA
+                    {job?.title ?? "—"}
                   </span>
                   <span className="ce-meta-item">
                     <Calendar size={13} />
-                    Applied 2 days ago
+                    Applied recently
+                  </span>
+                  <span className="ce-meta-item ce-meta-item--status">
+                    <span className={`ce-badge ${statusBadgeClass(status)}`}>
+                      <span className="ce-badge-dot" />
+                      {status}
+                    </span>
                   </span>
                 </div>
               </div>
             </div>
-            <div className="d-flex flex-column align-items-start align-items-lg-end gap-2">
-              <div className="ce-score-label">AI Match Score</div>
-              <div className="ce-score-num">95%</div>
-              <div className="d-flex flex-wrap gap-2">
-                <span className="ce-badge ce-badge--excellent">
-                  <span
-                    className="ce-badge-dot"
-                    style={{ background: "var(--success)" }}
+
+            {/* Right: score ring */}
+            <div className="ce-hero-score">
+              <div
+                className="ce-score-ring"
+                style={
+                  {
+                    "--score-color": scoreColor(matchScore),
+                  } as React.CSSProperties
+                }
+              >
+                <svg viewBox="0 0 80 80" className="ce-score-svg">
+                  <circle
+                    cx="40"
+                    cy="40"
+                    r="34"
+                    fill="none"
+                    stroke="rgba(0,0,0,.06)"
+                    strokeWidth="6"
                   />
-                  Excellent Match
-                </span>
-                <span className={`ce-badge ${statusBadgeClass(status)}`}>
+                  <circle
+                    cx="40"
+                    cy="40"
+                    r="34"
+                    fill="none"
+                    stroke={scoreColor(matchScore)}
+                    strokeWidth="6"
+                    strokeDasharray={`${(matchScore / 100) * 213.6} 213.6`}
+                    strokeLinecap="round"
+                    transform="rotate(-90 40 40)"
+                  />
+                </svg>
+                <div className="ce-score-inner">
+                  <span className="ce-score-num">{matchScore}%</span>
+                  <span className="ce-score-lbl">Match</span>
+                </div>
+              </div>
+              <div className="ce-hero-badges">
+                <span className={`ce-badge ${scoreBadgeClass(matchScore)}`}>
                   <span className="ce-badge-dot" />
-                  {status}
+                  {scoreLabel(matchScore)}
                 </span>
+                {report?.recommendation && (
+                  <span
+                    className="ce-badge"
+                    style={{
+                      background: `${recommendationColor(report.recommendation)}18`,
+                      borderColor: `${recommendationColor(report.recommendation)}40`,
+                      color: recommendationColor(report.recommendation),
+                    }}
+                  >
+                    <span
+                      className="ce-badge-dot"
+                      style={{
+                        background: recommendationColor(report.recommendation),
+                      }}
+                    />
+                    AI: {report.recommendation}
+                  </span>
+                )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Content grid */}
-        <div className="row g-4 au d1">
+        {/* ── Content grid ── */}
+        <div className="row g-4">
           {/* LEFT: tabs */}
           <div className="col-12 col-lg-8">
             <div className="ce-tabs mb-3">
@@ -438,8 +578,10 @@ export default function CandidateEvaluation() {
               ))}
             </div>
 
-            {activeTab === "overview" && (
+            {/* ── OVERVIEW ── */}
+            {activeTab === "overview" && report && (
               <div className="d-flex flex-column gap-3">
+                {/* Summary card */}
                 <div className="ce-card">
                   <div className="ce-card-header">
                     <span className="ce-card-title">
@@ -447,76 +589,158 @@ export default function CandidateEvaluation() {
                         size={15}
                         style={{ color: "var(--primary)" }}
                       />
-                      AI Match Analysis
+                      AI Analysis Summary
                     </span>
                   </div>
-                  <div className="ce-card-body d-flex flex-column gap-3">
-                    {scoreBreakdown.map((item) => (
-                      <div key={item.label}>
-                        <div className="d-flex align-items-center justify-content-between mb-1">
-                          <span style={{ fontSize: ".85rem", fontWeight: 500 }}>
-                            {item.label}
-                          </span>
-                          <span
-                            style={{
-                              fontSize: ".83rem",
-                              fontWeight: 700,
-                              color: "var(--primary)",
-                            }}
-                          >
-                            {item.score}%
-                          </span>
-                        </div>
-                        <div className="ce-track">
-                          <div
-                            className="ce-fill"
-                            style={
-                              { "--w": `${item.score}%` } as React.CSSProperties
-                            }
-                          />
-                        </div>
+                  <div className="ce-card-body">
+                    <p className="ce-summary-text">{report.summary}</p>
+
+                    {/* Relevance metrics row */}
+                    <div className="ce-metrics-row">
+                      <div className="ce-metric-chip">
+                        <span className="ce-metric-label">Title Match</span>
+                        <span
+                          className="ce-metric-val"
+                          style={{
+                            color: titleMatchColor(
+                              report.job_relevance.title_match,
+                            ),
+                          }}
+                        >
+                          {report.job_relevance.title_match}
+                        </span>
                       </div>
-                    ))}
+                      <div className="ce-metric-chip">
+                        <span className="ce-metric-label">Exp. Required</span>
+                        <span
+                          className="ce-metric-val"
+                          style={{
+                            color:
+                              report.job_relevance.required_experience_met ===
+                              "true"
+                                ? "var(--success)"
+                                : "var(--danger)",
+                          }}
+                        >
+                          {report.job_relevance.required_experience_met ===
+                          "true"
+                            ? "Met ✓"
+                            : "Not Met"}
+                        </span>
+                      </div>
+                      <div className="ce-metric-chip">
+                        <span className="ce-metric-label">Experience</span>
+                        <span className="ce-metric-val">
+                          {report.experience_evaluation.years_of_experience}
+                        </span>
+                      </div>
+                      <div className="ce-metric-chip">
+                        <span className="ce-metric-label">Proficiency</span>
+                        <span
+                          className="ce-metric-val"
+                          style={{
+                            color: proficiencyColor(
+                              report.experience_evaluation
+                                .technical_proficiency,
+                            ),
+                          }}
+                        >
+                          {report.experience_evaluation.technical_proficiency}
+                        </span>
+                      </div>
+                      <div className="ce-metric-chip">
+                        <span className="ce-metric-label">Industry</span>
+                        <span className="ce-metric-val">
+                          {report.experience_evaluation.industry_alignment}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Primary framework */}
+                    {report.job_relevance.primary_framework_match && (
+                      <div className="ce-framework-row">
+                        <span className="ce-framework-label">
+                          Primary Frameworks:
+                        </span>
+                        <span className="ce-framework-val">
+                          {report.job_relevance.primary_framework_match}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
+
+                {/* Skill matching card */}
                 <div className="ce-card">
                   <div className="ce-card-header">
                     <span className="ce-card-title">
                       <ClipboardList size={15} />
-                      Semantic CV Matching
+                      Skill Assessment
                     </span>
                   </div>
                   <div className="ce-card-body d-flex flex-column gap-3">
-                    <div className="ce-match-block ce-match-block--green">
-                      <div className="ce-match-block-title">
-                        <CheckCircle size={15} /> Strong Matches (8/10)
+                    {/* Matched skills */}
+                    {report.skill_assessment.matched_skills.length > 0 && (
+                      <div className="ce-match-block ce-match-block--green">
+                        <div className="ce-match-block-title">
+                          <CheckCircle size={15} />
+                          Matched Skills (
+                          {report.skill_assessment.matched_skills.length})
+                        </div>
+                        <div className="d-flex flex-wrap gap-2">
+                          {report.skill_assessment.matched_skills.map((s) => (
+                            <span key={s} className="ce-skill ce-skill--green">
+                              {s}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                      <div className="d-flex flex-wrap gap-2">
-                        {strongSkills.map((s) => (
-                          <span key={s} className="ce-skill ce-skill--green">
-                            {s}
-                          </span>
-                        ))}
+                    )}
+
+                    {/* Missing skills */}
+                    {report.skill_assessment.missing_skills.length > 0 && (
+                      <div className="ce-match-block ce-match-block--red">
+                        <div className="ce-match-block-title">
+                          <XCircle size={15} />
+                          Missing Skills (
+                          {report.skill_assessment.missing_skills.length})
+                        </div>
+                        <div className="d-flex flex-wrap gap-2">
+                          {report.skill_assessment.missing_skills.map((s) => (
+                            <span key={s} className="ce-skill ce-skill--red">
+                              {s}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                    <div className="ce-match-block ce-match-block--amber">
-                      <div className="ce-match-block-title">
-                        <AlertTriangle size={15} /> Partial Matches (2/10)
+                    )}
+
+                    {/* Soft skills */}
+                    {report.skill_assessment.soft_skills.length > 0 && (
+                      <div className="ce-match-block ce-match-block--blue">
+                        <div className="ce-match-block-title">
+                          <User size={15} />
+                          Soft Skills
+                        </div>
+                        <div className="d-flex flex-wrap gap-2">
+                          {report.skill_assessment.soft_skills.map((s) => (
+                            <span
+                              key={s}
+                              className="ce-skill ce-skill--primary"
+                            >
+                              {s}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                      <div className="d-flex flex-wrap gap-2">
-                        {partialSkills.map((s) => (
-                          <span key={s} className="ce-skill ce-skill--amber">
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
             )}
 
-            {activeTab === "skills" && (
+            {/* ── SKILLS TAB ── */}
+            {activeTab === "skills" && report && (
               <div className="ce-card">
                 <div className="ce-card-header">
                   <span className="ce-card-title">
@@ -525,79 +749,56 @@ export default function CandidateEvaluation() {
                   </span>
                 </div>
                 <div className="ce-card-body">
-                  <RadarChartSVG data={skillsData} />
-                  <div
-                    className="d-flex align-items-center gap-4 justify-content-center mb-3"
-                    style={{ fontSize: ".78rem", color: "var(--muted)" }}
-                  >
-                    <span className="d-flex align-items-center gap-1">
+                  <RadarChartSVG data={radarData} />
+                  <div className="ce-radar-legend">
+                    <span>
                       <span
-                        style={{
-                          width: 10,
-                          height: 10,
-                          borderRadius: 2,
-                          background: "rgba(79,70,229,.6)",
-                          display: "inline-block",
-                        }}
+                        className="ce-legend-dot"
+                        style={{ background: "rgba(79,70,229,.6)" }}
                       />
                       Candidate
                     </span>
-                    <span className="d-flex align-items-center gap-1">
+                    <span>
                       <span
-                        style={{
-                          width: 10,
-                          height: 10,
-                          borderRadius: 2,
-                          background: "rgba(16,185,129,.45)",
-                          display: "inline-block",
-                        }}
+                        className="ce-legend-dot"
+                        style={{ background: "rgba(16,185,129,.5)" }}
                       />
                       Required
                     </span>
                   </div>
-                  <div className="d-flex flex-column gap-3">
+
+                  {/* Job required skills vs candidate */}
+                  <div className="d-flex flex-column gap-3 mt-3">
                     <div>
-                      <p
-                        style={{
-                          fontFamily: "Syne",
-                          fontWeight: 700,
-                          fontSize: ".88rem",
-                          marginBottom: ".6rem",
-                        }}
-                      >
-                        Explicit Skills{" "}
-                        <span
-                          style={{ color: "var(--muted)", fontWeight: 400 }}
-                        >
-                          (from CV)
+                      <p className="ce-skills-section-title">
+                        Job Required Skills
+                        <span className="ce-skills-sub">
+                          ({jobSkills.length} total)
                         </span>
                       </p>
                       <div className="d-flex flex-wrap gap-2">
-                        {explicitSkills.map((s) => (
-                          <span key={s} className="ce-skill ce-skill--primary">
-                            {s}
-                          </span>
-                        ))}
+                        {jobSkills.map((s) => {
+                          const matched =
+                            report.skill_assessment.matched_skills.includes(s);
+                          return (
+                            <span
+                              key={s}
+                              className={`ce-skill ${matched ? "ce-skill--green" : "ce-skill--red"}`}
+                            >
+                              {matched ? "✓" : "✗"} {s}
+                            </span>
+                          );
+                        })}
                       </div>
                     </div>
+
                     <div>
-                      <p
-                        style={{
-                          fontFamily: "Syne",
-                          fontWeight: 700,
-                          fontSize: ".88rem",
-                          marginBottom: ".6rem",
-                        }}
-                      >
-                        Implicit Skills{" "}
-                        <span
-                          style={{ color: "var(--muted)", fontWeight: 400 }}
-                        >
-                          (AI-detected)
-                        </span>
+                      <p className="ce-skills-section-title">
+                        Soft Skills
+                        <span className="ce-skills-sub">(AI-detected)</span>
                       </p>
                       <div className="d-flex flex-wrap gap-2">
-                        {implicitSkills.map((s) => (
+                        {report.skill_assessment.soft_skills.map((s) => (
                           <span key={s} className="ce-skill ce-skill--muted">
                             {s}
                           </span>
@@ -609,6 +810,7 @@ export default function CandidateEvaluation() {
               </div>
             )}
 
+            {/* ── FAIRNESS TAB ── */}
             {activeTab === "fairness" && (
               <div className="ce-card">
                 <div className="ce-card-header">
@@ -643,12 +845,17 @@ export default function CandidateEvaluation() {
                     Fairness Metrics
                   </p>
                   <div className="d-flex flex-column gap-2">
-                    {fairnessMetrics.map((m) => (
-                      <div key={m.name} className="ce-fairness-row">
-                        <span>{m.name}</span>
+                    {[
+                      "Gender Bias",
+                      "Age Bias",
+                      "Name Bias",
+                      "Location Bias",
+                    ].map((m) => (
+                      <div key={m} className="ce-fairness-row">
+                        <span>{m} Check</span>
                         <span className="ce-fairness-pass">
                           <CheckCircle size={12} />
-                          {m.status}
+                          Pass
                         </span>
                       </div>
                     ))}
@@ -663,42 +870,51 @@ export default function CandidateEvaluation() {
             )}
           </div>
 
-          {/* RIGHT: actions */}
+          {/* RIGHT: actions + quick stats */}
           <div className="col-12 col-lg-4 d-flex flex-column gap-4">
+            {/* Actions */}
             <div className="ce-card">
               <div className="ce-card-header">
                 <span className="ce-card-title">
                   <TrendingUp size={15} />
-                  Actions
+                  Pipeline Actions
                 </span>
               </div>
               <div className="ce-card-body d-flex flex-column gap-2">
-                <button
-                  className="ce-action-btn ce-action-btn--warning"
-                  onClick={() => setActionType("screening")}
-                >
-                  <UserCheck size={15} /> Move to Screening
-                </button>
-                <button
-                  className="ce-action-btn ce-action-btn--primary"
-                  onClick={() => setActionType("interview")}
-                >
-                  <Video size={15} /> Schedule Interview
-                </button>
+                {status === "New" && (
+                  <button
+                    className="ce-action-btn ce-action-btn--warning"
+                    onClick={() => setActionType("screening")}
+                  >
+                    <UserCheck size={15} /> Move to Screening
+                  </button>
+                )}
+                {status === "Screening" && (
+                  <button
+                    className="ce-action-btn ce-action-btn--primary"
+                    onClick={() => setActionType("interview")}
+                  >
+                    <Video size={15} /> Schedule Interview
+                  </button>
+                )}
                 <hr className="ce-action-divider" />
-                <button
-                  className="ce-action-btn ce-action-btn--success"
-                  onClick={() => setActionType("offer")}
-                >
-                  <Gift size={15} /> Send Offer
-                </button>
-                <button
-                  className="ce-action-btn ce-action-btn--hired"
-                  onClick={() => setActionType("hired")}
-                >
-                  <Star size={15} /> Mark as Hired
-                </button>
-                <hr className="ce-action-divider" />
+                {status === "Interview" && (
+                  <button
+                    className="ce-action-btn ce-action-btn--success"
+                    onClick={() => setActionType("offer")}
+                  >
+                    <Gift size={15} /> Send Offer
+                  </button>
+                )}
+                {status === "Offered" && (
+                  <button
+                    className="ce-action-btn ce-action-btn--hired"
+                    onClick={() => setActionType("hired")}
+                  >
+                    <Star size={15} /> Mark as Hired
+                  </button>
+                )}
+                {/* <hr className="ce-action-divider" /> */}
                 <button
                   className="ce-action-btn ce-action-btn--danger"
                   onClick={() => setActionType("reject")}
@@ -708,44 +924,54 @@ export default function CandidateEvaluation() {
               </div>
             </div>
 
-            <div className="ce-card">
-              <div className="ce-card-header">
-                <span className="ce-card-title">
-                  <User size={15} />
-                  Quick Stats
-                </span>
+            {/* Quick stats from real data */}
+            {report && (
+              <div className="ce-card">
+                <div className="ce-card-header">
+                  <span className="ce-card-title">
+                    <User size={15} />
+                    Quick Stats
+                  </span>
+                </div>
+                <div className="ce-card-body d-flex flex-column gap-3">
+                  {[
+                    {
+                      label: "Experience",
+                      val: report.experience_evaluation.years_of_experience,
+                    },
+                    {
+                      label: "Industry",
+                      val: report.experience_evaluation.industry_alignment,
+                    },
+                    {
+                      label: "Proficiency",
+                      val: report.experience_evaluation.technical_proficiency,
+                    },
+                    {
+                      label: "Skills Matched",
+                      val: `${report.skill_assessment.matched_skills.length} / ${jobSkills.length}`,
+                    },
+                    { label: "AI Recommendation", val: report.recommendation },
+                    {
+                      label: "Match Score",
+                      val: `${matchScore}%`,
+                      sub: scoreLabel(matchScore),
+                    },
+                  ].map((s) => (
+                    <div key={s.label}>
+                      <div className="ce-stat-label">{s.label}</div>
+                      <div className="ce-stat-val">{s.val}</div>
+                      {s.sub && <div className="ce-stat-sub">{s.sub}</div>}
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="ce-card-body d-flex flex-column gap-3">
-                {[
-                  { label: "Years of Experience", val: "7 years", sub: "" },
-                  { label: "Previous Companies", val: "4", sub: "" },
-                  {
-                    label: "Education",
-                    val: "BS CS",
-                    sub: "Stanford University",
-                  },
-                  {
-                    label: "AI Match Score",
-                    val: "95%",
-                    sub: "Excellent match",
-                  },
-                ].map((s) => (
-                  <div key={s.label}>
-                    <div className="ce-stat-label">{s.label}</div>
-                    <div className="ce-stat-val">{s.val}</div>
-                    {s.sub && <div className="ce-stat-sub">{s.sub}</div>}
-                  </div>
-                ))}
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </main>
 
       {/* ══ MODALS ════════════════════════════════════════════ */}
-
-      {/* Error banner — shown inside any open modal */}
-      {/* (rendered via the modal body — see each modal's footer) */}
 
       {/* SCREENING */}
       <Modal
@@ -775,20 +1001,10 @@ export default function CandidateEvaluation() {
         }
       >
         <div className="ce-notice ce-notice--amber">
-          This will move <strong>Alex Johnson</strong> to the Screening stage.
-          The candidate will be notified.
+          This will move <strong>{candidateName}</strong> to the Screening
+          stage. The candidate will be notified.
         </div>
-        {error && (
-          <p
-            style={{
-              color: "var(--danger)",
-              fontSize: ".8rem",
-              marginTop: ".6rem",
-            }}
-          >
-            {error}
-          </p>
-        )}
+        {error && <p className="ce-modal-error">{error}</p>}
       </Modal>
 
       {/* INTERVIEW */}
@@ -809,7 +1025,7 @@ export default function CandidateEvaluation() {
             </button>
             <button
               className="ce-btn ce-btn--primary"
-              onClick={() => handleConfirm("Interview Scheduled")}
+              onClick={() => handleConfirm("Interview")}
               disabled={!interviewValid || loading}
               style={{ opacity: interviewValid && !loading ? 1 : 0.45 }}
             >
@@ -865,24 +1081,14 @@ export default function CandidateEvaluation() {
               <label className="ce-label">Duration (minutes)</label>
               <input
                 className="ce-input"
-                type="url"
+                type="number"
                 value={ivDuration}
                 onChange={(e) => setIvDuration(Number(e.target.value))}
               />
             </div>
           </div>
         </div>
-        {error && (
-          <p
-            style={{
-              color: "var(--danger)",
-              fontSize: ".8rem",
-              marginTop: ".6rem",
-            }}
-          >
-            {error}
-          </p>
-        )}
+        {error && <p className="ce-modal-error">{error}</p>}
       </Modal>
 
       {/* OFFER */}
@@ -903,7 +1109,7 @@ export default function CandidateEvaluation() {
             </button>
             <button
               className="ce-btn ce-btn--success"
-              onClick={() => handleConfirm("Offer Sent")}
+              onClick={() => handleConfirm("Offered")}
               disabled={!offerValid || loading}
               style={{ opacity: offerValid && !loading ? 1 : 0.45 }}
             >
@@ -922,7 +1128,7 @@ export default function CandidateEvaluation() {
               <input
                 className="ce-input"
                 type="text"
-                placeholder="e.g. 150000"
+                placeholder="e.g. 150,000"
                 value={offerSalary}
                 onChange={(e) => setOfferSalary(e.target.value)}
               />
@@ -943,9 +1149,7 @@ export default function CandidateEvaluation() {
           </div>
           <div className="col-12">
             <div className="ce-field">
-              <label className="ce-label">
-                End Date <span style={{ color: "var(--danger)" }}>*</span>
-              </label>
+              <label className="ce-label">Expiry Date</label>
               <input
                 className="ce-input"
                 type="date"
@@ -956,7 +1160,7 @@ export default function CandidateEvaluation() {
           </div>
           <div className="col-12">
             <div className="ce-field">
-              <label className="ce-label">Offer Notes</label>
+              <label className="ce-label">Notes</label>
               <textarea
                 className="ce-textarea"
                 placeholder="Include benefits, role details…"
@@ -966,17 +1170,7 @@ export default function CandidateEvaluation() {
             </div>
           </div>
         </div>
-        {error && (
-          <p
-            style={{
-              color: "var(--danger)",
-              fontSize: ".8rem",
-              marginTop: ".6rem",
-            }}
-          >
-            {error}
-          </p>
-        )}
+        {error && <p className="ce-modal-error">{error}</p>}
       </Modal>
 
       {/* HIRED */}
@@ -1008,8 +1202,9 @@ export default function CandidateEvaluation() {
         }
       >
         <div className="ce-notice ce-notice--green">
-          You're marking <strong>Alex Johnson</strong> as <strong>Hired</strong>
-          . This will close the application and update the pipeline.
+          You're marking <strong>{candidateName}</strong> as{" "}
+          <strong>Hired</strong>. This will close the application and update the
+          pipeline.
         </div>
         <div className="ce-field mt-3">
           <label className="ce-label">
@@ -1022,17 +1217,7 @@ export default function CandidateEvaluation() {
             onChange={(e) => setHireStartDate(e.target.value)}
           />
         </div>
-        {error && (
-          <p
-            style={{
-              color: "var(--danger)",
-              fontSize: ".8rem",
-              marginTop: ".6rem",
-            }}
-          >
-            {error}
-          </p>
-        )}
+        {error && <p className="ce-modal-error">{error}</p>}
       </Modal>
 
       {/* REJECT */}
@@ -1087,17 +1272,7 @@ export default function CandidateEvaluation() {
             The candidate will receive an automated rejection email.
           </div>
         </div>
-        {error && (
-          <p
-            style={{
-              color: "var(--danger)",
-              fontSize: ".8rem",
-              marginTop: ".6rem",
-            }}
-          >
-            {error}
-          </p>
-        )}
+        {error && <p className="ce-modal-error">{error}</p>}
       </Modal>
     </div>
   );

@@ -1,21 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BrainCircuit, Mail, CheckCircle, ArrowLeft } from "lucide-react";
-import "./Forgotpasswordpage.css";
 import { useAuth } from "../../../contexts/AuthContext";
+// ✅ import نفس CSS الـ AuthPage — مفيش CSS منفصل
+import "../AuthPage/AuthPage.css";
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate();
+  const { forgetPassword } = useAuth();
+
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
-  const { forgetPassword } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  async function handleSubmit() {
     setError("");
-
     if (!email) {
       setError("Please enter your email address.");
       return;
@@ -23,111 +22,134 @@ export default function ForgotPasswordPage() {
 
     try {
       setLoading(true);
-
       await forgetPassword(email);
       setSent(true);
-    } catch (error: any) {
+    } catch (err: any) {
       setError(
-        error?.response?.data?.message ||
+        err?.response?.data?.message ||
           "Failed to send reset link. Please try again.",
       );
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="auth-page">
-      {/* Decorative blobs */}
-      <div className="auth-blob auth-blob--1" />
-      <div className="auth-blob auth-blob--2" />
+    <div className="ap-root">
+      {/* Background */}
+      <div className="ap-bg">
+        <div className="ap-orb ap-orb--1" />
+        <div className="ap-orb ap-orb--2" />
+        <div className="ap-orb ap-orb--3" />
+        <div className="ap-orb ap-orb--4" />
+        <div className="ap-mesh" />
+      </div>
 
-      <div className="auth-container">
-        {/* Logo */}
-        <div className="auth-logo">
-          <div className="auth-logo__icon">
-            <BrainCircuit size={28} color="#fff" />
-          </div>
-          <span className="auth-logo__name">Hakeem</span>
+      {/* Nav */}
+      <nav className="ap-nav">
+        <a href="/" className="ap-logo">
+          <div className="ap-logo-icon">H</div>
+          <span className="ap-logo-name">Hakeem</span>
+        </a>
+        <button className="ap-nav-back" onClick={() => navigate("/auth")}>
+          ← Back to login
+        </button>
+      </nav>
+
+      <main className="ap-main">
+        {/* Headline */}
+        <div className="ap-headline">
+          <span className="ap-eyebrow">✉ Password Recovery</span>
+          <h1 className="ap-title">
+            {sent ? "Check your inbox" : "Forgot your password?"}
+          </h1>
+          <p className="ap-subtitle">
+            {sent
+              ? `We sent a reset link to ${email}. The link expires in 15 minutes.`
+              : "Enter your email and we'll send you a secure reset link right away."}
+          </p>
         </div>
 
-        <div className="auth-card">
-          {/* Shimmer line on top */}
-          <div className="auth-card__shimmer" />
-
+        {/* Card */}
+        <div className="ap-card ap-card--sm">
           {sent ? (
-            <div className="auth-success">
-              <div className="auth-success__icon">
-                <CheckCircle size={36} color="var(--success)" />
-              </div>
-              <h2 className="auth-success__title">Check your inbox</h2>
-              <p className="auth-success__desc">
-                If an account exists for <strong>{email}</strong>, a reset link
-                has been sent.
+            /* ── SUCCESS STATE ── */
+            <div className="ap-state-block">
+              <div className="ap-state-icon ap-state-icon--success">✓</div>
+              <p className="ap-state-hint">
+                Didn't receive it? Check your spam folder or{" "}
+                <button
+                  className="ap-inline-link"
+                  onClick={() => setSent(false)}
+                >
+                  try a different email
+                </button>
+                .
               </p>
               <button
-                className="btn btn--primary w-100"
+                className="ap-btn-primary"
                 onClick={() => navigate("/auth")}
               >
-                <ArrowLeft size={16} />
-                Back to Login
+                ← Back to Login
               </button>
             </div>
           ) : (
-            <>
-              <div className="auth-card__header">
-                <div className="auth-card__icon-wrap">
-                  <Mail size={22} color="var(--primary)" />
+            /* ── FORM ── */
+            <div className="ap-form">
+              {error && (
+                <div className="ap-alert ap-alert--error">
+                  <span className="ap-alert-icon">✕</span>
+                  {error}
                 </div>
-                <div>
-                  <h2 className="auth-card__title">Forgot Password?</h2>
-                  <p className="auth-card__desc">
-                    Enter your email and we'll send you a reset link
-                  </p>
-                </div>
+              )}
+
+              <div className="ap-field">
+                <label className="ap-label">Email address</label>
+                <input
+                  className="ap-input"
+                  type="email"
+                  placeholder="you@company.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError("");
+                  }}
+                  onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                />
               </div>
 
-              <form onSubmit={handleSubmit} className="auth-form">
-                <div className="auth-field">
-                  <label className="auth-label">Email Address</label>
-                  <div className="auth-input-wrap">
-                    <Mail className="auth-input-icon" size={16} />
-                    <input
-                      type="email"
-                      className={`auth-input ${error ? "auth-input--error" : ""}`}
-                      placeholder="example@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  {error && <p className="auth-error">{error}</p>}
-                </div>
+              <button
+                className="ap-btn-primary"
+                onClick={handleSubmit}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span className="ap-spinner" /> Sending…
+                  </>
+                ) : (
+                  "Send Reset Link →"
+                )}
+              </button>
 
-                <button
-                  type="submit"
-                  className="btn btn--primary w-100"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <span className="btn__spinner" />
-                  ) : (
-                    "Send Reset Link"
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  className="btn btn--ghost w-100"
-                  onClick={() => navigate("/auth")}
-                >
-                  <ArrowLeft size={15} />
-                  Back to Login
-                </button>
-              </form>
-            </>
+              <button
+                className="ap-btn-ghost"
+                onClick={() => navigate("/auth")}
+              >
+                ← Back to Login
+              </button>
+            </div>
           )}
         </div>
-      </div>
+
+        <div className="ap-trust">
+          <span>🔒 Secure link</span>
+          <span className="ap-dot" />
+          <span>⏱ Expires in 15 min</span>
+          <span className="ap-dot" />
+          <span>✦ Hakeem Auth</span>
+        </div>
+      </main>
     </div>
   );
 }

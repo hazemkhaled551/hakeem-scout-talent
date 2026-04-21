@@ -857,3 +857,314 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ══════════════════════════════════════════════════════════
+   SHARED UTILITY CLASSES
+   (used by ForgotPassword, ResetPassword, RequestRestore,
+    GoogleCallback, VerifyEmail)
+══════════════════════════════════════════════════════════ */
+
+/* Narrow card variant */
+.ap-card--sm {
+  max-width: 480px;
+}
+
+/* ── State block (success / error / loading result) ── */
+.ap-state-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.ap-state-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.ap-state-icon--success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.07);
+}
+.ap-state-icon--error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.07);
+}
+.ap-state-icon--warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.07);
+}
+
+.ap-state-hint {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 340px;
+  margin: 0;
+}
+
+/* ── Ghost button ── */
+.ap-btn-ghost {
+  width: 100%;
+  padding: 0.78rem;
+  background: transparent;
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+.ap-btn-ghost:hover {
+  border-color: #c0c8e8;
+  color: var(--text);
+  background: #f5f7fc;
+}
+
+/* ── Nav back as button (no href) ── */
+.ap-nav-back {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.5);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.2s;
+  font-family: "DM Sans", sans-serif;
+}
+.ap-nav-back:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── Inline link (inside text) ── */
+.ap-inline-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--p);
+  font-weight: 600;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* ── Notice boxes ── */
+.ap-notice {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  text-align: left;
+}
+.ap-notice--blue {
+  background: rgba(59, 130, 246, 0.07);
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  color: #1e40af;
+}
+.ap-notice--green {
+  background: rgba(16, 185, 129, 0.07);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  color: #065f46;
+}
+.ap-notice--amber {
+  background: rgba(245, 158, 11, 0.07);
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  color: #92400e;
+}
+
+/* ── Countdown ── */
+.ap-countdown {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: -0.3rem 0 0;
+}
+.ap-countdown strong {
+  color: var(--p);
+}
+
+/* ── Password tips box ── */
+.ap-tips-box {
+  background: rgba(91, 80, 240, 0.05);
+  border: 1px solid rgba(91, 80, 240, 0.12);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.ap-tips-box strong {
+  color: var(--text);
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.8rem;
+}
+.ap-tips-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.ap-tips-row span {
+  transition: color 0.2s;
+}
+.ap-tips-row span.ok {
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* ── Field ok (match) ── */
+.ap-field-ok {
+  font-size: 0.76rem;
+  color: var(--success);
+  font-weight: 600;
+  margin-top: 0.3rem;
+}
+
+/* ── Google callback loading ── */
+.ap-callback-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 0.5rem 0;
+  text-align: center;
+}
+
+.ap-callback-sub {
+  font-size: 0.87rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Google ring spinner */
+.ap-google-ring {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+.ap-ring-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: spin 0.9s linear infinite;
+}
+.ap-google-g {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Step chips */
+.ap-step-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
+}
+.ap-step-chip {
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  color: var(--muted);
+  background: #f1f3f8;
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+.ap-step-chip.active {
+  background: rgba(91, 80, 240, 0.1);
+  color: var(--p);
+  font-weight: 700;
+}
+.ap-step-chip.done {
+  background: rgba(16, 185, 129, 0.08);
+  color: var(--success);
+}
+
+/* Bouncing dots */
+.ap-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+.ap-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--p);
+  opacity: 0.4;
+  animation: dot-bounce 1.2s ease-in-out infinite;
+}
+.ap-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.ap-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dot-bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+/* Verify spinner */
+.ap-verify-spinner-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(91, 80, 240, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 8px rgba(91, 80, 240, 0.05);
+}
+.ap-verify-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(91, 80, 240, 0.2);
+  border-top-color: var(--p);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* Strength bar width override for ResetPassword (dynamic width via style) */
+.ap-strength-bar {
+  transition:
+    width 0.4s ease,
+    background 0.4s ease;
+}

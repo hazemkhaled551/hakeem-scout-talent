@@ -1,26 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  BrainCircuit,
-  Lock,
-  Eye,
-  EyeOff,
-  CheckCircle,
-  XCircle,
-  ArrowRight,
-  AlertCircle,
-} from "lucide-react";
-import "./Resetpassword.css";
 import { useAuth } from "../../../contexts/AuthContext";
+import "../AuthPage/AuthPage.css";
 
-/* ════════════════════════════════════════════════════════════
-   PASSWORD STRENGTH HELPER
-════════════════════════════════════════════════════════════ */
-function getStrength(pwd: string): {
-  level: 0 | 1 | 2 | 3 | 4;
+/* ── Password strength ── */
+type StrengthLevel = 0 | 1 | 2 | 3 | 4;
+interface Strength {
+  level: StrengthLevel;
   label: string;
   cls: string;
-} {
+}
+
+function getStrength(pwd: string): Strength {
   if (!pwd) return { level: 0, label: "", cls: "" };
   let score = 0;
   if (pwd.length >= 8) score++;
@@ -30,16 +21,13 @@ function getStrength(pwd: string): {
   const map = [
     { label: "", cls: "" },
     { label: "Weak", cls: "weak" },
-    { label: "Fair", cls: "fair" },
-    { label: "Good", cls: "good" },
-    { label: "Strong", cls: "strong" },
+    { label: "Fair", cls: "medium" },
+    { label: "Good", cls: "medium" },
+    { label: "Strong ✓", cls: "strong" },
   ] as const;
-  return { level: score as 0 | 1 | 2 | 3 | 4, ...map[score] };
+  return { level: score as StrengthLevel, ...map[score] };
 }
 
-/* ════════════════════════════════════════════════════════════
-   COMPONENT
-════════════════════════════════════════════════════════════ */
 export default function ResetPassword() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -47,53 +35,45 @@ export default function ResetPassword() {
   const token = searchParams.get("token");
 
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPass, setShowPass] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirm, setConfirm] = useState("");
+  const [showPw, setShowPw] = useState(false);
+  const [showCPw, setShowCPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [tokenError, setTokenError] = useState(false);
 
   const strength = getStrength(password);
-  const passMatch = confirmPassword.length > 0 && password === confirmPassword;
-  const misMatch = confirmPassword.length > 0 && password !== confirmPassword;
+  const passMatch = confirm.length > 0 && password === confirm;
+  const misMatch = confirm.length > 0 && password !== confirm;
   const canSubmit = password.length >= 6 && passMatch && !loading;
 
-  /* ── Validate token on mount ────────────────────────────── */
   useEffect(() => {
     if (!token) setTokenError(true);
   }, [token]);
 
-  /* ── Submit ─────────────────────────────────────────────── */
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit() {
     setError("");
-
     if (!token) {
       setError("Invalid or expired reset link.");
       return;
     }
-
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
     }
-
-    if (password !== confirmPassword) {
+    if (password !== confirm) {
       setError("Passwords do not match.");
       return;
     }
 
     try {
       setLoading(true);
-
       await resetPassword(token, password);
-
       setSuccess(true);
-    } catch (error: any) {
+    } catch (err: any) {
       setError(
-        error?.response?.data?.message ||
+        err?.response?.data?.message ||
           "Reset failed or link has expired. Please request a new one.",
       );
     } finally {
@@ -101,98 +81,96 @@ export default function ResetPassword() {
     }
   }
 
-  /* ── Render ─────────────────────────────────────────────── */
   return (
-    <div className="rp-page">
-      {/* Blobs */}
-      <div className="rp-blob rp-blob--1" />
-      <div className="rp-blob rp-blob--2" />
-      <div className="rp-blob rp-blob--3" />
+    <div className="ap-root">
+      <div className="ap-bg">
+        <div className="ap-orb ap-orb--1" />
+        <div className="ap-orb ap-orb--2" />
+        <div className="ap-orb ap-orb--3" />
+        <div className="ap-orb ap-orb--4" />
+        <div className="ap-mesh" />
+      </div>
 
-      <div className="rp-wrap">
-        {/* Logo */}
-        <div className="rp-logo-wrap">
-          <div className="rp-logo">
-            <BrainCircuit />
-          </div>
-          <span className="rp-brand">Hakeem</span>
-          <p className="rp-subtitle">Password Reset</p>
+      <nav className="ap-nav">
+        <a href="/" className="ap-logo">
+          <div className="ap-logo-icon">H</div>
+          <span className="ap-logo-name">Hakeem</span>
+        </a>
+        <button className="ap-nav-back" onClick={() => navigate("/auth")}>
+          ← Back to login
+        </button>
+      </nav>
+
+      <main className="ap-main">
+        <div className="ap-headline">
+          <span className="ap-eyebrow">🔒 Secure Reset</span>
+          <h1 className="ap-title">
+            {tokenError
+              ? "Invalid Link"
+              : success
+                ? "Password Updated!"
+                : "Reset your password"}
+          </h1>
+          <p className="ap-subtitle">
+            {tokenError
+              ? "This link is invalid or has expired."
+              : success
+                ? "Your password has been updated. You can now sign in."
+                : "Enter a strong new password for your Hakeem account."}
+          </p>
         </div>
 
-        {/* Card */}
-        <div className="rp-card">
+        <div className="ap-card ap-card--sm">
           {/* ── INVALID TOKEN ── */}
-          {tokenError ? (
-            <div style={{ textAlign: "center", padding: "1rem 0" }}>
-              <div
-                className="rp-success-icon"
-                style={{
-                  background: "rgba(239,68,68,.08)",
-                  margin: "0 auto 1rem",
-                }}
-              >
-                <XCircle size={36} color="var(--danger)" strokeWidth={1.8} />
-              </div>
-              <div className="rp-success-title">Invalid Reset Link</div>
-              <p className="rp-success-sub">
-                This link is invalid or has expired. Please request a new
-                password reset.
+          {tokenError && (
+            <div className="ap-state-block">
+              <div className="ap-state-icon ap-state-icon--error">✕</div>
+              <p className="ap-state-hint">
+                Please request a new password reset from the login page.
               </p>
               <button
-                className="rp-btn rp-btn--primary"
+                className="ap-btn-primary"
                 onClick={() => navigate("/auth")}
               >
-                <ArrowRight size={15} /> Back to Login
+                ← Back to Login
               </button>
             </div>
-          ) : /* ── SUCCESS ── */
-          success ? (
-            <div className="rp-success">
-              <div className="rp-success-icon">
-                <CheckCircle
-                  size={36}
-                  color="var(--success)"
-                  strokeWidth={1.8}
-                />
-              </div>
-              <div className="rp-success-title">Password Reset!</div>
-              <p className="rp-success-sub">
-                Your password has been updated successfully. You can now sign in
-                with your new password.
-              </p>
-              <button
-                className="rp-btn rp-btn--primary"
-                onClick={() => navigate("/auth")}
-              >
-                <ArrowRight size={15} /> Go to Login
-              </button>
-            </div>
-          ) : (
-            /* ── FORM ── */
-            <>
-              <div className="rp-card-title">
-                <Lock size={18} style={{ color: "var(--primary)" }} />
-                Reset Password
-              </div>
-              <p className="rp-card-sub">
-                Enter a strong new password for your account.
-              </p>
+          )}
 
-              {/* Error */}
+          {/* ── SUCCESS ── */}
+          {!tokenError && success && (
+            <div className="ap-state-block">
+              <div className="ap-state-icon ap-state-icon--success">✓</div>
+              <p className="ap-state-hint">
+                You can now sign in with your new password.
+              </p>
+              <button
+                className="ap-btn-primary"
+                onClick={() => navigate("/auth")}
+              >
+                Sign In →
+              </button>
+            </div>
+          )}
+
+          {/* ── FORM ── */}
+          {!tokenError && !success && (
+            <div className="ap-form">
               {error && (
-                <div className="rp-error">
-                  <AlertCircle size={14} /> {error}
+                <div className="ap-alert ap-alert--error">
+                  <span className="ap-alert-icon">✕</span>
+                  {error}
                 </div>
               )}
 
-              <form onSubmit={handleSubmit}>
+              <div className="ap-grid">
                 {/* New password */}
-                <div className="rp-field">
-                  <label className="rp-label">New Password</label>
-                  <div className="rp-input-wrap">
+                <div className="ap-field ap-span-2">
+                  <label className="ap-label">New Password</label>
+                  <div className="ap-input-wrap">
                     <input
-                      className={`rp-input ${error && password.length < 6 ? "rp-input--error" : ""}`}
-                      type={showPass ? "text" : "password"}
+                      className="ap-input"
+                      type={showPw ? "text" : "password"}
                       placeholder="Min. 6 characters"
                       value={password}
                       onChange={(e) => {
@@ -202,147 +180,96 @@ export default function ResetPassword() {
                     />
                     <button
                       type="button"
-                      className="rp-eye"
-                      onClick={() => setShowPass((v) => !v)}
+                      className="ap-eye"
+                      onClick={() => setShowPw(!showPw)}
                     >
-                      {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                      {showPw ? "Hide" : "Show"}
                     </button>
                   </div>
-
-                  {/* Strength bar */}
-                  {password.length > 0 && (
-                    <div className="rp-strength">
-                      <div className="rp-strength-bars">
-                        {[1, 2, 3, 4].map((n) => (
-                          <div
-                            key={n}
-                            className={`rp-strength-bar ${n <= strength.level ? `rp-strength-bar--filled-${strength.cls}` : ""}`}
-                          />
-                        ))}
+                  {password && (
+                    <div className="ap-strength">
+                      <div className="ap-strength-track">
+                        <div
+                          className={`ap-strength-bar ap-strength-bar--${strength.cls}`}
+                          style={{ width: `${(strength.level / 4) * 100}%` }}
+                        />
                       </div>
-                      {strength.label && (
-                        <span
-                          className={`rp-strength-label rp-strength-label--${strength.cls}`}
-                        >
-                          {strength.label} password
-                        </span>
-                      )}
+                      <span
+                        className={`ap-strength-lbl ap-strength-lbl--${strength.cls}`}
+                      >
+                        {strength.label}
+                      </span>
                     </div>
                   )}
                 </div>
 
                 {/* Confirm password */}
-                <div className="rp-field">
-                  <label className="rp-label">Confirm Password</label>
-                  <div className="rp-input-wrap">
+                <div className="ap-field ap-span-2">
+                  <label className="ap-label">Confirm Password</label>
+                  <div className="ap-input-wrap">
                     <input
-                      className={`rp-input ${misMatch ? "rp-input--error" : ""}`}
-                      type={showConfirm ? "text" : "password"}
+                      className={`ap-input${misMatch ? " ap-input--err" : ""}`}
+                      type={showCPw ? "text" : "password"}
                       placeholder="Repeat your password"
-                      value={confirmPassword}
+                      value={confirm}
                       onChange={(e) => {
-                        setConfirmPassword(e.target.value);
+                        setConfirm(e.target.value);
                         setError("");
                       }}
                     />
                     <button
                       type="button"
-                      className="rp-eye"
-                      onClick={() => setShowConfirm((v) => !v)}
+                      className="ap-eye"
+                      onClick={() => setShowCPw(!showCPw)}
                     >
-                      {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                      {showCPw ? "Hide" : "Show"}
                     </button>
                   </div>
-
-                  {/* Match indicator */}
                   {passMatch && (
-                    <div className="rp-match rp-match--ok">
-                      <CheckCircle size={13} /> Passwords match
-                    </div>
+                    <p className="ap-field-ok">✓ Passwords match</p>
                   )}
                   {misMatch && (
-                    <div className="rp-match rp-match--err">
-                      <XCircle size={13} /> Passwords don't match
-                    </div>
+                    <p className="ap-field-err">Passwords do not match</p>
                   )}
                 </div>
+              </div>
 
-                {/* Password requirements */}
-                {password.length > 0 && strength.level < 3 && (
-                  <div
-                    style={{
-                      background: "rgba(79,70,229,.05)",
-                      border: "1px solid rgba(79,70,229,.12)",
-                      borderRadius: 10,
-                      padding: ".7rem 1rem",
-                      marginBottom: "1rem",
-                      fontSize: ".78rem",
-                      color: "var(--muted)",
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    <strong
-                      style={{
-                        color: "var(--text)",
-                        display: "block",
-                        marginBottom: ".2rem",
-                      }}
-                    >
-                      Tip — strong passwords include:
-                    </strong>
-                    <span
-                      style={{
-                        color: /[A-Z]/.test(password)
-                          ? "var(--success)"
-                          : "inherit",
-                      }}
-                    >
-                      ✓ Uppercase letter
+              {/* Tips box */}
+              {password && strength.level < 3 && (
+                <div className="ap-tips-box">
+                  <strong>Tip — strong passwords include:</strong>
+                  <div className="ap-tips-row">
+                    <span className={/[A-Z]/.test(password) ? "ok" : ""}>
+                      ✓ Uppercase
                     </span>
-                    {"  "}
-                    <span
-                      style={{
-                        color: /[0-9]/.test(password)
-                          ? "var(--success)"
-                          : "inherit",
-                      }}
-                    >
+                    <span className={/[0-9]/.test(password) ? "ok" : ""}>
                       ✓ Number
                     </span>
-                    {"  "}
-                    <span
-                      style={{
-                        color: /[^A-Za-z0-9]/.test(password)
-                          ? "var(--success)"
-                          : "inherit",
-                      }}
-                    >
-                      ✓ Special character
+                    <span className={/[^A-Za-z0-9]/.test(password) ? "ok" : ""}>
+                      ✓ Symbol
                     </span>
                   </div>
-                )}
+                </div>
+              )}
 
-                <button
-                  type="submit"
-                  className="rp-btn rp-btn--primary"
-                  disabled={!canSubmit}
-                  style={{ opacity: canSubmit ? 1 : 0.5 }}
-                >
-                  {loading ? (
-                    <>
-                      <div className="rp-btn--spinner" /> Resetting…
-                    </>
-                  ) : (
-                    <>
-                      <Lock size={15} /> Reset Password
-                    </>
-                  )}
-                </button>
-              </form>
-            </>
+              <button
+                className="ap-btn-primary"
+                onClick={handleSubmit}
+                disabled={!canSubmit}
+                style={{ opacity: canSubmit ? 1 : 0.55 }}
+              >
+                {loading ? (
+                  <>
+                    <span className="ap-spinner" /> Resetting…
+                  </>
+                ) : (
+                  "Reset Password →"
+                )}
+              </button>
+            </div>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

@@ -1,28 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  BrainCircuit,
-  Mail,
-  ArrowLeft,
-  AlertCircle,
-  RefreshCw,
-  Send,
-} from "lucide-react";
-import "./auth-pages.css";
 import { useAuth } from "../../../contexts/AuthContext";
+import "../AuthPage/AuthPage.css";
 
-/* ════════════════════════════════════════════════════════════
-   EMAIL VALIDATION
-════════════════════════════════════════════════════════════ */
 const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-/* ════════════════════════════════════════════════════════════
-   COMPONENT
-════════════════════════════════════════════════════════════ */
 export default function RequestRestore() {
   const navigate = useNavigate();
-
   const { requestRestoreEmail } = useAuth();
+
   const [email, setEmail] = useState("");
   const [touched, setTouched] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -31,31 +17,23 @@ export default function RequestRestore() {
   const [resendSecs, setResendSecs] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  /* focus on mount */
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  /* resend countdown */
   useEffect(() => {
     if (resendSecs <= 0) return;
     const t = setTimeout(() => setResendSecs((s) => s - 1), 1000);
     return () => clearTimeout(t);
   }, [resendSecs]);
 
-  /* ── Submit ─────────────────────────────────────────────── */
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit() {
     setTouched(true);
     setError("");
-
     if (!isValidEmail(email)) return;
-
     try {
       setLoading(true);
-
       await requestRestoreEmail(email);
-
       setSent(true);
       setResendSecs(60);
     } catch {
@@ -65,15 +43,11 @@ export default function RequestRestore() {
     }
   }
 
-  /* ── Resend ─────────────────────────────────────────────── */
   async function handleResend() {
     if (resendSecs > 0) return;
     try {
       setLoading(true);
-
-      // 🔥 await forgotPassword({ email });
-      await new Promise((r) => setTimeout(r, 1200));
-
+      await requestRestoreEmail(email);
       setResendSecs(60);
     } catch {
       setError("Failed to resend. Please try again.");
@@ -84,158 +58,147 @@ export default function RequestRestore() {
 
   const emailError = touched && !isValidEmail(email);
 
-  /* ── Render ─────────────────────────────────────────────── */
   return (
-    <div className="auth-page py-5">
-      <div className="auth-blob auth-blob--1" />
-      <div className="auth-blob auth-blob--2" />
-      <div className="auth-blob auth-blob--3" />
+    <div className="ap-root">
+      <div className="ap-bg">
+        <div className="ap-orb ap-orb--1" />
+        <div className="ap-orb ap-orb--2" />
+        <div className="ap-orb ap-orb--3" />
+        <div className="ap-orb ap-orb--4" />
+        <div className="ap-mesh" />
+      </div>
 
-      <div className="auth-wrap">
-        {/* Logo */}
-        <div className="auth-logo-wrap restore-logo-wrap">
-          <div className="restore-logo">
-            <BrainCircuit />
-          </div>
-          <span className="restore-brand">Hakeem</span>
-          <p className="restore-subtitle">Restore Your Email </p>
+      <nav className="ap-nav">
+        <a href="/" className="ap-logo">
+          <div className="ap-logo-icon">H</div>
+          <span className="ap-logo-name">Hakeem</span>
+        </a>
+        <button className="ap-nav-back" onClick={() => navigate("/auth")}>
+          ← Back to login
+        </button>
+      </nav>
+
+      <main className="ap-main">
+        <div className="ap-headline">
+          <span className="ap-eyebrow">📬 Account Recovery</span>
+          <h1 className="ap-title">
+            {sent ? "Check your inbox" : "Restore your email"}
+          </h1>
+          <p className="ap-subtitle">
+            {sent
+              ? `We sent a restore link to ${email}. The link expires in 15 minutes.`
+              : "Enter your registered email and we'll send you a secure restore link."}
+          </p>
         </div>
 
-        <div className="auth-card">
-          {/* ══ SENT STATE ════════════════════════════════ */}
+        <div className="ap-card ap-card--sm">
           {sent ? (
-            <div style={{ textAlign: "center" }}>
-              <div
-                className="auth-sent-icon auth-sent-icon--mail"
-                style={{ margin: "0 auto 1.1rem" }}
-              >
-                <Mail size={32} color="var(--primary)" strokeWidth={1.5} />
-              </div>
-              <div className="auth-sent-title">Check Your Inbox</div>
-              <p className="auth-sent-sub">
-                We sent a Email reset link to{" "}
-                <span className="auth-sent-email">{email}</span>. The link
-                expires in 15 minutes.
-              </p>
-
-              <div className="auth-notice auth-notice--blue">
+            /* ── SENT ── */
+            <div className="ap-state-block">
+              <div className="ap-state-icon ap-state-icon--success">✉</div>
+              <div className="ap-notice ap-notice--blue">
                 Didn't receive the email? Check your spam folder or try
                 resending.
               </div>
 
-              {/* Resend */}
               <button
-                className="auth-btn auth-btn--primary"
+                className="ap-btn-primary"
                 onClick={handleResend}
                 disabled={resendSecs > 0 || loading}
                 style={{ opacity: resendSecs > 0 || loading ? 0.55 : 1 }}
               >
                 {loading ? (
                   <>
-                    <div className="auth-spinner" /> Sending…
+                    <span className="ap-spinner" /> Sending…
                   </>
                 ) : resendSecs > 0 ? (
-                  <>
-                    <RefreshCw size={15} /> Resend in {resendSecs}s
-                  </>
+                  `↺ Resend in ${resendSecs}s`
                 ) : (
-                  <>
-                    <RefreshCw size={15} /> Resend Email
-                  </>
+                  "↺ Resend Email"
                 )}
               </button>
 
               {resendSecs > 0 && (
-                <div className="auth-countdown">
-                  You can resend in <span>{resendSecs}s</span>
-                </div>
+                <p className="ap-countdown">
+                  You can resend in <strong>{resendSecs}s</strong>
+                </p>
               )}
 
               <button
-                className="auth-btn auth-btn--outline"
+                className="ap-btn-ghost"
                 onClick={() => navigate("/auth")}
               >
-                <ArrowLeft size={15} /> Back to Login
+                ← Back to Login
               </button>
             </div>
           ) : (
-            /* ══ FORM STATE ═══════════════════════════════ */
-            <>
-              <div className="auth-card-icon auth-card-icon--primary">
-                <Mail size={26} color="var(--primary)" strokeWidth={1.8} />
-              </div>
-              <div className="auth-card-title">Restore Email?</div>
-              <p className="auth-card-sub">
-                No worries! Enter your registered email and we'll send you a
-                secure reset link.
-              </p>
-
+            /* ── FORM ── */
+            <div className="ap-form">
               {error && (
-                <div className="auth-error">
-                  <AlertCircle size={14} /> {error}
+                <div className="ap-alert ap-alert--error">
+                  <span className="ap-alert-icon">✕</span>
+                  {error}
                 </div>
               )}
 
-              <form onSubmit={handleSubmit}>
-                <div className="auth-field">
-                  <label className="auth-label">Email Address</label>
-                  <input
-                    ref={inputRef}
-                    className={`auth-input ${emailError ? "auth-input--error" : ""}`}
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setError("");
-                    }}
-                    onBlur={() => setTouched(true)}
-                  />
-                  {emailError && (
-                    <span
-                      style={{
-                        fontSize: ".76rem",
-                        color: "var(--danger)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: ".3rem",
-                        marginTop: ".25rem",
-                      }}
-                    >
-                      <AlertCircle size={12} /> Please enter a valid email
-                      address.
-                    </span>
-                  )}
-                </div>
-
-                <button
-                  type="submit"
-                  className="auth-btn auth-btn--primary"
-                  disabled={loading || (touched && !isValidEmail(email))}
-                  style={{
-                    opacity:
-                      loading || (touched && !isValidEmail(email)) ? 0.55 : 1,
+              <div className="ap-field">
+                <label className="ap-label">Email address</label>
+                <input
+                  ref={inputRef}
+                  className={`ap-input${emailError ? " ap-input--err" : ""}`}
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError("");
                   }}
-                >
-                  {loading ? (
-                    <>
-                      <div className="auth-spinner" /> Sending…
-                    </>
-                  ) : (
-                    <>
-                      <Send size={15} /> Send Reset Link
-                    </>
-                  )}
-                </button>
-              </form>
+                  onBlur={() => setTouched(true)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                />
+                {emailError && (
+                  <p className="ap-field-err">
+                    Please enter a valid email address.
+                  </p>
+                )}
+              </div>
 
-              <button className="auth-back" onClick={() => navigate("/auth")}>
-                <ArrowLeft size={14} /> Back to Login
+              <button
+                className="ap-btn-primary"
+                onClick={handleSubmit}
+                disabled={loading || (touched && !isValidEmail(email))}
+                style={{
+                  opacity:
+                    loading || (touched && !isValidEmail(email)) ? 0.55 : 1,
+                }}
+              >
+                {loading ? (
+                  <>
+                    <span className="ap-spinner" /> Sending…
+                  </>
+                ) : (
+                  "Send Restore Link →"
+                )}
               </button>
-            </>
+
+              <button
+                className="ap-btn-ghost"
+                onClick={() => navigate("/auth")}
+              >
+                ← Back to Login
+              </button>
+            </div>
           )}
         </div>
-      </div>
+
+        <div className="ap-trust">
+          <span>🔒 Secure link</span>
+          <span className="ap-dot" />
+          <span>⏱ Expires in 15 min</span>
+          <span className="ap-dot" />
+          <span>✦ Hakeem Auth</span>
+        </div>
+      </main>
     </div>
   );
 }
