@@ -16,7 +16,7 @@ import {
   UserCircle2,
   XCircle,
 } from "lucide-react";
-import "./PublicProfile.css";
+import "./Publicprofile.css";
 import { getSharedProfile } from "../../../services/profileService";
 
 /* ════════════════════════════════════════════════════════════
