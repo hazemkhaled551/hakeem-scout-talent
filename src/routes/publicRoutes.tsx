@@ -42,9 +42,8 @@ export const PublicRoutes = () => (
     <Route path="/select-role" element={<SelectRolePage />} />
 
     <Route path="/jobs/:jobId" element={<JobDetails />} />
-    <Route path="/profile/applicant/:id" element={<PublicProfile />} />
-    <Route path="/profile/company/:id" element={<PublicProfile />} />
-
+    <Route path="/profile/applicant/:slug" element={<PublicProfile />} />
+    <Route path="/profile/company/:slug" element={<PublicProfile />} />
     <Route path="/company/plans" element={<Plans />} />
     <Route path="/company/payment" element={<Payment />} />
   </>

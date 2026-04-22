@@ -19,7 +19,9 @@ export const addSpecialization = async (name: string) => {
   return data;
 };
 
-export const deleteSpecialization = async (id: number) => {
+
+
+export const deleteSpecialization = async (id: string) => {
   const { data } = await api.delete(`/companys/me/specializations/${id}`);
   return data;
 };
@@ -53,5 +55,25 @@ export const updateExperience = async (
 
 export const deleteExperience = async (id: number) => {
   const { data } = await api.delete(`/applicant/me/experiences/${id}`);
+  return data;
+};
+
+/* ================= Shared Account Company ================= */
+
+export const shareCompanyProfile = async () => {
+  const { data } = await api.get("/company/me/shared/profile");
+  return data;
+};
+
+/* ================= Shared Account Applicant ================= */
+
+export const shareApplicantProfile = async () => {
+  const { data } = await api.get("/applicant/shared/profile");
+  return data;
+};
+
+/* ================= Shared Slug ================= */
+export const getSharedProfile = async (slug: string) => {
+  const { data } = await api.get(`/user/profile/${slug}`);
   return data;
 };

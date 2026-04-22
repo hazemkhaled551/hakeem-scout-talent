@@ -24,6 +24,11 @@ import {
   updateCompanyAbout,
 } from "../../../services/companyService";
 import CompanyNavbar from "../../../components/CompanyNavbar";
+import ShareProfileButton from "../../../components/Shareprofilebutton";
+import {
+  addSpecialization,
+  deleteSpecialization,
+} from "../../../services/profileService";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface RecruiterData {
@@ -170,15 +175,24 @@ export default function CompanyProfile() {
   }
 
   // ── Spec tag management (inside modal) ───────────────────────────────────
-  function addSpec() {
-    const t = newSpec.trim();
-    if (t && !specDraft.includes(t)) {
-      setSpecDraft((p) => [...p, t]);
+  async function addSpec() {
+    if (newSpec.trim() === "") return;
+
+    try {
+      const res = await addSpecialization(newSpec.trim());
+      setSpecDraft((p) => [...p, res.data]);
       setNewSpec("");
+    } catch (err) {
+      console.error("Add specialization failed", err);
     }
   }
-  function removeSpec(i: number) {
-    setSpecDraft((p) => p.filter((_, idx) => idx !== i));
+  async function removeSpec(id: string) {
+    try {
+      await deleteSpecialization(id);
+      setSpecDraft((p) => p.filter((s) => s.id !== id));
+    } catch (err) {
+      console.error("Delete specialization failed", err);
+    }
   }
 
   return (
@@ -188,13 +202,16 @@ export default function CompanyProfile() {
         {/* ══ HEADER ════════════════════════════════════════════ */}
 
         {/* ══ MAIN ══════════════════════════════════════════════ */}
-        <main className="rp-main">
+        <main className="rp-main d-flex gap-4">
           {/* Page heading */}
-          <div className="au">
-            <h1 className="rp-page-title">My Profile</h1>
-            <p className="rp-page-sub">
-              Manage your recruiter identity and specializations
-            </p>
+          <div className="anim-fade-up postion-relative d-flex align-items-start justify-content-between gap-3 flex-wrap">
+            <div className="rp-profile-banner">
+              <h1 className="rp-page-title">My Profile</h1>
+              <p className="rp-page-sub">
+                Manage your recruiter identity and specializations
+              </p>
+            </div>
+            <ShareProfileButton role="company" variant="outline" size="sm" />
           </div>
 
           {/* ── Profile Completion ──────────────────────────── */}
@@ -464,13 +481,10 @@ export default function CompanyProfile() {
         >
           {/* Current tags */}
           <div className="d-flex flex-wrap gap-2 mb-3">
-            {specDraft.map((s, i) => (
+            {specDraft.map((s) => (
               <span key={s.id} className="rp-spec-tag">
                 {s.name}
-                <button
-                  className="rp-spec-remove"
-                  onClick={() => removeSpec(i)}
-                >
+                <button className="rp-spec-remove" onClick={() => removeSpec()}>
                   <X size={11} />
                 </button>
               </span>

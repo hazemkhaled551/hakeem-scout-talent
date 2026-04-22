@@ -6,13 +6,15 @@ import {
   Edit2,
   X,
   Plus,
+  // ChevronLeft,
   CheckCircle,
+  AlertCircle,
   Save,
   BrainCircuit,
   Trash2,
   AlertOctagon,
 } from "lucide-react";
-import Modal from "../../../components/Modal/Modal";
+import Modal from "./../../../components/Modal/Modal";
 import "./Applicantprofile.css";
 import {
   getMe,
@@ -29,9 +31,8 @@ import {
   deleteExperience,
 } from "../../../services/profileService";
 import Loader from "../../../components/Loader";
+import ShareProfileButton from "../../../components/Shareprofilebutton";
 import ApplicantNavbar from "../../../components/ApplicantNavbar";
-import CVSection from "../../../components/Cvsection/Cvsection";
-import ProfileCompletion from "../../../components/ProfileCompletion/ProfileCompletion";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Experience {
@@ -59,15 +60,16 @@ const EMPTY_EXP_FORM: ExpForm = {
   description: "",
 };
 
-// const profileChecks = [
-//   { label: "Basic Info", done: true },
-//   { label: "Work Experience", done: true },
-//   { label: "Skills Assessment", done: false },
-// ];
+const profileChecks = [
+  { label: "Basic Info", done: true },
+  { label: "Work Experience", done: true },
+  { label: "Skills Assessment", done: false },
+];
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function ApplicantProfile() {
   const navigate = useNavigate();
+  // const [scrolled, setScrolled] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // ── Basic Info ──
@@ -152,15 +154,7 @@ export default function ApplicantProfile() {
 
   async function saveBasicInfo() {
     try {
-      const payload = {
-        name: basicInfo.name,
-        job_title: basicInfo.job_title,
-        phone: basicInfo.phone,
-        location: basicInfo.location,
-        linkedIn_profile: basicInfo.linkedIn_profile,
-      };
-
-      await updateBasicInfo(payload);
+      await updateBasicInfo(basicInfo);
       setIsEditing(false);
     } catch (err) {
       console.log(err);
@@ -302,24 +296,73 @@ export default function ApplicantProfile() {
 
   return (
     <div className="pr-page">
-      <ApplicantNavbar />
       {/* ══ HEADER ════════════════════════════════════════════ */}
+     <ApplicantNavbar />
 
       {/* ══ MAIN ══════════════════════════════════════════════ */}
       <main className="pr-main">
         {/* Page heading */}
-        <div className="anim-fade-up">
-          <h1 className="pr-page-title">My Profile</h1>
-          <p className="pr-page-sub">
-            Manage your personal info, experience, and skills
-          </p>
+        <div className="anim-fade-up postion-relative d-flex align-items-start justify-content-between gap-3 flex-wrap">
+          <div>
+            <h1 className="pr-page-title">My Profile</h1>
+            <p className="pr-page-sub">
+              Manage your personal info, experience, and skills
+            </p>
+          </div>
+          <ShareProfileButton role="applicant" variant="outline" size="sm" />
         </div>
 
         {/* ── Profile Completion ─────────────────────────── */}
-        <ProfileCompletion
-          percentage={completion.percentage}
-          sections={completion.sections}
-        />
+        <div className="pr-card pr-completion-card anim-fade-up delay-1">
+          <div className="pr-card-body">
+            <div className="d-flex align-items-start justify-content-between mb-1">
+              <div>
+                <div className="pr-card-title" style={{ fontSize: "1rem" }}>
+                  Complete Your Profile
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.83rem",
+                    color: "var(--muted)",
+                    marginTop: "0.15rem",
+                  }}
+                >
+                  Complete your profile to get better job matches
+                </div>
+              </div>
+              <span className="pr-completion-badge">
+                {completion.percentage}%
+              </span>
+            </div>
+
+            <div className="pr-progress-track">
+              <div
+                className="pr-progress-fill"
+                style={
+                  {
+                    "--fill": `${completion.percentage}%`,
+                  } as React.CSSProperties
+                }
+              />
+            </div>
+
+            <div className="row g-2">
+              {profileChecks.map((item, i) => (
+                <div key={i} className="col-auto">
+                  <div className="pr-check-item">
+                    {item.done ? (
+                      <CheckCircle size={15} className="pr-check-done" />
+                    ) : (
+                      <AlertCircle size={15} className="pr-check-pending" />
+                    )}
+                    {item.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* ── Basic Information ──────────────────────────── */}
         <div className="pr-card anim-fade-up delay-2">
           <div className="pr-card-header">
@@ -363,12 +406,9 @@ export default function ApplicantProfile() {
                     className="pr-input"
                     type={f.type}
                     value={basicInfo[f.key as keyof typeof basicInfo]}
-                    disabled={!isEditing || f.key === "email"}
+                    disabled={!isEditing}
                     onChange={(e) =>
-                      setBasicInfo({
-                        ...basicInfo,
-                        [f.key]: e.target.value,
-                      })
+                      setBasicInfo({ ...basicInfo, [f.key]: e.target.value })
                     }
                   />
                 </div>
@@ -472,8 +512,6 @@ export default function ApplicantProfile() {
           </div>
         </div>
 
-        <CVSection />
-
         {/* ── Danger Zone ───────────────────────────────── */}
         <div className="pr-card pr-danger-card anim-fade-up delay-5">
           <div className="pr-card-header">
@@ -504,9 +542,9 @@ export default function ApplicantProfile() {
                     maxWidth: 420,
                   }}
                 >
-                  Your account will be deactivated and scheduled for permanent
-                  deletion. You can restore your account within 15 days. After
-                  that, all your data will be permanently removed.
+                  Permanently delete your account and all associated data —
+                  applications, interviews, and profile information. This action
+                  is irreversible.
                 </p>
               </div>
               <button
@@ -698,15 +736,13 @@ export default function ApplicantProfile() {
                   color: "#991b1b",
                 }}
               >
-                Account scheduled for deletion
+                This cannot be undone
               </span>
             </div>
             <p
               style={{ fontSize: ".82rem", color: "#991b1b", lineHeight: 1.65 }}
             >
-              Your account will be deactivated and scheduled for permanent
-              deletion. You can restore your account within 15 days. After that,
-              all your data will be permanently removed.
+              Your account and all associated data will be permanently deleted.
             </p>
           </div>
 
@@ -730,7 +766,7 @@ export default function ApplicantProfile() {
                 marginBottom: ".5rem",
               }}
             >
-              The following will be deleted after 15 days:
+              The following will be deleted:
             </div>
             <div
               style={{
@@ -776,7 +812,7 @@ export default function ApplicantProfile() {
               >
                 DELETE
               </strong>{" "}
-              to confirm account deletion
+              to confirm
             </label>
             <input
               className="pr-input"

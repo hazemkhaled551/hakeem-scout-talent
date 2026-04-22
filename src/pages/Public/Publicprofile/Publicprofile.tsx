@@ -16,7 +16,8 @@ import {
   UserCircle2,
   XCircle,
 } from "lucide-react";
-import "./Publicprofile.css";
+import "./PublicProfile.css";
+import { getSharedProfile } from "../../../services/profileService";
 
 /* ════════════════════════════════════════════════════════════
    TYPES — mirrors both API shapes
@@ -107,22 +108,6 @@ const DUMMY_APPLICANT: ApplicantProfile = {
   ],
 };
 
-const DUMMY_COMPANY: CompanyProfile = {
-  id: "4f7f7c28-d20a-4027-8a01-93aa64707477",
-  About: "We build great products and love working with talented people.",
-  specialization: [],
-  user: {
-    id: "98aac737",
-    name: "TechCorp Inc.",
-    email: "hazemkhaled55677@gmail.com",
-    location: "Cairo, Egypt",
-    linkedIn_profile: "linkedin.com/company/techcorp",
-    role: "Company",
-    isEmailVerified: true,
-    createAt: "2026-04-17T12:53:49.478Z",
-  },
-};
-
 /* ════════════════════════════════════════════════════════════
    HELPERS
 ════════════════════════════════════════════════════════════ */
@@ -154,7 +139,8 @@ function isApplicant(p: ProfileData): p is ApplicantProfile {
      /profile/company/:id
 ════════════════════════════════════════════════════════════ */
 export default function PublicProfile() {
-  const { id, role } = useParams<{ id: string; role?: string }>();
+  const { slug, role } = useParams<{ slug: string; role?: string }>();
+  const id = slug; // route uses :slug
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
@@ -176,20 +162,11 @@ export default function PublicProfile() {
         setLoading(true);
         setNotFound(false);
 
-        // 🔥 Replace with your real API call:
-        // const endpoint = role === "company"
-        //   ? `/api/v1/profiles/company/${id}`
-        //   : `/api/v1/profiles/applicant/${id}`;
-        // const { data } = await api.get(endpoint);
-        // setProfile(data.data);
-
-        // Demo — pick dummy based on role param
-        await new Promise((r) => setTimeout(r, 500));
-        if (role === "company") {
-          setProfile(DUMMY_COMPANY);
-        } else {
-          setProfile(DUMMY_APPLICANT);
-        }
+        // Call the shared profile API using the slug
+        const res = await getSharedProfile(id!);
+        console.log(res);
+        
+        setProfile(res.data);
       } catch (err: any) {
         if (err?.response?.status === 404) setNotFound(true);
         else setProfile(DUMMY_APPLICANT);
@@ -198,7 +175,7 @@ export default function PublicProfile() {
       }
     }
     load();
-  }, [id, role]);
+  }, [slug, role]);
 
   /* ── Copy URL ───────────────────────────────────────────── */
   function handleCopy() {
