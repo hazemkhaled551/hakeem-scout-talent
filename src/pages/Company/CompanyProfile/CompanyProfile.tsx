@@ -484,7 +484,7 @@ export default function CompanyProfile() {
             {specDraft.map((s) => (
               <span key={s.id} className="rp-spec-tag">
                 {s.name}
-                <button className="rp-spec-remove" onClick={() => removeSpec()}>
+                <button className="rp-spec-remove" onClick={() => removeSpec(s.id)}>
                   <X size={11} />
                 </button>
               </span>
