@@ -18,7 +18,6 @@ export const getJobById = (id: string) => {
 /* Apply To Job */
 export const applyJob = (jobId: string, cvId: string, about: string) => {
   return api.post(`/candidate/applyJob/${jobId}/${cvId}`, { about });
-
 };
 
 /* Delete Job */
@@ -53,9 +52,10 @@ export const changeJobStatus = (jobId: string, status: string) => {
 
 /*Recommend Jobs */
 export const recommendJobs = () => {
-  return api.get(`/applicant/recommend/job`);
+  return api.get(`/applicant/recommend/job`, {
+    params: { isRefresh: true },
+  });
 };
-
 
 /* recommend Candidates */
 export const recommendCandidates = (jobId: string) => {

@@ -9,7 +9,7 @@ import {
   AlertTriangle,
   Trash2,
   Save,
-  Send,
+  // Send,
 } from "lucide-react";
 import Modal from "../../../components/Modal/Modal";
 import "./Companyjobs.css";
@@ -36,6 +36,22 @@ import {
 /* ════════════════════════════════════════════════════════════
    ENUMS
 ════════════════════════════════════════════════════════════ */
+
+const IndustryName = {
+  SOFTWARE_DEVELOPMENT: "Software Development",
+  ARTIFICIAL_INTELLIGENCE: "Artificial Intelligence & Machine Learning",
+  DATA_SCIENCE: "Data Science & Big Data",
+  CYBERSECURITY: "Cybersecurity",
+  CLOUD_COMPUTING: "Cloud Computing",
+  NETWORKING: "Networking & Infrastructure",
+  EMBEDDED_SYSTEMS: "Embedded Systems & IoT",
+  GAME_DEVELOPMENT: "Game Development",
+  UI_UX_DESIGN: "UI/UX Design",
+  BLOCKCHAIN: "Blockchain & FinTech",
+  AR_VR: "AR / VR (Augmented & Virtual Reality)",
+  HARDWARE: "Hardware & Electronics",
+} as const;
+type IndustryName = (typeof IndustryName)[keyof typeof IndustryName];
 
 type TabType = "ALL" | JobStatus;
 
@@ -87,7 +103,7 @@ function createEmpty(): Job {
   };
 }
 
-function toPayload(f: Job, statusOverride?: JobStatus): JobPayload {
+function toPayload(f: Job): JobPayload {
   return {
     title: f.title,
     location: f.location,
@@ -95,7 +111,7 @@ function toPayload(f: Job, statusOverride?: JobStatus): JobPayload {
     maxSalary: f.maxSalary,
     type: f.type,
     seniority: f.seniority,
-    status: statusOverride ?? f.status,
+    // status: statusOverride ?? f.status,
     workMode: f.workMode,
     description: f.description,
     skills: f.skills,
@@ -104,6 +120,7 @@ function toPayload(f: Job, statusOverride?: JobStatus): JobPayload {
     positions: f.positions,
     maxApplications: f.maxApplications,
     deadline: f.deadline,
+    industry: f.industry,
   };
 }
 
@@ -258,12 +275,12 @@ export default function CompanyJobs() {
   const canSubmit = formData.title.trim().length > 0 && salaryValid;
 
   /* ── create / update ── */
-  async function handleSubmit(statusOverride?: JobStatus) {
+  async function handleSubmit() {
     if (!canSubmit) return;
     setSubmitting(true);
     setFormError(null);
     try {
-      const payload = toPayload(formData, statusOverride);
+      const payload = toPayload(formData);
       if (editingJob) {
         await updateJob(editingJob.id, payload);
       } else {
@@ -378,19 +395,19 @@ export default function CompanyJobs() {
             {filtered.length > 0 ? (
               <div className="d-flex flex-column gap-3">
                 {filtered.map((job, i) => (
-                    <JobCard
-                      key={job.id}
-                      job={job}
-                      delay={i}
-                      onView={() => navigate(`/jobs/${job.id}`)}
-                      onEdit={() => handleEdit(job)}
-                      onDelete={() => setDeleteTarget(job)}
-                      onPipeline={() => navigate(`/company/pipeline`)}
-                      onCandidates={() =>
-                        navigate(`/company/jobs/candidates/${job.id}`)
-                      }
-                      onUpdateStatus={(s) => updateStatus(job.id, s)}
-                    />
+                  <JobCard
+                    key={job.id}
+                    job={job}
+                    delay={i}
+                    onView={() => navigate(`/jobs/${job.id}`)}
+                    onEdit={() => handleEdit(job)}
+                    onDelete={() => setDeleteTarget(job)}
+                    onPipeline={() => navigate(`/company/pipeline/${job.id}`)}
+                    onCandidates={() =>
+                      navigate(`/company/jobs/candidates/${job.id}`)
+                    }
+                    onUpdateStatus={(s) => updateStatus(job.id, s)}
+                  />
                 ))}
               </div>
             ) : (
@@ -445,19 +462,10 @@ export default function CompanyJobs() {
               className="cj-btn cj-btn--outline cj-btn--sm"
               disabled={!canSubmit || submitting}
               style={{ opacity: canSubmit && !submitting ? 1 : 0.45 }}
-              onClick={() => handleSubmit(JobStatus.DRAFT)}
+              onClick={() => handleSubmit()}
             >
               <Save size={13} />
               {submitting ? "Saving…" : "Save Draft"}
-            </button>
-            <button
-              className="cj-btn cj-btn--primary cj-btn--sm"
-              disabled={!canSubmit || submitting}
-              style={{ opacity: canSubmit && !submitting ? 1 : 0.45 }}
-              onClick={() => handleSubmit(JobStatus.PUBLISHED)}
-            >
-              <Send size={13} />
-              {submitting ? "Publishing…" : "Publish Now"}
             </button>
           </>
         }
@@ -572,6 +580,25 @@ export default function CompanyJobs() {
                 {Object.values(Seniority).map((s) => (
                   <option key={s} value={s}>
                     {s}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="cj-field">
+              <label className="cj-label">Industry</label>
+              <select
+                className="cj-select"
+                value={formData.industry}
+                onChange={(e) =>
+                  set("industry", e.target.value as IndustryName)
+                }
+              >
+                <option value="">Select industry</option>
+                {Object.values(IndustryName).map((i) => (
+                  <option key={i} value={i}>
+                    {i}
                   </option>
                 ))}
               </select>

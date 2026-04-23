@@ -81,7 +81,7 @@ export default function SelectRolePage() {
         };
       }
 
-      const res = await selectRole(id, selected!);
+      const res = await selectRole(id, payload);
       const user = res.data.user;
       const token = res.data.accessToken;
 

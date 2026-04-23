@@ -76,7 +76,7 @@ export interface JobPayload {
   maxSalary: number | "";
   type: string;
   seniority: string;
-  status: string;
+  // status: string;
   workMode: string;
   description: string;
   skills: string[];
@@ -85,4 +85,5 @@ export interface JobPayload {
   positions?: number;
   maxApplications?: number;
   deadline?: string;
+  industry: string;
 }

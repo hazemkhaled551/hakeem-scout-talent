@@ -4,6 +4,10 @@ import api from "../utils/api";
 export const getJobsApplicants = () => {
   return api.get("/candidate/company/jobsApply");
 };
+export const getJobsApplicantsByJob = (jobId: string) => {
+  return api.get(`/candidate/company/applicantion/${jobId}`);
+};
+
 export const getJobsApplicationById = (id: string) => {
   return api.get(`/candidate/applicant/jobsApply/${id}`);
 };

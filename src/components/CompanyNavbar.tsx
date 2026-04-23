@@ -9,7 +9,7 @@ const companyLinks = [
   { label: "Jobs", to: "/company/jobs" },
   { label: "Interviews", to: "/company/interviews" },
   { label: "Offers", to: "/company/offers" },
-  { label: "Pipeline", to: "/company/pipeline" },
+  // { label: "Pipeline", to: "/company/pipeline" },
 ];
 
 export default function CompanyNavbar() {

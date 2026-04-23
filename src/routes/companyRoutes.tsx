@@ -26,7 +26,7 @@ export const CompanyRoutes = () => (
         path="/company/jobs/candidates/:id"
         element={<CandidateSuggestions />}
       />
-      <Route path="/company/pipeline" element={<CandidatePipeline />} />
+      <Route path="/company/pipeline/:jobId" element={<CandidatePipeline />} />
     </Route>
   </Route>
 );

@@ -33,6 +33,7 @@ import {
 import Loader from "../../../components/Loader";
 import ShareProfileButton from "../../../components/Shareprofilebutton";
 import ApplicantNavbar from "../../../components/ApplicantNavbar";
+import CVSection from "../../../components/Cvsection/Cvsection";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Experience {
@@ -511,6 +512,9 @@ export default function ApplicantProfile() {
             </div>
           </div>
         </div>
+
+
+      <CVSection/>
 
         {/* ── Danger Zone ───────────────────────────────── */}
         <div className="pr-card pr-danger-card anim-fade-up delay-5">

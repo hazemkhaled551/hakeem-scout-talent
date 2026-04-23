@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import {
   Users,
   Clock,
@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 import "../Companydashboard/Companydashboard.css"; // reuses same CSS
-import { getJobsApplicants } from "../../../services/candidateService";
+import { getJobsApplicantsByJob } from "../../../services/candidateService";
 import Loader from "../../../components/Loader";
 import CompanyNavbar from "../../../components/CompanyNavbar";
 
@@ -102,7 +102,7 @@ function mapStatus(raw: string): CandidateStatus {
 ════════════════════════════════════════════════════════════ */
 export default function CandidatePipeline() {
   const navigate = useNavigate();
-  // const { jobId } = useParams<{ jobId: string }>();
+  const { jobId } = useParams<{ jobId: string }>();
 
   // const [scrolled, setScrolled] = useState(false);
   const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -134,8 +134,8 @@ export default function CandidatePipeline() {
         // 🔥 Replace with your real API call:
         // const res = await getJobApplicants(jobId);
         // Reuse existing getJobsApplicants and filter by jobId
-        const res = await getJobsApplicants();
-        const all: any[] = res.data.data.jobaApply ?? [];
+        const res = await getJobsApplicantsByJob(jobId!);
+        const all: any[] = res.data.data ?? [];
         console.log(all);
 
         setCandidates(

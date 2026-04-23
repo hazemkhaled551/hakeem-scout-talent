@@ -128,10 +128,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("user", JSON.stringify(user));
   };
 
-  const selectRole = async (id: string, role: string) => {
-    console.log(role);
+  const selectRole = async (id: string, payload :any) => {
+    console.log(payload);
     
-    const { data } = await api.post(`/auth/select-role/${id}`, { role });
+    const { data } = await api.post(`/auth/select-role/${id}`, { payload });
 
     return data;
   };
