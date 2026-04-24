@@ -16,6 +16,8 @@ import {
 import "./Notifications.css";
 import ApplicantNavbar from "../../../components/ApplicantNavbar";
 import CompanyNavbar from "../../../components/CompanyNavbar";
+import api from "../../../utils/api";
+import useSocket from "../../../hooks/useSocket";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -33,7 +35,7 @@ export type NotificationType =
   | "hired"
   | "rejected";
 
-export type NotificationRecipient = "applicant" | "company";
+export type NotificationRecipient = "Applicant" | "Company";
 
 export interface NotificationDTO {
   id: string;
@@ -60,171 +62,171 @@ type FilterTab = "All" | "Unread" | NotificationType;
 /* ════════════════════════════════════════════════════════════
    DUMMY DATA  (replace with API)
 ════════════════════════════════════════════════════════════ */
-const DUMMY_APPLICANT: NotificationDTO[] = [
-  {
-    id: "1",
-    type: "interview_scheduled",
-    recipient: "applicant",
-    isRead: false,
-    createdAt: "2026-03-25T08:00:00Z",
-    title: "Interview Scheduled",
-    body: "Your Technical interview with TechCorp Inc. is set for Mar 25, 2026 at 10:00 AM.",
-    actionUrl: "/applicant/interviews",
-    meta: {
-      companyName: "TechCorp Inc.",
-      interviewDate: "Mar 25, 2026 · 10:00 AM",
-      jobTitle: "Senior Software Engineer",
-    },
-  },
-  {
-    id: "2",
-    type: "feedback_submitted",
-    recipient: "applicant",
-    isRead: false,
-    createdAt: "2026-03-18T12:00:00Z",
-    title: "Interview Feedback Available",
-    body: "TechCorp Inc. submitted feedback for your Frontend Engineer interview. Next step: Offer.",
-    actionUrl: "/applicant/interviews",
-    meta: { companyName: "DesignStudio", nextStep: "Offer" },
-  },
-  {
-    id: "3",
-    type: "status_changed",
-    recipient: "applicant",
-    isRead: false,
-    createdAt: "2026-03-17T09:00:00Z",
-    title: "Application Status Updated",
-    body: "Your application for Full Stack Developer at InnovateLabs moved to Screening.",
-    actionUrl: "/applicant",
-    meta: {
-      jobTitle: "Full Stack Developer",
-      companyName: "InnovateLabs",
-      status: "Screening",
-    },
-  },
-  {
-    id: "4",
-    type: "offer_sent",
-    recipient: "applicant",
-    isRead: true,
-    createdAt: "2026-03-15T14:00:00Z",
-    title: "Offer Received! 🎉",
-    body: "TechCorp Inc. sent you an offer for Senior Software Engineer. Check your dashboard.",
-    actionUrl: "/applicant",
-    meta: {
-      jobTitle: "Senior Software Engineer",
-      companyName: "TechCorp Inc.",
-    },
-  },
-  {
-    id: "5",
-    type: "interview_rescheduled",
-    recipient: "applicant",
-    isRead: true,
-    createdAt: "2026-03-14T10:00:00Z",
-    title: "Interview Rescheduled",
-    body: "Your Culture Fit interview with CloudBase has been moved to Mar 29, 2026 at 3:30 PM.",
-    actionUrl: "/applicant/interviews",
-    meta: { companyName: "CloudBase", interviewDate: "Mar 29, 2026 · 3:30 PM" },
-  },
-  {
-    id: "6",
-    type: "interview_cancelled",
-    recipient: "applicant",
-    isRead: true,
-    createdAt: "2026-03-13T11:00:00Z",
-    title: "Interview Cancelled",
-    body: "DataFlow Systems cancelled your Final interview. The position has been filled.",
-    actionUrl: "/applicant/interviews",
-    meta: { companyName: "DataFlow Systems" },
-  },
-  {
-    id: "7",
-    type: "rejected",
-    recipient: "applicant",
-    isRead: true,
-    createdAt: "2026-03-10T09:00:00Z",
-    title: "Application Update",
-    body: "Thank you for applying to Backend Developer at DataFlow Systems. We've decided to move forward with other candidates.",
-    actionUrl: "/applicant",
-    meta: { jobTitle: "Backend Developer", companyName: "DataFlow Systems" },
-  },
-];
+// const DUMMY_APPLICANT: NotificationDTO[] = [
+//   {
+//     id: "1",
+//     type: "interview_scheduled",
+//     recipient: "applicant",
+//     isRead: false,
+//     createdAt: "2026-03-25T08:00:00Z",
+//     title: "Interview Scheduled",
+//     body: "Your Technical interview with TechCorp Inc. is set for Mar 25, 2026 at 10:00 AM.",
+//     actionUrl: "/applicant/interviews",
+//     meta: {
+//       companyName: "TechCorp Inc.",
+//       interviewDate: "Mar 25, 2026 · 10:00 AM",
+//       jobTitle: "Senior Software Engineer",
+//     },
+//   },
+//   {
+//     id: "2",
+//     type: "feedback_submitted",
+//     recipient: "applicant",
+//     isRead: false,
+//     createdAt: "2026-03-18T12:00:00Z",
+//     title: "Interview Feedback Available",
+//     body: "TechCorp Inc. submitted feedback for your Frontend Engineer interview. Next step: Offer.",
+//     actionUrl: "/applicant/interviews",
+//     meta: { companyName: "DesignStudio", nextStep: "Offer" },
+//   },
+//   {
+//     id: "3",
+//     type: "status_changed",
+//     recipient: "applicant",
+//     isRead: false,
+//     createdAt: "2026-03-17T09:00:00Z",
+//     title: "Application Status Updated",
+//     body: "Your application for Full Stack Developer at InnovateLabs moved to Screening.",
+//     actionUrl: "/applicant",
+//     meta: {
+//       jobTitle: "Full Stack Developer",
+//       companyName: "InnovateLabs",
+//       status: "Screening",
+//     },
+//   },
+//   {
+//     id: "4",
+//     type: "offer_sent",
+//     recipient: "applicant",
+//     isRead: true,
+//     createdAt: "2026-03-15T14:00:00Z",
+//     title: "Offer Received! 🎉",
+//     body: "TechCorp Inc. sent you an offer for Senior Software Engineer. Check your dashboard.",
+//     actionUrl: "/applicant",
+//     meta: {
+//       jobTitle: "Senior Software Engineer",
+//       companyName: "TechCorp Inc.",
+//     },
+//   },
+//   {
+//     id: "5",
+//     type: "interview_rescheduled",
+//     recipient: "applicant",
+//     isRead: true,
+//     createdAt: "2026-03-14T10:00:00Z",
+//     title: "Interview Rescheduled",
+//     body: "Your Culture Fit interview with CloudBase has been moved to Mar 29, 2026 at 3:30 PM.",
+//     actionUrl: "/applicant/interviews",
+//     meta: { companyName: "CloudBase", interviewDate: "Mar 29, 2026 · 3:30 PM" },
+//   },
+//   {
+//     id: "6",
+//     type: "interview_cancelled",
+//     recipient: "applicant",
+//     isRead: true,
+//     createdAt: "2026-03-13T11:00:00Z",
+//     title: "Interview Cancelled",
+//     body: "DataFlow Systems cancelled your Final interview. The position has been filled.",
+//     actionUrl: "/applicant/interviews",
+//     meta: { companyName: "DataFlow Systems" },
+//   },
+//   {
+//     id: "7",
+//     type: "rejected",
+//     recipient: "applicant",
+//     isRead: true,
+//     createdAt: "2026-03-10T09:00:00Z",
+//     title: "Application Update",
+//     body: "Thank you for applying to Backend Developer at DataFlow Systems. We've decided to move forward with other candidates.",
+//     actionUrl: "/applicant",
+//     meta: { jobTitle: "Backend Developer", companyName: "DataFlow Systems" },
+//   },
+// ];
 
-const DUMMY_COMPANY: NotificationDTO[] = [
-  {
-    id: "c1",
-    type: "new_applicant",
-    recipient: "company",
-    isRead: false,
-    createdAt: "2026-03-25T09:30:00Z",
-    title: "New Application Received",
-    body: "Alex Johnson applied for Senior Software Engineer. AI Match Score: 95%.",
-    actionUrl: "/company",
-    meta: {
-      candidateName: "Alex Johnson",
-      jobTitle: "Senior Software Engineer",
-    },
-  },
-  {
-    id: "c2",
-    type: "new_applicant",
-    recipient: "company",
-    isRead: false,
-    createdAt: "2026-03-25T07:00:00Z",
-    title: "New Application Received",
-    body: "Maria Garcia applied for Full Stack Developer. AI Match Score: 92%.",
-    actionUrl: "/company",
-    meta: { candidateName: "Maria Garcia", jobTitle: "Full Stack Developer" },
-  },
-  {
-    id: "c3",
-    type: "interview_scheduled",
-    recipient: "company",
-    isRead: false,
-    createdAt: "2026-03-24T15:00:00Z",
-    title: "Interview Confirmed",
-    body: "Interview with Alex Johnson for Senior Software Engineer is confirmed for Mar 25 at 10:00 AM.",
-    actionUrl: "/company/interviews",
-    meta: {
-      candidateName: "Alex Johnson",
-      interviewDate: "Mar 25, 2026 · 10:00 AM",
-    },
-  },
-  {
-    id: "c4",
-    type: "interview_cancelled",
-    recipient: "company",
-    isRead: true,
-    createdAt: "2026-03-22T10:00:00Z",
-    title: "Interview Cancelled by Applicant",
-    body: "Emily Brown cancelled her HR interview for UI/UX Developer.",
-    actionUrl: "/company/interviews",
-    meta: { candidateName: "Emily Brown", jobTitle: "UI/UX Developer" },
-  },
-  {
-    id: "c5",
-    type: "job_published",
-    recipient: "company",
-    isRead: true,
-    createdAt: "2026-03-20T08:00:00Z",
-    title: "Job Post Published",
-    body: "Senior Software Engineer is now live and visible to applicants.",
-    actionUrl: "/company/jobs",
-    meta: { jobTitle: "Senior Software Engineer" },
-  },
-  {
-    id: "c6",
-    type: "hired",
-    recipient: "company",
-    isRead: true,
-    createdAt: "2026-03-15T16:00:00Z",
-    title: "Candidate Hired",
-    body: "Thomas Moore has been successfully marked as Hired for DevOps Engineer.",
-    actionUrl: "/company",
-    meta: { candidateName: "Thomas Moore", jobTitle: "DevOps Engineer" },
-  },
-];
+// const DUMMY_COMPANY: NotificationDTO[] = [
+//   {
+//     id: "c1",
+//     type: "new_applicant",
+//     recipient: "company",
+//     isRead: false,
+//     createdAt: "2026-03-25T09:30:00Z",
+//     title: "New Application Received",
+//     body: "Alex Johnson applied for Senior Software Engineer. AI Match Score: 95%.",
+//     actionUrl: "/company",
+//     meta: {
+//       candidateName: "Alex Johnson",
+//       jobTitle: "Senior Software Engineer",
+//     },
+//   },
+//   {
+//     id: "c2",
+//     type: "new_applicant",
+//     recipient: "company",
+//     isRead: false,
+//     createdAt: "2026-03-25T07:00:00Z",
+//     title: "New Application Received",
+//     body: "Maria Garcia applied for Full Stack Developer. AI Match Score: 92%.",
+//     actionUrl: "/company",
+//     meta: { candidateName: "Maria Garcia", jobTitle: "Full Stack Developer" },
+//   },
+//   {
+//     id: "c3",
+//     type: "interview_scheduled",
+//     recipient: "company",
+//     isRead: false,
+//     createdAt: "2026-03-24T15:00:00Z",
+//     title: "Interview Confirmed",
+//     body: "Interview with Alex Johnson for Senior Software Engineer is confirmed for Mar 25 at 10:00 AM.",
+//     actionUrl: "/company/interviews",
+//     meta: {
+//       candidateName: "Alex Johnson",
+//       interviewDate: "Mar 25, 2026 · 10:00 AM",
+//     },
+//   },
+//   {
+//     id: "c4",
+//     type: "interview_cancelled",
+//     recipient: "company",
+//     isRead: true,
+//     createdAt: "2026-03-22T10:00:00Z",
+//     title: "Interview Cancelled by Applicant",
+//     body: "Emily Brown cancelled her HR interview for UI/UX Developer.",
+//     actionUrl: "/company/interviews",
+//     meta: { candidateName: "Emily Brown", jobTitle: "UI/UX Developer" },
+//   },
+//   {
+//     id: "c5",
+//     type: "job_published",
+//     recipient: "company",
+//     isRead: true,
+//     createdAt: "2026-03-20T08:00:00Z",
+//     title: "Job Post Published",
+//     body: "Senior Software Engineer is now live and visible to applicants.",
+//     actionUrl: "/company/jobs",
+//     meta: { jobTitle: "Senior Software Engineer" },
+//   },
+//   {
+//     id: "c6",
+//     type: "hired",
+//     recipient: "company",
+//     isRead: true,
+//     createdAt: "2026-03-15T16:00:00Z",
+//     title: "Candidate Hired",
+//     body: "Thomas Moore has been successfully marked as Hired for DevOps Engineer.",
+//     actionUrl: "/company",
+//     meta: { candidateName: "Thomas Moore", jobTitle: "DevOps Engineer" },
+//   },
+// ];
 
 /* ════════════════════════════════════════════════════════════
    HELPERS
@@ -500,10 +502,81 @@ export default function NotificationsPage({ role }: NotificationsPageProps) {
   const [activeTab, setActiveTab] = useState<FilterTab>("All");
 
   // Use role-specific dummy data (swap with API)
-  const [notifications, setNotifications] = useState<NotificationDTO[]>(
-    role === "applicant" ? DUMMY_APPLICANT : DUMMY_COMPANY,
-  );
+  const [notifications, setNotifications] = useState<NotificationDTO[]>([]);
 
+  const token = localStorage.getItem("token");
+
+  useSocket(token || "", (newNotification: any) => {
+    setNotifications((prev) => {
+      const exists = prev.find((n) => n.id === newNotification.id);
+      if (exists) return prev;
+
+      return [{ ...newNotification, isRead: false }, ...prev];
+    });
+  });
+  // const loadNotifications = async () => {
+  //   try {
+  //     const res = await api.get("/notification/all");
+
+  //     setNotifications(res.data.data); // حسب شكل API عندك
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  // 1. استبدل الـ loadNotifications بـ AbortController
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadNotifications = async () => {
+      try {
+        const res = await api.get("/notification/all", {
+          signal: controller.signal,
+        });
+        if (res.data?.data) {
+          setNotifications(res.data.data);
+        }
+      } catch (err: any) {
+        // Ignore abort errors (happens on unmount)
+        if (err?.code !== "ERR_CANCELED") {
+          console.error("Failed to load notifications:", err);
+          // يفضل الـ fallback data موجود
+        }
+      }
+    };
+
+    loadNotifications();
+
+    return () => controller.abort();
+  }, []);
+
+  // 2. markRead مع API call
+  // async function markRead(id: string) {
+  //   // Optimistic update أولًا
+  //   setNotifications((p) =>
+  //     p.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
+  //   );
+  //   try {
+  //     await api.patch(`/notification/${id}/read`);
+  //   } catch (err) {
+  //     console.error("Failed to mark read:", err);
+  //     // Rollback لو فشل
+  //     setNotifications((p) =>
+  //       p.map((n) => (n.id === id ? { ...n, isRead: false } : n)),
+  //     );
+  //   }
+  // }
+
+  // 3. markAllRead مع API call
+  // async function markAllRead() {
+  //   const previousState = notifications;
+  //   setNotifications((p) => p.map((n) => ({ ...n, isRead: true })));
+  //   try {
+  //     await api.patch("/notification/read-all");
+  //   } catch (err) {
+  //     console.error("Failed to mark all read:", err);
+  //     setNotifications(previousState); // Rollback
+  //   }
+  // }
   // useEffect(() => {
   //   const fn = () => setScrolled(window.scrollY > 16);
   //   window.addEventListener("scroll", fn);
@@ -550,10 +623,14 @@ export default function NotificationsPage({ role }: NotificationsPageProps) {
   /* ── Render ──────────────────────────────────────────────── */
   // const backPath = role === "applicant" ? "/applicant" : "/company";
 
+  const userRole = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user") || "").role
+    : null;
+
   return (
     <div className="nt-page">
       {/* HEADER */}
-      {role === "applicant" ? <ApplicantNavbar /> : <CompanyNavbar />}
+      {userRole === "Applicant" ? <ApplicantNavbar /> : <CompanyNavbar />}
 
       <main className="nt-main">
         {/* Page heading */}
@@ -581,7 +658,7 @@ export default function NotificationsPage({ role }: NotificationsPageProps) {
           {FILTER_TABS
             // hide "Applicants" tab for applicant role, hide "Feedback" for company
             .filter((t) => {
-              if (role === "applicant" && t.id === "new_applicant")
+              if (role === "Applicant" && t.id === "new_applicant")
                 return false;
               return true;
             })

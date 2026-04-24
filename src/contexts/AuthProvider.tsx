@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     setToken(data.accessToken);
     localStorage.setItem("token", data.accessToken);
-  };
+  };  
 
   /* ================= LOGOUT ================= */
 

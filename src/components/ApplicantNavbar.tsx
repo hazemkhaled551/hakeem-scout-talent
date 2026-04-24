@@ -57,7 +57,7 @@ export default function ApplicantNavbar() {
           <div className="navbar__right">
             <button
               className="navbar__notif-btn"
-              onClick={() => navigate("/applicant/notifications")}
+              onClick={() => navigate("/notification")}
               aria-label="Notifications"
             >
               <Bell size={16} />

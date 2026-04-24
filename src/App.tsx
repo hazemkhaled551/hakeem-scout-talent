@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthProvider";
+// import { AuthProvider } from "./contexts/AuthProvider";
 import { UserProvider } from "./contexts/UserContext";
 
 import { PublicRoutes } from "./routes/publicRoutes";
@@ -10,11 +10,16 @@ import NotificationsPage from "./pages/Public/Notifications/Notifications";
 import NotFound from "./pages/Public/Errors/NotFound";
 import Unauthorized from "./pages/Public/Errors/Unauthorized";
 import { AdminRoutes } from "./routes/adminRoutes";
+import { SocketProvider } from "./contexts/SocketProvider";
+import { Toaster } from "react-hot-toast";
+import { useAuth } from "./contexts/AuthContext";
 
 export default function App() {
+  const { token } = useAuth();
   return (
-    <AuthProvider>
-      <UserProvider>
+    <UserProvider>
+      <Toaster position="top-right" reverseOrder={false} />
+      <SocketProvider token={token || ""}>
         <BrowserRouter>
           <Routes>
             {PublicRoutes()}
@@ -24,13 +29,13 @@ export default function App() {
             {AdminRoutes()}
             <Route
               path="/notification"
-              element={<NotificationsPage role="company" />}
+              element={<NotificationsPage role="Company" />}
             />
             <Route path="unauthorized" element={<Unauthorized />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-      </UserProvider>
-    </AuthProvider>
+      </SocketProvider>
+    </UserProvider>
   );
 }

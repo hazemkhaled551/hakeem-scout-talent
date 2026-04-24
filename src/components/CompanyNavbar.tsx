@@ -60,7 +60,7 @@ export default function CompanyNavbar() {
           <div className="navbar__right">
             <button
               className="navbar__notif-btn"
-              onClick={() => navigate("/company/notifications")}
+              onClick={() => navigate("/notification")}
               aria-label="Notifications"
             >
               <Bell size={16} />
