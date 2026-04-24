@@ -1,15 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { useState } from "react";
+import { SocketContext } from "./SocketContext";
 import useSocket from "../hooks/useSocket";
-
-interface SocketContextType {
-  notifications: any[];
-}
-
-const SocketContext = createContext<SocketContextType>({
-  notifications: [],
-});
-
-export const useSocketContext = () => useContext(SocketContext);
 
 export const SocketProvider = ({
   children,
@@ -21,7 +12,6 @@ export const SocketProvider = ({
   const [notifications, setNotifications] = useState<any[]>([]);
 
   useSocket(token, (data) => {
-    // هنا بقى بتستقبل النوتيفيكيشن
     setNotifications((prev) => [data, ...prev]);
   });
 
