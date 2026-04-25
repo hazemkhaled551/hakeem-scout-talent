@@ -16,6 +16,7 @@ import AdminTable, {
   UserCell,
   type Column,
 } from "../../components/Admintable";
+import { getDashboardData } from "../../services/AdminDashboard/dashboard";
 
 /* ── Types ── */
 interface RecentUser {
@@ -36,83 +37,83 @@ interface RecentJob {
 }
 
 /* ── Dummy ── */
-const DUMMY_USERS: RecentUser[] = [
-  {
-    id: "1",
-    name: "Sara Mostafa",
-    email: "sara@example.com",
-    role: "Applicant",
-    joinedAt: "Apr 17, 2026",
-    status: "Active",
-  },
-  {
-    id: "2",
-    name: "TechCorp Inc.",
-    email: "hr@techcorp.com",
-    role: "Company",
-    joinedAt: "Apr 16, 2026",
-    status: "Active",
-  },
-  {
-    id: "3",
-    name: "Ahmed Nour",
-    email: "ahmed@example.com",
-    role: "Applicant",
-    joinedAt: "Apr 15, 2026",
-    status: "Pending",
-  },
-  {
-    id: "4",
-    name: "InnovateLabs",
-    email: "jobs@innov.io",
-    role: "Company",
-    joinedAt: "Apr 14, 2026",
-    status: "Active",
-  },
-  {
-    id: "5",
-    name: "Mona Hassan",
-    email: "mona@example.com",
-    role: "Applicant",
-    joinedAt: "Apr 14, 2026",
-    status: "Inactive",
-  },
-];
+// const DUMMY_USERS: RecentUser[] = [
+//   {
+//     id: "1",
+//     name: "Sara Mostafa",
+//     email: "sara@example.com",
+//     role: "Applicant",
+//     joinedAt: "Apr 17, 2026",
+//     status: "Active",
+//   },
+//   {
+//     id: "2",
+//     name: "TechCorp Inc.",
+//     email: "hr@techcorp.com",
+//     role: "Company",
+//     joinedAt: "Apr 16, 2026",
+//     status: "Active",
+//   },
+//   {
+//     id: "3",
+//     name: "Ahmed Nour",
+//     email: "ahmed@example.com",
+//     role: "Applicant",
+//     joinedAt: "Apr 15, 2026",
+//     status: "Pending",
+//   },
+//   {
+//     id: "4",
+//     name: "InnovateLabs",
+//     email: "jobs@innov.io",
+//     role: "Company",
+//     joinedAt: "Apr 14, 2026",
+//     status: "Active",
+//   },
+//   {
+//     id: "5",
+//     name: "Mona Hassan",
+//     email: "mona@example.com",
+//     role: "Applicant",
+//     joinedAt: "Apr 14, 2026",
+//     status: "Inactive",
+//   },
+// ];
 
-const DUMMY_JOBS: RecentJob[] = [
-  {
-    id: "1",
-    title: "Senior Backend Engineer",
-    company: "TechCorp Inc.",
-    status: "Published",
-    apps: 24,
-    postedAt: "Apr 16, 2026",
-  },
-  {
-    id: "2",
-    title: "Frontend Developer",
-    company: "DesignStudio",
-    status: "Published",
-    apps: 18,
-    postedAt: "Apr 15, 2026",
-  },
-  {
-    id: "3",
-    title: "DevOps Engineer",
-    company: "CloudBase",
-    status: "Closed",
-    apps: 31,
-    postedAt: "Apr 12, 2026",
-  },
-  {
-    id: "4",
-    title: "UI/UX Designer",
-    company: "MediaGroup",
-    status: "Draft",
-    apps: 0,
-    postedAt: "Apr 11, 2026",
-  },
-];
+// const DUMMY_JOBS: RecentJob[] = [
+//   {
+//     id: "1",
+//     title: "Senior Backend Engineer",
+//     company: "TechCorp Inc.",
+//     status: "Published",
+//     apps: 24,
+//     postedAt: "Apr 16, 2026",
+//   },
+//   {
+//     id: "2",
+//     title: "Frontend Developer",
+//     company: "DesignStudio",
+//     status: "Published",
+//     apps: 18,
+//     postedAt: "Apr 15, 2026",
+//   },
+//   {
+//     id: "3",
+//     title: "DevOps Engineer",
+//     company: "CloudBase",
+//     status: "Closed",
+//     apps: 31,
+//     postedAt: "Apr 12, 2026",
+//   },
+//   {
+//     id: "4",
+//     title: "UI/UX Designer",
+//     company: "MediaGroup",
+//     status: "Draft",
+//     apps: 0,
+//     postedAt: "Apr 11, 2026",
+//   },
+// ];
 
 const STATUS_COLOR: Record<string, "green" | "amber" | "red" | "gray"> = {
   Active: "green",
@@ -199,10 +200,85 @@ const JOB_COLS: Column<RecentJob>[] = [
 /* ════════════════════════════════════════════════════════════ */
 export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<RecentUser[]>([]);
+  const [jobs, setJobs] = useState<RecentJob[]>([]);
+  const [stats, setStats] = useState<any[]>([]);
 
+  function mapUsers(apiUsers: any[]): RecentUser[] {
+    return apiUsers.map((u) => ({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      role: u.role,
+      joinedAt: new Date(u.createAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      status: u.status === "Online" ? "Active" : "Inactive",
+    }));
+  }
+  function mapJobs(apiJobs: any[]): RecentJob[] {
+    return apiJobs.map((j) => ({
+      id: j.id,
+      title: j.title,
+      company: j.company?.user?.name || "Unknown",
+      status: j.status,
+      apps: 0, // مفيش apps في الـ API
+      postedAt: new Date(j.createdAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+    }));
+  }
+
+  function mapStats(status: any) {
+    return [
+      {
+        label: "Total Users",
+        value: status.totalUser,
+        hint: "All users",
+        icon: <Users size={16} />,
+        color: "indigo",
+      },
+      {
+        label: "Active Jobs",
+        value: status.activeJobs,
+        hint: "Published",
+        icon: <Briefcase size={16} />,
+        color: "green",
+      },
+      {
+        label: "Revenue (MRR)",
+        value: `$${status.revenueMRR}`,
+        hint: "This month",
+        icon: <CreditCard size={16} />,
+        color: "cyan",
+      },
+      {
+        label: "Offers Sent",
+        value: status.offersSent,
+        hint: "This month",
+        icon: <TrendingUp size={16} />,
+        color: "amber",
+      },
+    ];
+  }
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(t);
+    async function load() {
+      const res = await getDashboardData();
+      console.log(res);
+      
+
+      setUsers(mapUsers(res.data.data.recentUsers));
+      setJobs(mapJobs(res.data.data.recentJobs));
+      setStats(mapStats(res.data.data.status));
+
+      setLoading(false);
+    }
+
+    load();
   }, []);
 
   return (
@@ -212,35 +288,35 @@ export default function AdminDashboard() {
         {[
           {
             label: "Total Users",
-            value: "4,821",
+            value: stats[0]?.value || "0",
             hint: "+12% this month",
             icon: <Users size={16} />,
             color: "indigo" as const,
-            delta: { value: "12%", up: true },
+            // delta: { value: "12%", up: true },
           },
           {
             label: "Active Jobs",
-            value: "138",
+            value: stats[1]?.value || "0",
             hint: "Published",
             icon: <Briefcase size={16} />,
             color: "green" as const,
-            delta: { value: "8%", up: true },
+            // delta: { value: "8%", up: true },
           },
           {
             label: "Revenue (MRR)",
-            value: "$8,240",
+            value: stats[2]?.value || "$0",
             hint: "This month",
             icon: <CreditCard size={16} />,
             color: "cyan" as const,
-            delta: { value: "22%", up: true },
+            // delta: { value: "22%", up: true },
           },
           {
             label: "Offers Sent",
-            value: "312",
+            value: stats[3]?.value || "0",
             hint: "This month",
             icon: <TrendingUp size={16} />,
             color: "amber" as const,
-            delta: { value: "5%", up: false },
+            // delta: { value: "5%", up: false },
           },
         ].map((s, i) => (
           <div key={i} className={`col-6 col-xl-3 adm-au adm-d${i + 1}`}>
@@ -337,7 +413,7 @@ export default function AdminDashboard() {
           <AdminTable<RecentUser>
             title="Recent Users"
             columns={USER_COLS}
-            data={DUMMY_USERS}
+            data={users}
             loading={loading}
             emptyTitle="No users yet"
           />
@@ -346,7 +422,7 @@ export default function AdminDashboard() {
           <AdminTable<RecentJob>
             title="Recent Jobs"
             columns={JOB_COLS}
-            data={DUMMY_JOBS}
+            data={jobs}
             loading={loading}
             emptyTitle="No jobs yet"
           />

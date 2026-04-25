@@ -115,6 +115,7 @@ export default function AuthPage() {
       );
       if (user?.role === "Applicant") navigate("/dashboard");
       else if (user?.role === "Company") navigate("/company/dashboard");
+      else if (user?.role === "Admin") navigate("/admin");
     } catch (error: any) {
       setAlert({
         type: "error",

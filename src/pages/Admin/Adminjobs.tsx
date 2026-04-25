@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState,  useEffect } from "react";
 import {
   Briefcase,
   Search,
@@ -10,10 +10,9 @@ import {
   DollarSign,
 } from "lucide-react";
 import AdminLayout from "../../layouts/Adminlayout";
-import AdminTable, {
-  Badge,
-  type Column,
-} from "../../components/Admintable";
+import AdminTable, { Badge, type Column } from "../../components/Admintable";
+
+import { getAllJobs } from "../../services/AdminDashboard/jobs";
 
 /* ════════════════════════════════════════════════════════════
    TYPES & DUMMY
@@ -33,120 +32,7 @@ interface Job {
   deadline: string;
 }
 
-const DUMMY: Job[] = [
-  {
-    id: "1",
-    title: "Senior Backend Engineer",
-    company: "TechCorp Inc.",
-    location: "Cairo",
-    type: "Full_Time",
-    workMode: "Hybrid",
-    status: "Published",
-    applicants: 24,
-    hired: 2,
-    salary: "$8k–$12k",
-    postedAt: "Apr 16",
-    deadline: "May 30, 2026",
-  },
-  {
-    id: "2",
-    title: "Frontend Developer",
-    company: "DesignStudio",
-    location: "Alexandria",
-    type: "Full_Time",
-    workMode: "Remote",
-    status: "Published",
-    applicants: 18,
-    hired: 1,
-    salary: "$5k–$8k",
-    postedAt: "Apr 15",
-    deadline: "May 15, 2026",
-  },
-  {
-    id: "3",
-    title: "DevOps Engineer",
-    company: "CloudBase",
-    location: "Dubai",
-    type: "Full_Time",
-    workMode: "Onsite",
-    status: "Closed",
-    applicants: 31,
-    hired: 3,
-    salary: "$10k–$15k",
-    postedAt: "Apr 12",
-    deadline: "Apr 30, 2026",
-  },
-  {
-    id: "4",
-    title: "UI/UX Designer",
-    company: "MediaGroup",
-    location: "Giza",
-    type: "Part_Time",
-    workMode: "Hybrid",
-    status: "Draft",
-    applicants: 0,
-    hired: 0,
-    salary: "$3k–$5k",
-    postedAt: "Apr 11",
-    deadline: "Jun 1, 2026",
-  },
-  {
-    id: "5",
-    title: "Data Scientist",
-    company: "DataFlow Systems",
-    location: "Remote",
-    type: "Full_Time",
-    workMode: "Remote",
-    status: "Published",
-    applicants: 42,
-    hired: 1,
-    salary: "$9k–$13k",
-    postedAt: "Apr 10",
-    deadline: "May 20, 2026",
-  },
-  {
-    id: "6",
-    title: "Mobile Developer",
-    company: "MobileFirst",
-    location: "Cairo",
-    type: "Full_Time",
-    workMode: "Hybrid",
-    status: "Paused",
-    applicants: 9,
-    hired: 0,
-    salary: "$6k–$9k",
-    postedAt: "Apr 8",
-    deadline: "May 10, 2026",
-  },
-  {
-    id: "7",
-    title: "Product Manager",
-    company: "InnovateLabs",
-    location: "Remote",
-    type: "Full_Time",
-    workMode: "Remote",
-    status: "Filled",
-    applicants: 57,
-    hired: 1,
-    salary: "$8k–$11k",
-    postedAt: "Mar 20",
-    deadline: "Apr 20, 2026",
-  },
-  {
-    id: "8",
-    title: "QA Engineer",
-    company: "TechCorp Inc.",
-    location: "Cairo",
-    type: "Full_Time",
-    workMode: "Onsite",
-    status: "Expired",
-    applicants: 14,
-    hired: 0,
-    salary: "$4k–$6k",
-    postedAt: "Mar 10",
-    deadline: "Apr 10, 2026",
-  },
-];
+
 
 const STATUS_COLOR: Record<
   string,
@@ -165,27 +51,70 @@ const fmt = (t: string) => t.replace("_", " ");
 /* ════════════════════════════════════════════════════════════
    PAGE
 ════════════════════════════════════════════════════════════ */
+
+const mapJob = (j: any): Job => ({
+  id: j.id,
+  title: j.title,
+  company: j.company?.id || "Unknown Company", // مفيش name فـ API
+  location: j.location,
+  type: j.type,
+  workMode: j.workMode,
+  status: j.status,
+  applicants: j.applicationsCount,
+  hired: j.acceptedCount,
+  salary: `$${Number(j.minSalary) / 1000}k–$${Number(j.maxSalary) / 1000}k`,
+  postedAt: new Date(j.createdAt).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  }),
+  deadline: new Date(j.deadline).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }),
+});
 export default function AdminJobs() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 6;
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [total, setTotal] = useState(0);
+  const [stats, setStats] = useState<any>({});
 
-  const filtered = useMemo(
-    () =>
-      DUMMY.filter((j) => {
-        const q = search.toLowerCase();
-        return (
-          (!q ||
-            j.title.toLowerCase().includes(q) ||
-            j.company.toLowerCase().includes(q)) &&
-          (!statusFilter || j.status === statusFilter)
-        );
-      }),
-    [search, statusFilter],
-  );
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const res = await getAllJobs(page, PAGE_SIZE);
 
-  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+        const mapped = res.data.data.jobs.map(mapJob);
+
+        setJobs(mapped);
+        setTotal(res.data.data.pagination.total);
+        setStats(res.data.data.status);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchJobs();
+  }, [page]);
+
+  // const filtered = useMemo(
+  //   () =>
+  //     DUMMY.filter((j) => {
+  //       const q = search.toLowerCase();
+  //       return (
+  //         (!q ||
+  //           j.title.toLowerCase().includes(q) ||
+  //           j.company.toLowerCase().includes(q)) &&
+  //         (!statusFilter || j.status === statusFilter)
+  //       );
+  //     }),
+  //   [search, statusFilter],
+  // );
+
+  // const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const COLS: Column<Job>[] = [
     {
@@ -325,20 +254,20 @@ export default function AdminJobs() {
       {/* Stats */}
       <div className="row g-3 mb-4">
         {[
-          { label: "Total Jobs", value: DUMMY.length, color: "indigo" },
+          { label: "Total Jobs", value: stats.totalJobs, color: "indigo" },
           {
             label: "Published",
-            value: DUMMY.filter((j) => j.status === "Published").length,
+            value: stats.published,
             color: "green",
           },
           {
             label: "Total Apps",
-            value: DUMMY.reduce((a, j) => a + j.applicants, 0),
+            value: stats.totalApplications,
             color: "cyan",
           },
           {
             label: "Hired",
-            value: DUMMY.reduce((a, j) => a + j.hired, 0),
+            value: stats.totalHired,
             color: "amber",
           },
         ].map((s, i) => (
@@ -358,12 +287,10 @@ export default function AdminJobs() {
         <AdminTable<Job>
           title="All Jobs"
           columns={COLS}
-          data={paged}
-          emptyTitle="No jobs found"
-          emptyIcon={<Briefcase size={22} />}
+          data={jobs}
           page={page}
           pageSize={PAGE_SIZE}
-          total={filtered.length}
+          total={total} // من API مش filtered.length
           onPageChange={setPage}
           searchSlot={
             <div className="d-flex align-items-center gap-2">

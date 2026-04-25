@@ -151,21 +151,21 @@ h4 {
   overflow-y: auto;
 }
 /* scrollbar على السايدبار نفسه */
-.adm-sidebar::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 6px;
 }
 
-.adm-sidebar::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.adm-sidebar::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 10px;
   transition: background 0.2s;
 }
 
-.adm-sidebar::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.35);
 }
 

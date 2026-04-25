@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Users, Search, Eye, Ban, CheckCircle } from "lucide-react";
 import AdminLayout from "../../layouts/Adminlayout";
 import AdminTable, {
@@ -7,125 +7,172 @@ import AdminTable, {
   type Column,
 } from "../../components/Admintable";
 
+import {
+  getAllUsers,
+  // getUserDetails,
+  banUser,
+  unbanUser,
+} from "../../services/AdminDashboard/users";
+
 interface User {
   id: string;
   name: string;
   email: string;
   role: "Applicant" | "Company";
-  status: "Active" | "Pending" | "Suspended";
+  status: "Active" | "Pending" | "Suspended" | "Banned";
   verified: boolean;
   joinedAt: string;
   plan?: string;
 }
 
-const DUMMY: User[] = [
-  {
-    id: "1",
-    name: "Sara Mostafa",
-    email: "sara@example.com",
-    role: "Applicant",
-    status: "Active",
-    verified: true,
-    joinedAt: "Apr 17, 2026",
-  },
-  {
-    id: "2",
-    name: "TechCorp Inc.",
-    email: "hr@techcorp.com",
-    role: "Company",
-    status: "Active",
-    verified: true,
-    joinedAt: "Apr 16, 2026",
-    plan: "Pro",
-  },
-  {
-    id: "3",
-    name: "Ahmed Nour",
-    email: "ahmed@example.com",
-    role: "Applicant",
-    status: "Pending",
-    verified: false,
-    joinedAt: "Apr 15, 2026",
-  },
-  {
-    id: "4",
-    name: "InnovateLabs",
-    email: "jobs@innov.io",
-    role: "Company",
-    status: "Active",
-    verified: true,
-    joinedAt: "Apr 14, 2026",
-    plan: "Free",
-  },
-  {
-    id: "5",
-    name: "Mona Hassan",
-    email: "mona@example.com",
-    role: "Applicant",
-    status: "Suspended",
-    verified: true,
-    joinedAt: "Apr 13, 2026",
-  },
-  {
-    id: "6",
-    name: "CloudBase",
-    email: "team@cloudbase.com",
-    role: "Company",
-    status: "Active",
-    verified: true,
-    joinedAt: "Apr 12, 2026",
-    plan: "Enterprise",
-  },
-  {
-    id: "7",
-    name: "Omar Fathy",
-    email: "omar@example.com",
-    role: "Applicant",
-    status: "Active",
-    verified: true,
-    joinedAt: "Apr 11, 2026",
-  },
-  {
-    id: "8",
-    name: "MediaGroup",
-    email: "hr@media.com",
-    role: "Company",
-    status: "Pending",
-    verified: false,
-    joinedAt: "Apr 10, 2026",
-    plan: "Free",
-  },
-];
+// const DUMMY: User[] = [
+//   {
+//     id: "1",
+//     name: "Sara Mostafa",
+//     email: "sara@example.com",
+//     role: "Applicant",
+//     status: "Active",
+//     verified: true,
+//     joinedAt: "Apr 17, 2026",
+//   },
+//   {
+//     id: "2",
+//     name: "TechCorp Inc.",
+//     email: "hr@techcorp.com",
+//     role: "Company",
+//     status: "Active",
+//     verified: true,
+//     joinedAt: "Apr 16, 2026",
+//     plan: "Pro",
+//   },
+//   {
+//     id: "3",
+//     name: "Ahmed Nour",
+//     email: "ahmed@example.com",
+//     role: "Applicant",
+//     status: "Pending",
+//     verified: false,
+//     joinedAt: "Apr 15, 2026",
+//   },
+//   {
+//     id: "4",
+//     name: "InnovateLabs",
+//     email: "jobs@innov.io",
+//     role: "Company",
+//     status: "Active",
+//     verified: true,
+//     joinedAt: "Apr 14, 2026",
+//     plan: "Free",
+//   },
+//   {
+//     id: "5",
+//     name: "Mona Hassan",
+//     email: "mona@example.com",
+//     role: "Applicant",
+//     status: "Suspended",
+//     verified: true,
+//     joinedAt: "Apr 13, 2026",
+//   },
+//   {
+//     id: "6",
+//     name: "CloudBase",
+//     email: "team@cloudbase.com",
+//     role: "Company",
+//     status: "Active",
+//     verified: true,
+//     joinedAt: "Apr 12, 2026",
+//     plan: "Enterprise",
+//   },
+//   {
+//     id: "7",
+//     name: "Omar Fathy",
+//     email: "omar@example.com",
+//     role: "Applicant",
+//     status: "Active",
+//     verified: true,
+//     joinedAt: "Apr 11, 2026",
+//   },
+//   {
+//     id: "8",
+//     name: "MediaGroup",
+//     email: "hr@media.com",
+//     role: "Company",
+//     status: "Pending",
+//     verified: false,
+//     joinedAt: "Apr 10, 2026",
+//     plan: "Free",
+//   },
+// ];
 
 const STATUS_COLOR: Record<string, "green" | "amber" | "red"> = {
-  Active: "green",
-  Pending: "amber",
+  Online: "green",
+  Offline: "amber",
   Suspended: "red",
 };
+
+function mapUsers(apiUsers: any[]): User[] {
+  return apiUsers.map((u) => ({
+    id: u.id,
+    name: u.name,
+    email: u.email,
+    role: u.role,
+
+    status: u.status,
+
+    verified: u.isEmailVerified,
+
+    joinedAt: new Date(u.createAt).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }),
+
+    plan: u.role === "Company" ? "Free" : undefined, // مؤقت لحد ما API يبقى فيه plans
+  }));
+}
 
 export default function AdminUsers() {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const PAGE_SIZE = 6;
 
-  const filtered = useMemo(
-    () =>
-      DUMMY.filter((u) => {
-        const q = search.toLowerCase();
-        return (
-          (!q ||
-            u.name.toLowerCase().includes(q) ||
-            u.email.toLowerCase().includes(q)) &&
-          (!roleFilter || u.role === roleFilter) &&
-          (!statusFilter || u.status === statusFilter)
-        );
-      }),
-    [search, roleFilter, statusFilter],
-  );
+  const [users, setUsers] = useState<User[]>([]);
+  const [stats, setStats] = useState<any>({});
+  const [loading, setLoading] = useState(true);
 
-  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  useEffect(() => {
+    async function loadUsers() {
+      setLoading(true);
+
+      const res = await getAllUsers(page, PAGE_SIZE);
+
+      const data = res.data.data;
+
+      setUsers(mapUsers(data.users));
+      setStats(data.status);
+      setTotal(data.pagination.total);
+
+      setLoading(false);
+    }
+
+    loadUsers();
+  }, [page, search, roleFilter, statusFilter]);
+
+  async function handleBan(userId: string) {
+    await banUser(userId);
+    setUsers((prev) =>
+      prev.map((u) => (u.id === userId ? { ...u, status: "Suspended" } : u)),
+    );
+  }
+  async function handleUnban(userId: string) {
+    await unbanUser(userId);
+    setUsers((prev) =>
+      prev.map((u) => (u.id === userId ? { ...u, status: "Active" } : u)),
+    );
+  }
 
   const COLS: Column<User>[] = [
     {
@@ -197,11 +244,17 @@ export default function AdminUsers() {
             <Eye size={12} /> View
           </button>
           {r.status !== "Suspended" ? (
-            <button className="adm-row-btn adm-row-btn--danger">
+            <button
+              onClick={() => handleBan(r.id)}
+              className="adm-row-btn adm-row-btn--danger"
+            >
               <Ban size={12} /> Ban
             </button>
           ) : (
-            <button className="adm-row-btn adm-row-btn--success">
+            <button
+              onClick={() => handleUnban(r.id)}
+              className="adm-row-btn adm-row-btn--success"
+            >
               <CheckCircle size={12} /> Unban
             </button>
           )}
@@ -215,20 +268,20 @@ export default function AdminUsers() {
       {/* Stats */}
       <div className="row g-3 mb-4">
         {[
-          { label: "Total Users", value: DUMMY.length, color: "indigo" },
+          { label: "Total Users", value: stats.totalUser, color: "indigo" },
           {
             label: "Applicants",
-            value: DUMMY.filter((u) => u.role === "Applicant").length,
+            value: stats.applicants,
             color: "indigo",
           },
           {
             label: "Companies",
-            value: DUMMY.filter((u) => u.role === "Company").length,
+            value: stats.companys,
             color: "cyan",
           },
           {
             label: "Suspended",
-            value: DUMMY.filter((u) => u.status === "Suspended").length,
+            value: stats.ban,
             color: "red",
           },
         ].map((s, i) => (
@@ -248,12 +301,13 @@ export default function AdminUsers() {
         <AdminTable<User>
           title="All Users"
           columns={COLS}
-          data={paged}
+          data={users}
+          loading={loading}
           emptyTitle="No users found"
           emptyIcon={<Users size={22} />}
           page={page}
           pageSize={PAGE_SIZE}
-          total={filtered.length}
+          total={total}
           onPageChange={setPage}
           searchSlot={
             <div className="d-flex align-items-center gap-2">
