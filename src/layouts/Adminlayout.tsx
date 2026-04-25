@@ -24,6 +24,8 @@ const NAV_GROUPS = [
     label: "Main",
     items: [
       { label: "Dashboard", icon: <LayoutDashboard size={16} />, to: "/admin" },
+      { label: "Admins", icon: <LayoutDashboard size={16} />, to: "/admin/admins" },
+      { label: "Amin Roles", icon: <LayoutDashboard size={16} />, to: "/admin/roles" },
       { label: "Users", icon: <Users size={16} />, to: "/admin/users" },
       {
         label: "Companies",
@@ -36,6 +38,8 @@ const NAV_GROUPS = [
   {
     label: "Finance",
     items: [
+
+      { label: "Subscriptions", icon: <CreditCard size={16} />, to: "/admin/subscriptions" },
       { label: "Plans", icon: <CreditCard size={16} />, to: "/admin/plans" },
       {
         label: "Payments",

@@ -106,7 +106,7 @@ const STATUS_COLOR: Record<string, "green" | "amber" | "red"> = {
   Cancelled: "red",
 };
 
-export default function AdminPlans() {
+export default function AdminSubscriptions() {
   const [search, setSearch] = useState("");
   const [planFilter, setPlanFilter] = useState("");
   const [page, setPage] = useState(1);

@@ -148,7 +148,27 @@ h4 {
     width 0.25s ease,
     transform 0.25s ease;
   overflow: hidden;
+  overflow-y: auto;
 }
+/* scrollbar على السايدبار نفسه */
+.adm-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.adm-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.adm-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.adm-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
 .adm-sidebar.collapsed {
   width: var(--sb-w-sm);
 }
