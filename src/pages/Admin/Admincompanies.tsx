@@ -6,7 +6,7 @@ import {
   Ban,
   CheckCircle,
   MapPin,
-  Plus,
+  // Plus,
 } from "lucide-react";
 import AdminLayout from "../../layouts/Adminlayout";
 import AdminTable, {
@@ -320,11 +320,6 @@ export default function AdminCompanies() {
           pageSize={PAGE_SIZE}
           total={filtered.length}
           onPageChange={setPage}
-          actions={
-            <button className="adm-btn adm-btn--primary adm-btn--sm">
-              <Plus size={13} /> Add Company
-            </button>
-          }
           searchSlot={
             <div className="d-flex align-items-center gap-2 flex-wrap">
               <div className="adm-search-wrap">
