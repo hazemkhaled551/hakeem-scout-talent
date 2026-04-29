@@ -33,7 +33,7 @@ import {
   interviewCandidate,
   getCandidateAnalysis,
 } from "../../../services/candidateService";
-import CompanyNavbar from "../../../components/CompanyNavbar";
+
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -435,7 +435,7 @@ export default function CandidateEvaluation() {
   if (analysisLoading) {
     return (
       <div className="ce-page">
-        <CompanyNavbar />
+      
         <main className="ce-main">
           <div className="ce-loading-state">
             <Loader2 size={32} className="ce-loading-spin" />
@@ -450,7 +450,7 @@ export default function CandidateEvaluation() {
   if (analysisError) {
     return (
       <div className="ce-page">
-        <CompanyNavbar />
+       
         <main className="ce-main">
           <div className="ce-error-state">
             <AlertCircle size={32} style={{ color: "var(--danger)" }} />
@@ -464,8 +464,7 @@ export default function CandidateEvaluation() {
   /* ── Main render ─────────────────────────────────────── */
   return (
     <div className="ce-page">
-      <CompanyNavbar />
-
+      
       <main className="ce-main">
         {/* ── Hero ── */}
         <div className="ce-hero mb-4">

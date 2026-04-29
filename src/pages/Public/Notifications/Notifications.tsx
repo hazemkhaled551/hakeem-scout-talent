@@ -15,9 +15,9 @@ import {
 } from "lucide-react";
 import "./Notifications.css";
 import ApplicantNavbar from "../../../components/ApplicantNavbar";
-import CompanyNavbar from "../../../components/CompanyNavbar";
 import api from "../../../utils/api";
 import useSocket from "../../../hooks/useSocket";
+import CompanyNavbar from "../../../components/CompanyNavbar";
 
 /* ════════════════════════════════════════════════════════════
    TYPES

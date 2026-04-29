@@ -245,7 +245,6 @@ export default function ApplicantInterviews() {
   return (
     <div className="ai-page">
       {/* HEADER */}
-   
 
       <main className="ai-main">
         <div className="mb-4 au">
@@ -489,7 +488,7 @@ export default function ApplicantInterviews() {
               >
                 <div className="d-flex align-items-start gap-3 mb-3">
                   <div className="ai-company-logo">
-                    {companyIntiatal(iv?.application?.job?.company?.name)}
+                    {companyIntiatal(iv?.application?.job?.company?.user?.name)}
                   </div>
                   <div className="flex-1 min-width-0">
                     <div className="d-flex align-items-start justify-content-between gap-2 flex-wrap mb-1">
@@ -499,7 +498,7 @@ export default function ApplicantInterviews() {
                         </div>
                         <div className="ai-card-company d-flex align-items-center gap-1">
                           <Building2 size={12} />{" "}
-                          {iv?.application?.job?.company?.name}
+                          {iv?.application?.job?.company?.user?.name}
                         </div>
                       </div>
                       <div className="d-flex align-items-center gap-2 flex-wrap">
@@ -534,10 +533,10 @@ export default function ApplicantInterviews() {
                           {iv.location}
                         </span>
                       )}
-                      <span className="ai-meta-item">
+                      {/* <span className="ai-meta-item">
                         <User size={12} />
                         {iv.interviewerName}
-                      </span>
+                      </span> */}
                     </div>
                     {iv.notes && (
                       <p
@@ -833,7 +832,11 @@ export default function ApplicantInterviews() {
               }}
             >
               <div className="d-flex align-items-center gap-3 mb-2">
-                <div className="ai-company-logo">{selected.companyInitial}</div>
+                <div className="ai-company-logo">
+                  {companyIntiatal(
+                    selected.application?.job?.company?.user?.name,
+                  )}
+                </div>
                 <div>
                   <div
                     style={{
@@ -842,17 +845,17 @@ export default function ApplicantInterviews() {
                       fontSize: "1rem",
                     }}
                   >
-                    {selected.jobTitle}
+                    {selected.application.job.title}
                   </div>
                   <div style={{ fontSize: ".82rem", color: "var(--muted)" }}>
-                    {selected?.company?.name}
+                    {selected?.application?.job?.company?.user?.name}
                   </div>
                 </div>
               </div>
               <div className="d-flex flex-wrap gap-2">
                 <span className="ai-type-pill">
-                  {typeIcon(selected.interviewType)}
-                  {selected.interviewType}
+                  {typeIcon(selected.type)}
+                  {selected.type}
                 </span>
                 <span className={`ai-badge ${badgeClass(selected.status)}`}>
                   <span className="ai-badge-dot" />
@@ -869,14 +872,14 @@ export default function ApplicantInterviews() {
                 },
                 {
                   label: "Duration",
-                  val: `${selected.durationMins} minutes`,
+                  val: `${selected.durationMin} minutes`,
                   icon: <Clock size={13} />,
                 },
-                {
-                  label: "Interviewer",
-                  val: selected.interviewerName,
-                  icon: <User size={13} />,
-                },
+                // {
+                //   label: "Interviewer",
+                //   val: selected.interviewerName,
+                //   icon: <User size={13} />,
+                // },
                 ...(selected.meetingLink
                   ? [
                       {
@@ -999,7 +1002,8 @@ export default function ApplicantInterviews() {
                   marginBottom: ".4rem",
                 }}
               >
-                {selected.jobTitle} · {selected.company.name}
+                {selected.application?.job?.title} ·{" "}
+                {selected.application?.job?.company?.user?.name}
               </div>
               <div
                 style={{
@@ -1287,10 +1291,10 @@ export default function ApplicantInterviews() {
                       fontSize: "1rem",
                     }}
                   >
-                    {selected.jobTitle}
+                    {selected.application?.job?.title}
                   </div>
                   <div style={{ fontSize: ".82rem", color: "var(--muted)" }}>
-                    {selected.company.name}
+                    {selected.application?.job?.company?.user?.name}
                   </div>
                 </div>
               </div>

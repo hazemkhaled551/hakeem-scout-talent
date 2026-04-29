@@ -39,7 +39,6 @@ import {
   fmtTime,
   formatDateWithTimezone,
 } from "../../../utils/format";
-import CompanyNavbar from "../../../components/CompanyNavbar";
 
 import {
   type InterviewDTO,
@@ -267,32 +266,61 @@ export default function CompanyInterviews() {
       setLoading(false);
     }
   }
+  useEffect(() => {
+    // reset fields لما يغير next step
+    setOfferSalary("");
+    setOfferStart("");
+    setOfferExpiryDate("");
+    setOfferNotes("");
+
+    setNextType("");
+    setNextScheduledAt("");
+    setNextMeetingLink("");
+    setNextDuration(60);
+
+    setFbInternal("");
+  }, [fbNextStep]);
   type NextStep = "Offered" | "Another Interview" | "Reject";
 
   async function handleComplete() {
     if (!selected || !fbPublic) return;
+
     try {
       setLoading(true);
+
       const payload: any = {
         publicFeedback: fbPublic,
         rating: fbRating,
         nextStep: fbNextStep,
-        nextInterview: {
-          type: nextType,
-          scheduledAt: formatDateWithTimezone(nextScheduledAt),
-          meetingLink: nextMeetingLink,
-          durationMin: nextDuration,
-        },
-        offer: {
+      };
+
+      // ✅ OFFER
+      if (fbNextStep === "Offered") {
+        payload.offer = {
           offeredSalary: offerSalary,
           startDate: formatDateWithTimezone(offerStart),
           expiresAt: formatDateWithTimezone(offerExpiryDate),
           notes: offerNotes,
-        },
-        reject: {
+        };
+      }
+
+      // ✅ ANOTHER INTERVIEW
+      if (fbNextStep === "Another Interview") {
+        payload.nextInterview = {
+          type: nextType,
+          scheduledAt: formatDateWithTimezone(nextScheduledAt),
+          meetingLink: nextMeetingLink,
+          durationMin: nextDuration,
+        };
+      }
+
+      // ✅ REJECT
+      if (fbNextStep === "Reject") {
+        payload.reject = {
           reason: fbInternal,
-        },
-      };
+        };
+      }
+
       await completeInterview(selected.id, payload);
 
       await loadInterviews();
@@ -303,12 +331,10 @@ export default function CompanyInterviews() {
       setLoading(false);
     }
   }
-
   /* ── RENDER ─────────────────────────────────────────────── */
   return (
     <div className="ci-page">
       {/* HEADER */}
-      <CompanyNavbar />
 
       <main className="ci-main">
         <div className="d-flex align-items-start justify-content-between mb-4 au">

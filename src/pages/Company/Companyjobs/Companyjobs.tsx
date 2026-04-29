@@ -21,7 +21,6 @@ import {
   deleteJob,
 } from "../../../services/jobService";
 import Loader from "../../../components/Loader";
-import CompanyNavbar from "../../../components/CompanyNavbar";
 import JobCard from "../../../components/JobCard/JobCard";
 // import CandidateSuggestions from "../../components/Candidatesuggestions/Candidatesuggestions";
 import {
@@ -356,7 +355,7 @@ export default function CompanyJobs() {
 
   return (
     <div className="cj-page">
-      <CompanyNavbar />
+
 
       <main className="cj-main">
         {/* Heading */}

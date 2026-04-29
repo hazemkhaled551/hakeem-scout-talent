@@ -274,7 +274,7 @@ export default function ApplicantDashboard() {
                         style={{ fontSize: ".8rem", padding: ".45rem" }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigate(`/jobs/${job.id}/apply`);
+                          navigate(`/jobs/${job.job.id}/apply`);
                         }}
                       >
                         Apply Now

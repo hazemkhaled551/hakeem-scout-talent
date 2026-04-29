@@ -263,7 +263,7 @@ function statusBadgeClass(s: string) {
   const m: Record<string, string> = {
     New: "as-status--applied",
     Screening: "as-status--screening",
-    Interview: "as-status--interview",
+    interview: "as-status--interview",
     Offered: "as-status--offered",
     Hired: "as-status--hired",
     Rejected: "as-status--rejected",
@@ -645,13 +645,13 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
           >
             <TrendingUp size={11} /> Experience Evaluation
           </div>
-          <div className="row g-2" style={{ fontSize: ".82rem" }}>
+          <div className="row " style={{ fontSize: ".82rem" }}>
             <div className="col-12 col-sm-4">
               <span style={{ color: "var(--muted)" }}>Years: </span>
               <strong>{r.experience_evaluation.years_of_experience}</strong>
             </div>
             <div className="col-12 col-sm-4">
-              <span style={{ color: "var(--muted)" }}>Industry: </span>
+              <span style={{ color: "var(--muted)" }}>Seniorty: </span>
               <strong>{r.experience_evaluation.industry_alignment}</strong>
             </div>
             <div className="col-12 col-sm-4">

@@ -18,7 +18,7 @@ import {
   getCompanyJobs,
 } from "../../../services/companyService";
 import Loader from "../../../components/Loader";
-import CompanyNavbar from "../../../components/CompanyNavbar";
+
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -165,7 +165,7 @@ export default function CompanyDashboard() {
   return (
     <div className="cd-page">
       {/* HEADER */}
-      <CompanyNavbar />
+    
 
       <main className="cd-main">
         {/* Heading */}

@@ -8,7 +8,6 @@ import {
   Clock,
   CheckCircle,
   Upload,
-  Sparkles,
   X,
   AlertCircle,
   ChevronLeft,
@@ -26,7 +25,6 @@ import { uploadCV, getAllCVs } from "../../../services/cvService";
 import Loader from "../../../components/Loader";
 import { fmt } from "../../../utils/format";
 
-
 // ─── Step config ──────────────────────────────────────────────────────────────
 const STEPS = [
   { id: 1, label: "Overview", icon: <FileText size={14} /> },
@@ -38,9 +36,9 @@ const STEPS = [
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function JobApplication() {
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
+
   const [step, setStep] = useState(1);
-  const [showAI, setShowAI] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const { jobId } = useParams();
   const [job, setJob] = useState<any>(null);
@@ -53,32 +51,9 @@ export default function JobApplication() {
   const [fileError, setFileError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  // Personal info (pre-filled from profile)
-  // const [info, setInfo] = useState({
-  //   firstName: "John",
-  //   lastName: "Doe",
-  //   email: "john.doe@email.com",
-  //   phone: "+1 (555) 123-4567",
-  //   location: "San Francisco, CA",
-  //   linkedin: "https://linkedin.com/in/johndoe",
-  // });
-
   const [coverLetter, setCoverLetter] = useState(
     "I am excited to apply for the Senior Software Engineer position at TechCorp. With over 7 years of experience in full-stack development, I believe I am a strong match for this role…",
   );
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  // Redirect after AI match display
-  useEffect(() => {
-    if (!showAI) return;
-    const t = setTimeout(() => navigate("/dashboard"), 4000);
-    return () => clearTimeout(t);
-  }, [showAI, navigate]);
 
   useEffect(() => {
     const fn = async () => {
@@ -131,7 +106,7 @@ export default function JobApplication() {
 
       await applyJob(jobId, cvId, coverLetter);
 
-      setShowAI(true);
+      navigate("/jobs");
     } catch (error) {
       console.error(error);
     } finally {
@@ -187,93 +162,6 @@ export default function JobApplication() {
 
   // ── AI result screen ───────────────────────────────────────────────────────
 
-  if (showAI)
-    return (
-      <div className="jb-page">
-        <header className={`jb-header ${scrolled ? "scrolled" : ""}`}>
-          <div className="container-xl">
-            <div className="d-flex align-items-center py-3">
-              <div className="jb-logo">H</div>
-              <span className="jb-brand ms-2">Hakeem</span>
-            </div>
-          </div>
-        </header>
-
-        <main className="jb-main">
-          <div className="jb-card au">
-            <div className="ja-ai-screen">
-              <div className="ja-ai-icon-wrap">
-                <Sparkles size={34} />
-              </div>
-
-              <h2 className="ja-ai-title">Application Submitted!</h2>
-              <p className="ja-ai-sub">
-                Our AI analyzed your CV and matched it against the job
-                requirements
-              </p>
-
-              {/* Score */}
-              <div className="mb-4 ac d1">
-                <div className="ja-score-num">92%</div>
-                <div className="ja-score-label">Overall AI Match Score</div>
-                <div
-                  className="jb-track jb-track--md mt-3"
-                  style={{ maxWidth: 320, margin: "0 auto" }}
-                >
-                  <div
-                    className="jb-fill"
-                    style={{ "--w": "92%" } as React.CSSProperties}
-                  />
-                </div>
-              </div>
-
-              {/* Stat trio */}
-              <div
-                className="row g-3 justify-content-center mb-4 au d2"
-                style={{ maxWidth: 420, margin: "0 auto" }}
-              >
-                {[
-                  { val: "8/10", lbl: "Skills Match", cls: "ja-stat--green" },
-                  { val: "95%", lbl: "Experience", cls: "ja-stat--cyan" },
-                  { val: "High", lbl: "Culture Fit", cls: "ja-stat--indigo" },
-                ].map((s, i) => (
-                  <div key={i} className="col-4 text-center">
-                    <div className={`ja-stat-val ${s.cls}`}>{s.val}</div>
-                    <div className="ja-stat-lbl">{s.lbl}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Checklist highlights */}
-              <div
-                className="d-flex flex-column gap-2 text-start au d3"
-                style={{ maxWidth: 360, margin: "0 auto 1.5rem" }}
-              >
-                {[
-                  "Strong TypeScript & React background",
-                  "Cloud experience matches requirements",
-                  "5+ years aligns with seniority level",
-                ].map((t, i) => (
-                  <div key={i} className="jb-check">
-                    <CheckCircle
-                      size={15}
-                      className="jb-check-icon"
-                      style={{ color: "var(--success)" }}
-                    />
-                    <span className="jb-check-text">{t}</span>
-                  </div>
-                ))}
-              </div>
-
-              <p className="ja-redirect">
-                <span className="ja-redirect-dot" />
-                Redirecting to your dashboard…
-              </p>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
   if (loading) {
     <Loader text="Loading job details..." fullPage />;
   }
@@ -281,7 +169,6 @@ export default function JobApplication() {
   return (
     <div className="jb-page">
       {/* ══ HEADER ════════════════════════════════════════════ */}
-    
 
       <main className="jb-main">
         {/* ── Step indicator ────────────────────────────────── */}

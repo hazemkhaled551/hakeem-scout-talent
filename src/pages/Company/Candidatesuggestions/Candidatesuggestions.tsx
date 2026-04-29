@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Send, Eye, Star, Zap, ArrowUpDown, Briefcase } from "lucide-react";
 import { useParams } from "react-router-dom";
-import CompanyNavbar from "../../../components/CompanyNavbar";
+
 import "./CandidateSuggestions.css";
 import { recommendCandidates } from "../../../services/jobService";
 import Loader from "../../../components/Loader";
@@ -417,7 +417,7 @@ export default function CandidateSuggestions() {
 
   return (
     <div className="cs-page">
-      <CompanyNavbar />
+ 
 
       <main className="cs-main">
         {/* Hero header */}

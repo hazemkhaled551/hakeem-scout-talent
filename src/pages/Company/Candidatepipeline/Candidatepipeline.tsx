@@ -12,7 +12,7 @@ import {
 import "../Companydashboard/Companydashboard.css"; // reuses same CSS
 import { getJobsApplicantsByJob } from "../../../services/candidateService";
 import Loader from "../../../components/Loader";
-import CompanyNavbar from "../../../components/CompanyNavbar";
+
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -215,7 +215,7 @@ export default function CandidatePipeline() {
   return (
     <div className="cd-page">
       {/* HEADER */}
-      <CompanyNavbar />
+     
 
       <main className="cd-main">
         {/* Heading */}

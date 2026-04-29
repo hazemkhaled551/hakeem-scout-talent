@@ -23,7 +23,6 @@ import {
   updateCompanyBasicInfo,
   updateCompanyAbout,
 } from "../../../services/companyService";
-import CompanyNavbar from "../../../components/CompanyNavbar";
 import ShareProfileButton from "../../../components/Shareprofilebutton";
 import {
   addSpecialization,
@@ -197,7 +196,7 @@ export default function CompanyProfile() {
 
   return (
     <>
-      <CompanyNavbar />
+     
       <div className="rp-page">
         {/* ══ HEADER ════════════════════════════════════════════ */}
 

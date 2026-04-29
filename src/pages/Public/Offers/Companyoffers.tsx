@@ -13,7 +13,6 @@ import {
 import Modal from "../../../components/Modal/Modal";
 import "./Offers.css";
 import { getAllOffersToCompany } from "../../../services/offerService";
-import CompanyNavbar from "../../../components/CompanyNavbar";
 
 /* ════════════════════════════════════════════════════════════
    API RESPONSE SHAPE  (company)
@@ -226,7 +225,6 @@ export default function CompanyOffers() {
   return (
     <div className="of-page">
       {/* HEADER */}
-      <CompanyNavbar />
 
       <main className="of-main">
         {/* Heading */}
