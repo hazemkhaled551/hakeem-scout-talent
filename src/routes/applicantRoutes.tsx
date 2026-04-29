@@ -9,6 +9,7 @@ import ApplicationStatus from "../pages/Applicant/Applicationstatus/Applications
 import ApplicantOffers from "../pages/Public/Offers/Applicantoffers";
 import JobSuggestions from "../pages/Applicant/Jobsuggestions/Jobsuggestions";
 import ApplicantLayout from "../layouts/ApplicantLayout";
+import JobDetails from "../pages/Public/Jobdetails/Jobdetails";
 
 export const ApplicantRoutes = () => (
   <Route element={<ProtectedRoute allowedRoles={"Applicant"} />}>
@@ -21,6 +22,8 @@ export const ApplicantRoutes = () => (
       <Route path="/jobs" element={<JobList />} />
       <Route path="/jobs/suggestions" element={<JobSuggestions />} />
       <Route path="/jobs/:jobId/apply" element={<JobApplication />} />
+    <Route path="/jobs/:jobId" element={<JobDetails />} />
+
     </Route>
   </Route>
 );

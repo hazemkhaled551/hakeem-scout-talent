@@ -23,7 +23,7 @@ import {
   getApplicantJobs,
 } from "../../../services/userService";
 import { formatDate } from "../../../utils/format";
-import ApplicantNavbar from "../../../components/ApplicantNavbar";
+
 import { recommendJobs } from "../../../services/jobService";
 
 // ─── Mock AI Suggestions (3 only) ─────────────────────────────────────────────
@@ -35,7 +35,7 @@ function getStatusBadge(status: string) {
       return "dk-badge dk-badge--interview";
     case "New":
       return "dk-badge dk-badge--review";
-    case "Rejected":
+    case "rejected":
       return "dk-badge dk-badge--rejected";
     case "Offered":
       return "dk-badge dk-badge--green";
@@ -104,7 +104,6 @@ export default function ApplicantDashboard() {
   return (
     <div className="dk-page">
       {/* ══ HEADER ══════════════════════════════════════════════ */}
-      <ApplicantNavbar />
 
       {/* ══ MAIN ════════════════════════════════════════════════ */}
       <main className="dk-main">
@@ -199,85 +198,92 @@ export default function ApplicantDashboard() {
             </div>
 
             {/* 3 suggestion cards */}
-            <div className="row g-3">
-              {aiSuggestions.map((job) => (
-                <div key={job.id} className="col-12 col-md-4">
-                  <div
-                    className="dk-suggestion-card"
-                    onClick={() => navigate(`/jobs/${job.id}`)}
-                  >
-                    {/* AI badge */}
-                    <div className="dk-suggestion-ribbon">
-                      <Star size={9} fill="currentColor" />
-                      AI Pick
-                    </div>
 
-                    {/* Title + company */}
-                    <div className="dk-suggestion-title">{job.job.title}</div>
-                    <div className="dk-suggestion-meta">
-                      <span>
-                        <Building2 size={11} />
-                        {job.company?.name}
-                      </span>
-                      <span>
-                        <MapPin size={11} />
-                        {job.job.location}
-                      </span>
-                      <span>
-                        <DollarSign size={11} />
-                        {job.job.minSalary.toLocaleString()} –{" "}
-                        {job.job.maxSalary.toLocaleString()}
-                      </span>
-                    </div>
-
-                    {/* Skills */}
-                    <div className="dk-suggestion-tags">
-                      {job.job.skills.slice(0, 3).map((s: string) => (
-                        <span key={s} className="jb-tag">
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Match score */}
-                    <div className="dk-suggestion-match">
-                      <div className="d-flex justify-content-between mb-1">
-                        <span className="jl-match-label">AI Match</span>
-                        <span
-                          className="jl-match-num"
-                          style={{ color: scoreText(job.final_score) }}
-                        >
-                          {pct(job.final_score)}%
-                        </span>
-                      </div>
-                      <div className="jb-track">
-                        <div
-                          className="jb-fill"
-                          style={
-                            {
-                              "--w": `${job.final_score * 100}%`,
-                              background: scoreGradient(job.final_score),
-                            } as React.CSSProperties
-                          }
-                        />
-                      </div>
-                    </div>
-
-                    {/* Apply button */}
-                    <button
-                      className="dk-btn-primary w-100 mt-3"
-                      style={{ fontSize: ".8rem", padding: ".45rem" }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/jobs/${job.id}/apply`);
-                      }}
+            {aiSuggestions.length === 0 ? (
+              <div className="dk-no-suggestions">
+                No AI suggestions available.
+              </div>
+            ) : (
+              <div className="row g-3">
+                {aiSuggestions.map((job) => (
+                  <div key={job.id} className="col-12 col-md-4">
+                    <div
+                      className="dk-suggestion-card"
+                      onClick={() => navigate(`/jobs/${job.id}`)}
                     >
-                      Apply Now
-                    </button>
+                      {/* AI badge */}
+                      <div className="dk-suggestion-ribbon">
+                        <Star size={9} fill="currentColor" />
+                        AI Pick
+                      </div>
+
+                      {/* Title + company */}
+                      <div className="dk-suggestion-title">{job.job.title}</div>
+                      <div className="dk-suggestion-meta">
+                        <span>
+                          <Building2 size={11} />
+                          {job.company?.name}
+                        </span>
+                        <span>
+                          <MapPin size={11} />
+                          {job.job.location}
+                        </span>
+                        <span>
+                          <DollarSign size={11} />
+                          {job.job.minSalary.toLocaleString()} –{" "}
+                          {job.job.maxSalary.toLocaleString()}
+                        </span>
+                      </div>
+
+                      {/* Skills */}
+                      <div className="dk-suggestion-tags">
+                        {job.job.skills.slice(0, 3).map((s: string) => (
+                          <span key={s} className="jb-tag">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Match score */}
+                      <div className="dk-suggestion-match">
+                        <div className="d-flex justify-content-between mb-1">
+                          <span className="jl-match-label">AI Match</span>
+                          <span
+                            className="jl-match-num"
+                            style={{ color: scoreText(job.final_score) }}
+                          >
+                            {pct(job.final_score)}%
+                          </span>
+                        </div>
+                        <div className="jb-track">
+                          <div
+                            className="jb-fill"
+                            style={
+                              {
+                                "--w": `${job.final_score * 100}%`,
+                                background: scoreGradient(job.final_score),
+                              } as React.CSSProperties
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      {/* Apply button */}
+                      <button
+                        className="dk-btn-primary w-100 mt-3"
+                        style={{ fontSize: ".8rem", padding: ".45rem" }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/jobs/${job.id}/apply`);
+                        }}
+                      >
+                        Apply Now
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -304,77 +310,83 @@ export default function ApplicantDashboard() {
             </div>
 
             <div className="d-flex flex-column gap-3">
-              {apps.map((app) => (
-                <div key={app.job.id} className="dk-app-item">
-                  {/* Title + badge */}
-                  <div className="d-flex align-items-start justify-content-between gap-2 mb-3">
-                    <div>
-                      <div className="dk-app-position">{app.job.title}</div>
-                    </div>
-                    <span className={getStatusBadge(app.status)}>
-                      <span className="dk-badge-dot" />
-                      {app.status}
-                    </span>
-                  </div>
-
-                  {/* Meta */}
-                  <div className="row g-3 mb-3">
-                    <div className="col-4">
-                      <div className="dk-app-meta-label">
-                        <Calendar size={11} className="me-1" />
-                        Applied
-                      </div>
-                      <div className="dk-app-meta-value">
-                        {formatDate(app.createdAt)}
-                      </div>
-                    </div>
-                    <div className="col-4">
-                      <div className="dk-app-meta-label">
-                        <BrainCircuit size={11} className="me-1" />
-                        AI Match
-                      </div>
-                      <div className="dk-app-meta-value dk-app-meta-value--indigo">
-                        {app.matchScore}%
-                      </div>
-                    </div>
-                    <div className="col-4">
-                      <div className="dk-app-meta-label">
-                        <MapPin size={11} className="me-1" />
-                        Location
-                      </div>
-                      <div className="dk-app-meta-value">
-                        {app.job.location}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Next action */}
-                  {app.nextAction && (
-                    <div className="dk-app-action-row mb-3">
-                      <span className="dk-action-dot" />
-                      {app.nextAction}
-                    </div>
-                  )}
-
-                  {/* Buttons */}
-                  <div className="d-flex gap-2 flex-wrap">
-                    <button
-                      className="dk-btn-outline dk-btn-sm"
-                      onClick={() =>
-                        navigate(`/applicant/app-status/${app.id}`)
-                      }
-                    >
-                      View Details
-                    </button>
-                    {app.status === "Interview" && (
-                      <button className="dk-btn-success">
-                        <Video size={13} className="me-1" />
-                        Join Interview
-                      </button>
-                    )}
-                  </div>
+              {apps.length === 0 ? (
+                <div className="dk-no-applications">
+                  You haven't applied to any jobs yet.
                 </div>
-              ))}
+              ) : (
+                apps.map((app) => (
+                  <div key={app.job.id} className="dk-app-item">
+                    {/* Title + badge */}
+                    <div className="d-flex align-items-start justify-content-between gap-2 mb-3">
+                      <div>
+                        <div className="dk-app-position">{app.job.title}</div>
+                      </div>
+                      <span className={getStatusBadge(app.status)}>
+                        <span className="dk-badge-dot" />
+                        {app.status}
+                      </span>
+                    </div>
+
+                    {/* Meta */}
+                    <div className="row g-3 mb-3">
+                      <div className="col-4">
+                        <div className="dk-app-meta-label">
+                          <Calendar size={11} className="me-1" />
+                          Applied
+                        </div>
+                        <div className="dk-app-meta-value">
+                          {formatDate(app.createdAt)}
+                        </div>
+                      </div>
+                      <div className="col-4">
+                        <div className="dk-app-meta-label">
+                          <BrainCircuit size={11} className="me-1" />
+                          AI Match
+                        </div>
+                        <div className="dk-app-meta-value dk-app-meta-value--indigo">
+                          {app.result.analysis_report.match_score}%
+                        </div>
+                      </div>
+                      <div className="col-4">
+                        <div className="dk-app-meta-label">
+                          <MapPin size={11} className="me-1" />
+                          Location
+                        </div>
+                        <div className="dk-app-meta-value">
+                          {app.job.location}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Next action */}
+                    {app.nextAction && (
+                      <div className="dk-app-action-row mb-3">
+                        <span className="dk-action-dot" />
+                        {app.nextAction}
+                      </div>
+                    )}
+
+                    {/* Buttons */}
+                    <div className="d-flex gap-2 flex-wrap">
+                      <button
+                        className="dk-btn-outline dk-btn-sm"
+                        onClick={() =>
+                          navigate(`/applicant/app-status/${app.id}`)
+                        }
+                      >
+                        View Details
+                      </button>
+                      {app.status === "Interview" && (
+                        <button className="dk-btn-success">
+                          <Video size={13} className="me-1" />
+                          Join Interview
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

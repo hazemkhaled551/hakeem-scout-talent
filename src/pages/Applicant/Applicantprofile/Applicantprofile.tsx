@@ -32,7 +32,7 @@ import {
 } from "../../../services/profileService";
 import Loader from "../../../components/Loader";
 import ShareProfileButton from "../../../components/Shareprofilebutton";
-import ApplicantNavbar from "../../../components/ApplicantNavbar";
+
 import CVSection from "../../../components/Cvsection/Cvsection";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -298,7 +298,7 @@ export default function ApplicantProfile() {
   return (
     <div className="pr-page">
       {/* ══ HEADER ════════════════════════════════════════════ */}
-     <ApplicantNavbar />
+   
 
       {/* ══ MAIN ══════════════════════════════════════════════ */}
       <main className="pr-main">

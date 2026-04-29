@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Building2,
-  MapPin,
-  DollarSign,
-  Clock,
+  // Building2,
+  // MapPin,
+  // DollarSign,
+  // Clock,
   Search,
   X,
   SlidersHorizontal,
@@ -20,7 +20,7 @@ import Loader from "../../../components/Loader";
 import { JobType, WorkMode, type Job } from "../../../types/job";
 
 import { fmt } from "../../../utils/format";
-import ApplicantNavbar from "../../../components/ApplicantNavbar";
+import JobCard from "../../../components/JobCard/JobCard";
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 // const JOBS: Job[] = [
@@ -152,7 +152,6 @@ export default function JobList() {
   return (
     <div className="jb-page">
       {/* ══ HEADER ══════════════════════════════════════════════ */}
-      <ApplicantNavbar />
 
       {/* ══ MAIN ════════════════════════════════════════════════ */}
       <main className="jb-main au">
@@ -277,98 +276,13 @@ export default function JobList() {
         {jobs.length > 0 ? (
           <div className="d-flex flex-column gap-3">
             {jobs.map((job, i) => (
-              <div
+              <JobCard
                 key={job.id}
-                className={`jl-job-card au d${Math.min(i + 2, 6)}`}
-                onClick={() => navigate(`/jobs/${job.id}`)}
-              >
-                <div className="d-flex align-items-start gap-3 mb-3">
-                  {/* Company avatar */}
-                  {/* <div className="jl-company-avatar">{job.companyInitial}</div> */}
-
-                  {/* Title + meta */}
-                  <div className="flex-1 min-width-0">
-                    <div className="d-flex align-items-start justify-content-between gap-2 mb-1">
-                      <div className="jl-job-title">{job.title}</div>
-                      {/* <span
-                        className="jb-badge jb-badge--gray"
-                        style={{ flexShrink: 0 }}
-                      >
-                        {job.daysAgo}d ago
-                      </span> */}
-                    </div>
-                    <div className="jb-meta">
-                      <span className="jb-meta-item">
-                        <Building2 size={13} />
-                        {job.company.name}
-                      </span>
-                      <span className="jb-meta-item">
-                        <MapPin size={13} />
-                        {job.location}
-                      </span>
-                      <span className="jb-meta-item">
-                        <DollarSign size={13} />
-                        {job.minSalary} - {job.maxSalary}
-                      </span>
-                      <span className="jb-meta-item">
-                        <Clock size={13} />
-                        {fmt(job.type)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Tags + work mode */}
-                <div className="d-flex flex-wrap gap-2 mb-3">
-                  {job.skills.map((t) => (
-                    <span key={t} className="jb-tag">
-                      {t}
-                    </span>
-                  ))}
-                  <span className="jb-badge jb-badge--indigo">
-                    {job.workMode}
-                  </span>
-                </div>
-
-                {/* AI Match mini bar */}
-                <div className="mb-3">
-                  <div className="d-flex align-items-center justify-content-between mb-1">
-                    <span className="jl-match-label">AI Match</span>
-                    <span className="jl-match-num">
-                      {job?.matchScore || 0}%
-                    </span>
-                  </div>
-                  <div className="jb-track">
-                    <div
-                      className="jb-fill"
-                      style={
-                        {
-                          "--w": `${job?.matchScore || 0}%`,
-                        } as React.CSSProperties
-                      }
-                    />
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div
-                  className="d-flex gap-2"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <button
-                    className="jb-btn jb-btn--outline jb-btn--sm"
-                    onClick={() => navigate(`/jobs/${job.id}`)}
-                  >
-                    View Details
-                  </button>
-                  <button
-                    className="jb-btn jb-btn--primary jb-btn--sm"
-                    onClick={() => navigate(`/jobs/${job.id}/apply`)}
-                  >
-                    Apply Now
-                  </button>
-                </div>
-              </div>
+                job={job}
+                delay={i} // for animation
+                onView={() => navigate(`/jobs/${job.id}`)}
+                onApply={() => navigate(`/jobs/${job.id}/apply`)}
+              />
             ))}
           </div>
         ) : (

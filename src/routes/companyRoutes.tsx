@@ -9,6 +9,7 @@ import CompanyOffers from "../pages/Public/Offers/Companyoffers";
 import CandidateSuggestions from "../pages/Company/Candidatesuggestions/Candidatesuggestions";
 import CandidatePipeline from "../pages/Company/Candidatepipeline/Candidatepipeline";
 import CompanyLayout from "../layouts/CompanyLayout";
+import JobDetails from "../pages/Public/Jobdetails/Jobdetails";
 
 export const CompanyRoutes = () => (
   <Route element={<ProtectedRoute allowedRoles={"Company"} />}>
@@ -27,6 +28,8 @@ export const CompanyRoutes = () => (
         element={<CandidateSuggestions />}
       />
       <Route path="/company/pipeline/:jobId" element={<CandidatePipeline />} />
+    <Route path="/jobs/:jobId" element={<JobDetails />} />
+
     </Route>
   </Route>
 );

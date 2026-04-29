@@ -1,12 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
-  Building2,
+  // Building2,
   MapPin,
   DollarSign,
   Clock,
   CheckCircle,
-  ChevronLeft,
+  // ChevronLeft,
   Briefcase,
   // Globe,
   // Users,
@@ -23,7 +23,7 @@ import { type Job } from "../../../types/job";
 export default function JobDetails() {
   const navigate = useNavigate();
   const { jobId } = useParams();
-  const [scrolled, setScrolled] = useState(false);
+  // const [scrolled, setScrolled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [job, setJob] = useState<Job | null>(null);
 
@@ -49,11 +49,11 @@ export default function JobDetails() {
   // In production, replace with API call using jobId
   // const job: Job = { ...MOCK_JOB, id: jobId };
 
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
+  // useEffect(() => {
+  //   const fn = () => setScrolled(window.scrollY > 16);
+  //   window.addEventListener("scroll", fn);
+  //   return () => window.removeEventListener("scroll", fn);
+  // }, []);
   if (loading) {
     return <Loader fullPage text="Loading job details..." />;
     // return <Loader text="Loading job details..." />; // For non-fullPage loader, adjust styling to center it within the main content area
@@ -61,7 +61,7 @@ export default function JobDetails() {
   return (
     <div className="jb-page">
       {/* ══ HEADER ══════════════════════════════════════════════ */}
-      <header className={`jb-header ${scrolled ? "scrolled" : ""}`}>
+      {/* <header className={`jb-header ${scrolled ? "scrolled" : ""}`}>
         <div className="container-xl">
           <div className="d-flex align-items-center justify-content-between py-3">
             <div className="d-flex align-items-center gap-2">
@@ -76,7 +76,7 @@ export default function JobDetails() {
             </button>
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* ══ MAIN ════════════════════════════════════════════════ */}
       <main className="jb-main">
@@ -84,7 +84,7 @@ export default function JobDetails() {
         <div className="jd-hero mb-4 au">
           <div className="d-flex align-items-start gap-3 mb-3">
             <div className="jd-company-avatar">
-              {companyIntiatal(job?.company?.name)}
+              {companyIntiatal(job?.title)}
             </div>
             <div className="flex-1">
               <div className="d-flex align-items-start justify-content-between gap-2 flex-wrap">
@@ -98,10 +98,10 @@ export default function JobDetails() {
                 </span> */}
               </div>
               <div className="jb-meta mt-2">
-                <span className="jb-meta-item">
+                {/* <span className="jb-meta-item">
                   <Building2 size={13} />
                   {job?.company?.name}
-                </span>
+                </span> */}
                 <span className="jb-meta-item">
                   <MapPin size={13} />
                   {job?.location}

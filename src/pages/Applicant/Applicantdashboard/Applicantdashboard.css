@@ -683,3 +683,11 @@
 .dk-suggestion-match {
   margin-top: auto;
 }
+
+.dk-no-suggestions,
+.dk-no-applications {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 2rem 1rem;
+}

@@ -16,7 +16,7 @@ import {
   getAllOffersToApplicant,
   sendResponseToOffer,
 } from "../../../services/offerService";
-import ApplicantNavbar from "../../../components/ApplicantNavbar";
+
 /* ════════════════════════════════════════════════════════════
    API RESPONSE SHAPE  (applicant)
   {
@@ -253,7 +253,6 @@ export default function ApplicantOffers() {
   return (
     <div className="of-page">
       {/* HEADER */}
-      <ApplicantNavbar />
 
       <main className="of-main">
         {/* Heading */}

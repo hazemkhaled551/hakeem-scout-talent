@@ -16,6 +16,7 @@ import {
   GitBranch,
   Users,
   User,
+  UserPlus,
 } from "lucide-react";
 import { type Job, JobStatus } from "../../types/job";
 
@@ -23,16 +24,16 @@ import { type Job, JobStatus } from "../../types/job";
    ENUMS (re-exported so consumers don't need to re-declare)
 ════════════════════════════════════════════════════════════ */
 
-
 export interface JobCardProps {
   job: Job;
   delay: number;
-  onView: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
-  onPipeline: () => void;
-  onCandidates: () => void;
-  onUpdateStatus: (s: JobStatus) => void;
+  onView?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  onApply?: () => void;
+  onPipeline?: () => void;
+  onCandidates?: () => void;
+  onUpdateStatus?: (s: JobStatus) => void;
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -72,6 +73,7 @@ export default function JobCard({
   onView,
   onEdit,
   onDelete,
+  onApply,
   onPipeline,
   onUpdateStatus,
   onCandidates,
@@ -188,75 +190,93 @@ export default function JobCard({
 
         {/* ── Action Bar ── */}
         <div className="cj-actions">
-          <button
-            className="cj-btn cj-btn--outline cj-btn--xs"
-            onClick={onView}
-          >
-            <Eye size={12} /> View
-          </button>
+          {onView && (
+            <button
+              className="cj-btn cj-btn--outline cj-btn--xs"
+              onClick={onView}
+            >
+              <Eye size={12} /> View
+            </button>
+          )}
 
-          <button
-            className="cj-btn cj-btn--outline cj-btn--xs"
-            onClick={onEdit}
-          >
-            <Edit2 size={12} /> Edit
-          </button>
+          {onEdit && (
+            <button
+              className="cj-btn cj-btn--outline cj-btn--xs"
+              onClick={onEdit}
+            >
+              <Edit2 size={12} /> Edit
+            </button>
+          )}
 
           {/* ✅ View Pipeline button */}
-          <button
-            className="cj-btn cj-btn--pipeline cj-btn--xs"
-            onClick={onPipeline}
-          >
-            <GitBranch size={12} /> View Pipeline
-          </button>
-          <button
-            className="cj-btn cj-btn--candidates cj-btn--xs"
-            onClick={onCandidates}
-          >
-            <Users size={12} /> Candidates
-          </button>
+          {onPipeline && (
+            <button
+              className="cj-btn cj-btn--pipeline cj-btn--xs"
+              onClick={onPipeline}
+            >
+              <GitBranch size={12} /> View Pipeline
+            </button>
+          )}
+          {onCandidates && (
+            <button
+              className="cj-btn cj-btn--candidates cj-btn--xs"
+              onClick={onCandidates}
+            >
+              <Users size={12} /> Candidates
+            </button>
+          )}
 
-          {job.status === JobStatus.DRAFT && (
+          {job.status === JobStatus.DRAFT && onUpdateStatus && (
             <button
               className="cj-btn cj-btn--success-soft cj-btn--xs"
-              onClick={() => onUpdateStatus(JobStatus.PUBLISHED)}
+              onClick={() => onUpdateStatus?.(JobStatus.PUBLISHED)}
             >
               <Send size={12} /> Publish
             </button>
           )}
 
-          {job.status === JobStatus.PAUSED && (
+          {job.status === JobStatus.PAUSED && onUpdateStatus && (
             <button
               className="cj-btn cj-btn--success-soft cj-btn--xs"
-              onClick={() => onUpdateStatus(JobStatus.PUBLISHED)}
+              onClick={() => onUpdateStatus?.(JobStatus.PUBLISHED)}
             >
               <Play size={12} /> Resume
             </button>
           )}
 
-          {job.status === JobStatus.PUBLISHED && (
+          {job.status === JobStatus.PUBLISHED && onUpdateStatus && (
             <>
               <button
                 className="cj-btn cj-btn--outline cj-btn--xs"
-                onClick={() => onUpdateStatus(JobStatus.PAUSED)}
+                onClick={() => onUpdateStatus?.(JobStatus.PAUSED)}
               >
                 <PauseCircle size={12} /> Pause
               </button>
               <button
                 className="cj-btn cj-btn--outline cj-btn--xs"
-                onClick={() => onUpdateStatus(JobStatus.CLOSED)}
+                onClick={() => onUpdateStatus?.(JobStatus.CLOSED)}
               >
                 <XCircle size={12} /> Close
               </button>
             </>
           )}
 
-          <button
-            className="cj-btn cj-btn--danger cj-btn--xs ms-auto"
-            onClick={onDelete}
-          >
-            <Trash2 size={12} /> Delete
-          </button>
+          {onDelete && (
+            <button
+              className="cj-btn cj-btn--danger cj-btn--xs ms-auto"
+              onClick={onDelete}
+            >
+              <Trash2 size={12} /> Delete
+            </button>
+          )}
+          {onApply && (
+            <button
+              className="cj-btn cj-btn--primary cj-btn--xs ms-auto"
+              onClick={onApply}
+            >
+              <UserPlus size={12} /> Apply
+            </button>
+          )}
         </div>
       </div>
     </div>

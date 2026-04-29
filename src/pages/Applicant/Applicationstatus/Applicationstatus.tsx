@@ -33,7 +33,7 @@ import {
   getJobsApplicationById,
   responseToOffer,
 } from "../../../services/candidateService";
-import ApplicantNavbar from "../../../components/ApplicantNavbar";
+
 
 /* ════════════════════════════════════════════════════════════
    TYPES — mirror the API response
@@ -790,7 +790,7 @@ export default function ApplicationStatus() {
     <div className="as-page">
       {/* HEADER */}
 
-      <ApplicantNavbar />
+    
       <main className="as-main">
         {/* ── HERO ──────────────────────────────────────── */}
         <div className="as-hero mb-4 au">

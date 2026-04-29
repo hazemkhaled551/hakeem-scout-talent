@@ -18,7 +18,7 @@ import {
 import "../../../styles/Jobs.css";
 import "./Jobsuggestions.css";
 import { fmt } from "../../../utils/format";
-import ApplicantNavbar from "../../../components/ApplicantNavbar";
+
 import { recommendJobs } from "../../../services/jobService";
 
 /* ════════════════════════════════════════════════════════════
@@ -127,7 +127,7 @@ export default function JobSuggestions() {
   /* ── Render ─────────────────────────────────────────────── */
   return (
     <div className="jb-page">
-      <ApplicantNavbar />
+      
 
       <main className="jb-main au">
         {/* ── Heading ─────────────────────────────────── */}

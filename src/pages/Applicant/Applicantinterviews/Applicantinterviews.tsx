@@ -32,7 +32,7 @@ import {
   fmtTime,
   fmtDateLong,
 } from "../../../utils/format";
-import ApplicantNavbar from "../../../components/ApplicantNavbar";
+
 import {
   type ExtendedInterviewDTO,
   type InterviewStatus,
@@ -245,7 +245,7 @@ export default function ApplicantInterviews() {
   return (
     <div className="ai-page">
       {/* HEADER */}
-      <ApplicantNavbar />
+   
 
       <main className="ai-main">
         <div className="mb-4 au">

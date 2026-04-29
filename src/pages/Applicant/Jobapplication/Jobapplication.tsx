@@ -25,7 +25,7 @@ import { uploadCV, getAllCVs } from "../../../services/cvService";
 
 import Loader from "../../../components/Loader";
 import { fmt } from "../../../utils/format";
-import ApplicantNavbar from "../../../components/ApplicantNavbar";
+
 
 // ─── Step config ──────────────────────────────────────────────────────────────
 const STEPS = [
@@ -281,7 +281,7 @@ export default function JobApplication() {
   return (
     <div className="jb-page">
       {/* ══ HEADER ════════════════════════════════════════════ */}
-      <ApplicantNavbar />
+    
 
       <main className="jb-main">
         {/* ── Step indicator ────────────────────────────────── */}

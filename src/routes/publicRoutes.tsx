@@ -9,7 +9,7 @@ import RestoreAccount from "../pages/Auth/RestoreAccount/RestoreAccount";
 import RequestRestore from "../pages/Auth/RestoreAccount/RestoreAccountRequest";
 import GoogleCallback from "../pages/Auth/Googlecallback/Googlecallback";
 import PublicProfile from "../pages/Public/Publicprofile/Publicprofile";
-import JobDetails from "../pages/Public/Jobdetails/Jobdetails";
+// import JobDetails from "../pages/Public/Jobdetails/Jobdetails";
 import AuthRoute from "./AuthRoute";
 import Payment from "../pages/Public/Plans/Payment";
 import Plans from "../pages/Public/Plans/Plans";
@@ -41,7 +41,6 @@ export const PublicRoutes = () => (
     <Route path="/restore-email" element={<RestoreAccount />} />
     <Route path="/select-role" element={<SelectRolePage />} />
 
-    <Route path="/jobs/:jobId" element={<JobDetails />} />
     <Route path="/profile/applicant/:slug" element={<PublicProfile />} />
     <Route path="/profile/company/:slug" element={<PublicProfile />} />
     <Route path="/company/plans" element={<Plans />} />
