@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import "./Publicprofile.css";
 import { getSharedProfile } from "../../../services/profileService";
+import Footer from "../../../components/Footer";
 
 /* ════════════════════════════════════════════════════════════
    TYPES — mirrors both API shapes
@@ -72,41 +73,41 @@ type ProfileData = ApplicantProfile | CompanyProfile;
 /* ════════════════════════════════════════════════════════════
    DUMMY DATA
 ════════════════════════════════════════════════════════════ */
-const DUMMY_APPLICANT: ApplicantProfile = {
-  id: "ac4f877b-7182-4e2f-80d3-e5277d73a203",
-  phone: "01207396967",
-  job_title: "Frontend Developer",
-  candidateId: "53",
-  user: {
-    id: "527baa76",
-    name: "Hazem Khaled",
-    email: "zmyhazemkhaled@gmail.com",
-    location: "Zagazig, Egypt",
-    linkedIn_profile: "linkedin.com/in/hazem",
-    role: "Applicant",
-    isEmailVerified: true,
-    createAt: "2026-04-17T12:49:50.666Z",
-  },
-  skills: [
-    { id: "1", name: "React" },
-    { id: "2", name: "TypeScript" },
-    { id: "3", name: "JavaScript" },
-    { id: "4", name: "Angular" },
-    { id: "5", name: "Git" },
-    { id: "6", name: "GitHub" },
-  ],
-  experiences: [
-    {
-      id: "24f1d649",
-      title: "Frontend Developer",
-      company: "Aziz Company",
-      startDate: "2026-01-08T00:00:00.000Z",
-      endDate: "2026-03-18T00:00:00.000Z",
-      description:
-        "Developed a fully functional internal ride-sharing web application using React. Integrated frontend with a custom API powered by Google Apps Script to enable real-time data exchange with Google Sheets.\n\nBuilt responsive and user-friendly interfaces, ensuring smooth user experience across devices.",
-    },
-  ],
-};
+// const DUMMY_APPLICANT: ApplicantProfile = {
+//   id: "ac4f877b-7182-4e2f-80d3-e5277d73a203",
+//   phone: "01207396967",
+//   job_title: "Frontend Developer",
+//   candidateId: "53",
+//   user: {
+//     id: "527baa76",
+//     name: "Hazem Khaled",
+//     email: "zmyhazemkhaled@gmail.com",
+//     location: "Zagazig, Egypt",
+//     linkedIn_profile: "linkedin.com/in/hazem",
+//     role: "Applicant",
+//     isEmailVerified: true,
+//     createAt: "2026-04-17T12:49:50.666Z",
+//   },
+//   skills: [
+//     { id: "1", name: "React" },
+//     { id: "2", name: "TypeScript" },
+//     { id: "3", name: "JavaScript" },
+//     { id: "4", name: "Angular" },
+//     { id: "5", name: "Git" },
+//     { id: "6", name: "GitHub" },
+//   ],
+//   experiences: [
+//     {
+//       id: "24f1d649",
+//       title: "Frontend Developer",
+//       company: "Aziz Company",
+//       startDate: "2026-01-08T00:00:00.000Z",
+//       endDate: "2026-03-18T00:00:00.000Z",
+//       description:
+//         "Developed a fully functional internal ride-sharing web application using React. Integrated frontend with a custom API powered by Google Apps Script to enable real-time data exchange with Google Sheets.\n\nBuilt responsive and user-friendly interfaces, ensuring smooth user experience across devices.",
+//     },
+//   ],
+// };
 
 /* ════════════════════════════════════════════════════════════
    HELPERS
@@ -165,11 +166,11 @@ export default function PublicProfile() {
         // Call the shared profile API using the slug
         const res = await getSharedProfile(id!);
         console.log(res);
-        
+
         setProfile(res.data);
       } catch (err: any) {
         if (err?.response?.status === 404) setNotFound(true);
-        else setProfile(DUMMY_APPLICANT);
+        else setProfile(null);
       } finally {
         setLoading(false);
       }
@@ -500,6 +501,7 @@ export default function PublicProfile() {
           Joined Hakeem · {fmtDate(user.createAt)}
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

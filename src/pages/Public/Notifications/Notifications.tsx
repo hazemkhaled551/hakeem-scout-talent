@@ -18,6 +18,7 @@ import ApplicantNavbar from "../../../components/ApplicantNavbar";
 import api from "../../../utils/api";
 import useSocket from "../../../hooks/useSocket";
 import CompanyNavbar from "../../../components/CompanyNavbar";
+import Footer from "../../../components/Footer";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -45,11 +46,13 @@ export interface NotificationDTO {
   body: string;
   isRead: boolean;
   createdAt: string; // ISO
+
   // optional contextual links
   actionUrl?: string; // e.g. "/applicant/interviews"
   meta?: {
     candidateName?: string;
     jobTitle?: string;
+    jobId?: string;
     companyName?: string;
     interviewDate?: string;
     status?: string;
@@ -320,19 +323,20 @@ interface NotifItemProps {
 
 export function NotifItem({
   notif,
-  onRead,
-  onNavigate,
+  // onRead,
+  // onNavigate,
   compact,
 }: NotifItemProps) {
-  function handleClick() {
-    if (!notif.isRead) onRead(notif.id);
-    onNavigate(notif.actionUrl);
-  }
+  const navigate = useNavigate();
+  // function handleClick() {
+  //   if (!notif.isRead) onRead(notif.id);
+  //   onNavigate(notif.actionUrl);
+  // }
 
   return (
     <div
       className={`nt-item ${notif.isRead ? "" : "nt-item--unread"}`}
-      onClick={handleClick}
+      onClick={() => navigate(`/jobs/${notif.meta?.jobId}/apply`)}
     >
       <div className={`nt-icon ${TYPE_ICON_CLASS[notif.type]}`}>
         {TYPE_ICON[notif.type]}
@@ -719,6 +723,7 @@ export default function NotificationsPage({ role }: NotificationsPageProps) {
           ))
         )}
       </main>
+      <Footer />
     </div>
   );
 }

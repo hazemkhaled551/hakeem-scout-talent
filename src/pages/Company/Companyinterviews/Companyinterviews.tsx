@@ -241,6 +241,7 @@ export default function CompanyInterviews() {
       await rescheduleInterview(selected.id, {
         scheduledAt: newDate,
         meetingLink: newMeetingLink || undefined,
+        durationMin: nextDuration,
       });
       await loadInterviews();
       closeModal();
@@ -1502,6 +1503,18 @@ export default function CompanyInterviews() {
               placeholder="https://meet.google.com/…"
               value={newMeetingLink}
               onChange={(e) => setNewMeetingLink(e.target.value)}
+            />
+          </div>
+          <div className="ci-field">
+            <label className="ci-label">
+              Duration (minutes){" "}
+              <span style={{ color: "var(--danger)" }}>*</span>
+            </label>
+            <input
+              className="ci-input"
+              type="number"
+              value={nextDuration}
+              onChange={(e) => setNextDuration(Number(e.target.value))}
             />
           </div>
 

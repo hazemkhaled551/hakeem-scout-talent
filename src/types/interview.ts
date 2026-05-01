@@ -37,6 +37,7 @@ export interface CompleteInterviewPayload {
 export interface ReschedulePayload {
   scheduledAt: string;
   meetingLink?: string;
+  durationMin?: number;
 }
 
 /* ── Cancel ────────────────────────────────────────────── */
@@ -121,8 +122,8 @@ export interface ApplicantInterviewStats {
   cancelled: number;
   thisWeek: number;
 }
-  
- export type OfferResponse = "accept" | "rejected" | null;
+
+export type OfferResponse = "accept" | "rejected" | null;
 
 /* Extend the feedback type locally to include offer details */
 export interface OfferDetails {
@@ -130,7 +131,7 @@ export interface OfferDetails {
   startDate?: string;
   notes?: string;
 }
- export interface NextInterviewDetails {
+export interface NextInterviewDetails {
   type: string;
   scheduledAt?: string;
   meetingLink?: string;

@@ -38,10 +38,15 @@ export const offerCandidate = (id: string, payload: any) => {
 };
 /* Respose To offer */
 export const responseToOffer = (id: string | undefined, payload: any) => {
-  return api.patch(`/candidate/offer/response/${id}`, payload);
+  return api.patch(`/offer/response/${id}`, payload);
 };
 
 /* Get Candidate Pipeline */
 export const getCandidateAnalysis = (id: string) => {
   return api.get(`/candidate/company/jobsApply/${id}`);
 };
+
+/* invite candidate to apply for a job */
+export const inviteCandidate = (jobId: string, userId : string, recommendId : string) => {
+  return api.get(`/jobs/candidate/invit/${jobId}/${userId}/${recommendId}`);
+}

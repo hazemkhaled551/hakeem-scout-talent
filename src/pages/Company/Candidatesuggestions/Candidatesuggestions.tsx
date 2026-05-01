@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { Send, Eye, Star, Zap, ArrowUpDown, Briefcase } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import "./CandidateSuggestions.css";
 import { recommendCandidates } from "../../../services/jobService";
 import Loader from "../../../components/Loader";
+import { inviteCandidate } from "../../../services/candidateService";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
 ════════════════════════════════════════════════════════════ */
 export interface Candidate {
+  slug: any;
+  isInvited: boolean;
+  userId: string;
   id: string;
   name: string;
   role: string;
@@ -292,6 +296,15 @@ function CandidateCard({
   onInvite: () => void;
   delay: number;
 }) {
+  const navigate = useNavigate();
+  async function handleInvite() {
+    try {
+      await inviteCandidate(candidate.jobId, candidate.userId, candidate.id);
+      onInvite();
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <div
       className={`cs-card ${isTop ? "cs-card--top" : ""} cs-au cs-d${Math.min(delay, 6)}`}
@@ -335,15 +348,19 @@ function CandidateCard({
       {/* Actions */}
       <div className="d-flex align-items-center gap-2 flex-wrap">
         <button
-          className={`cs-invite-btn ${invited ? "cs-invite-btn--sent" : "cs-invite-btn--default"}`}
-          onClick={onInvite}
-          disabled={invited}
+          className={`cs-invite-btn ${candidate.isInvited ? "cs-invite-btn--sent" : "cs-invite-btn--default"}`}
+          onClick={handleInvite}
+          disabled={candidate.isInvited || invited}
         >
           <Send size={11} />
-          {invited ? "Sent ✓" : "Invite"}
+          {candidate.isInvited ? "Sent ✓" : "Invite"}
         </button>
 
-        <button className="cs-view-btn">
+        <button
+          type="button"
+          onClick={() => navigate(`/profile/applicant/${candidate.slug}`)}
+          className="cs-view-btn"
+        >
           <Eye size={11} /> Profile
         </button>
 
@@ -394,6 +411,9 @@ export default function CandidateSuggestions() {
           skills: [], // لو مش موجودة من API
           matchScore: Math.round(r.final_score * 100),
           jobId: jobId,
+          userId: r.applicant.user.id,
+          isInvited: r.isInvit, // لو API بترجع الحقل ده
+          slug: r.applicant.user.slug, // لو حابب تستخدمه في رابط الملف الشخصي
         }));
 
         setCandidates(formatted);
@@ -417,8 +437,6 @@ export default function CandidateSuggestions() {
 
   return (
     <div className="cs-page">
- 
-
       <main className="cs-main">
         {/* Hero header */}
         <div className="cs-hero cs-au">

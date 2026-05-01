@@ -7,10 +7,10 @@ import {
   CheckCircle,
   Plus,
   Briefcase,
-  MapPin,
-  DollarSign,
-  Globe,
-  ArrowRight,
+  // MapPin,
+  // DollarSign,
+  // Globe,
+  // ArrowRight,
 } from "lucide-react";
 import "./Companydashboard.css";
 import {
@@ -18,36 +18,36 @@ import {
   getCompanyJobs,
 } from "../../../services/companyService";
 import Loader from "../../../components/Loader";
-
+import JobCard from "../../../components/JobCard/JobCard";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
 ════════════════════════════════════════════════════════════ */
-interface PublishedJob {
-  id: string;
-  title: string;
-  location: string;
-  type: string;
-  workMode: string;
-  minSalary: number | string;
-  maxSalary: number | string;
-  skills: string[];
-  applicants: number;
-  newCount: number;
-  postedDays: number;
-  deadline?: string;
-  positions?: number;
-}
+// interface PublishedJob {
+//   id: string;
+//   title: string;
+//   location: string;
+//   type: string;
+//   workMode: string;
+//   minSalary: number | string;
+//   maxSalary: number | string;
+//   skills: string[];
+//   applicants: number;
+//   newCount: number;
+//   postedDays: number;
+//   deadline?: string;
+//   positions?: number;
+// }
 
 /* ════════════════════════════════════════════════════════════
    HELPERS
 ════════════════════════════════════════════════════════════ */
-function fmtSalary(min: number | string, max: number | string) {
-  if (!min && !max) return "—";
-  const f = (n: number) => (n >= 1000 ? `$${(n / 1000).toFixed(0)}k` : `$${n}`);
-  return `${f(Number(min))} – ${f(Number(max))}`;
-}
-const fmtType = (v: string) => (v || "").replace("_", " ");
+// function fmtSalary(min: number | string, max: number | string) {
+//   if (!min && !max) return "—";
+//   const f = (n: number) => (n >= 1000 ? `$${(n / 1000).toFixed(0)}k` : `$${n}`);
+//   return `${f(Number(min))} – ${f(Number(max))}`;
+// }
+// const fmtType = (v: string) => (v || "").replace("_", " ");
 
 /* ════════════════════════════════════════════════════════════
    COMPONENT
@@ -57,7 +57,7 @@ export default function CompanyDashboard() {
   // const [scrolled, setScrolled] = useState(false);
   // const [menuOpen, setMenuOpen] = useState(false);
   const [stats, setStats] = useState<any>(null);
-  const [jobs, setJobs] = useState<PublishedJob[]>([]);
+  const [jobs, setJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -124,7 +124,9 @@ export default function CompanyDashboard() {
     },
     {
       label: "Avg. Time to Hire",
-      value: stats?.avgTimeToHireDays ? `${stats.avgTimeToHireDays}d` : "—",
+      value: stats?.avgTimeToHireDays?.toFixed(2)
+        ? `${stats.avgTimeToHireDays.toFixed(2)}d`
+        : "—",
       hint: "vs last month",
       icon: <Clock size={16} />,
       iconCls: "cd-kpi-icon--amber",
@@ -165,7 +167,6 @@ export default function CompanyDashboard() {
   return (
     <div className="cd-page">
       {/* HEADER */}
-    
 
       <main className="cd-main">
         {/* Heading */}
@@ -248,12 +249,19 @@ export default function CompanyDashboard() {
         ) : (
           <div className="row g-3 au d3">
             {filtered.map((job, i) => (
-              <div key={job.id} className={`col-12 au d${Math.min(i + 1, 6)}`}>
-                <JobCard
-                  job={job}
-                  onClick={() => navigate(`/company/pipeline/${job.id}`)}
-                />
-              </div>
+              <JobCard
+                key={job.id}
+                job={job}
+                delay={i}
+                onView={() => navigate(`/jobs/${job.id}`)}
+                // onEdit={() => handleEdit(job)}
+                // onDelete={() => setDeleteTarget(job)}
+                onPipeline={() => navigate(`/company/pipeline/${job.id}`)}
+                onCandidates={() =>
+                  navigate(`/company/jobs/candidates/${job.id}`)
+                }
+                // onUpdateStatus={(s) => updateStatus(job.id, s)}
+              />
             ))}
             <button
               className="cd-btn cd-btn--full cd-btn--sm cd-btn--primary"
@@ -271,137 +279,137 @@ export default function CompanyDashboard() {
 /* ════════════════════════════════════════════════════════════
    JOB CARD  — clicks → CandidatePipeline page
 ════════════════════════════════════════════════════════════ */
-function JobCard({ job, onClick }: { job: PublishedJob; onClick: () => void }) {
-  return (
-    <div
-      className="cd-cand-card"
-      onClick={onClick}
-      style={{
-        cursor: "pointer",
-        padding: "1.2rem 1.4rem",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        gap: ".75rem",
-      }}
-    >
-      {/* Header */}
-      <div className="d-flex align-items-start justify-content-between gap-2">
-        <div>
-          <div className="cd-cand-name" style={{ fontSize: ".95rem" }}>
-            {job.title}
-          </div>
-          <div
-            className="d-flex flex-wrap gap-2 mt-1"
-            style={{ fontSize: ".76rem", color: "var(--muted)" }}
-          >
-            {job.location && (
-              <span className="d-flex align-items-center gap-1">
-                <MapPin size={11} />
-                {job.location}
-              </span>
-            )}
-            {job.type && (
-              <span className="d-flex align-items-center gap-1">
-                <Clock size={11} />
-                {fmtType(job.type)}
-              </span>
-            )}
-            {job.workMode && (
-              <span className="d-flex align-items-center gap-1">
-                <Globe size={11} />
-                {job.workMode}
-              </span>
-            )}
-            {(job.minSalary || job.maxSalary) && (
-              <span className="d-flex align-items-center gap-1">
-                <DollarSign size={11} />
-                {fmtSalary(job.minSalary, job.maxSalary)}
-              </span>
-            )}
-          </div>
-        </div>
-        {/* Applicant badge */}
-        <div style={{ textAlign: "right", flexShrink: 0 }}>
-          <div
-            style={{
-              fontFamily: "Syne",
-              fontWeight: 800,
-              fontSize: "1.4rem",
-              color: "var(--primary)",
-              lineHeight: 1,
-            }}
-          >
-            {job.applicants}
-          </div>
-          <div style={{ fontSize: ".7rem", color: "var(--muted)" }}>
-            applicants
-          </div>
-        </div>
-      </div>
+// function JobCard({ job, onClick }: { job: PublishedJob; onClick: () => void }) {
+//   return (
+//     <div
+//       className="cd-cand-card"
+//       onClick={onClick}
+//       style={{
+//         cursor: "pointer",
+//         padding: "1.2rem 1.4rem",
+//         height: "100%",
+//         display: "flex",
+//         flexDirection: "column",
+//         gap: ".75rem",
+//       }}
+//     >
+//       {/* Header */}
+//       <div className="d-flex align-items-start justify-content-between gap-2">
+//         <div>
+//           <div className="cd-cand-name" style={{ fontSize: ".95rem" }}>
+//             {job.title}
+//           </div>
+//           <div
+//             className="d-flex flex-wrap gap-2 mt-1"
+//             style={{ fontSize: ".76rem", color: "var(--muted)" }}
+//           >
+//             {job.location && (
+//               <span className="d-flex align-items-center gap-1">
+//                 <MapPin size={11} />
+//                 {job.location}
+//               </span>
+//             )}
+//             {job.type && (
+//               <span className="d-flex align-items-center gap-1">
+//                 <Clock size={11} />
+//                 {fmtType(job.type)}
+//               </span>
+//             )}
+//             {job.workMode && (
+//               <span className="d-flex align-items-center gap-1">
+//                 <Globe size={11} />
+//                 {job.workMode}
+//               </span>
+//             )}
+//             {(job.minSalary || job.maxSalary) && (
+//               <span className="d-flex align-items-center gap-1">
+//                 <DollarSign size={11} />
+//                 {fmtSalary(job.minSalary, job.maxSalary)}
+//               </span>
+//             )}
+//           </div>
+//         </div>
+//         {/* Applicant badge */}
+//         <div style={{ textAlign: "right", flexShrink: 0 }}>
+//           <div
+//             style={{
+//               fontFamily: "Syne",
+//               fontWeight: 800,
+//               fontSize: "1.4rem",
+//               color: "var(--primary)",
+//               lineHeight: 1,
+//             }}
+//           >
+//             {job.applicants}
+//           </div>
+//           <div style={{ fontSize: ".7rem", color: "var(--muted)" }}>
+//             applicants
+//           </div>
+//         </div>
+//       </div>
 
-      {/* Skills */}
-      {job.skills.length > 0 && (
-        <div className="d-flex flex-wrap gap-1">
-          {job.skills.slice(0, 4).map((s) => (
-            <span key={s} className="cd-skill-tag">
-              {s}
-            </span>
-          ))}
-        </div>
-      )}
+//       {/* Skills */}
+//       {job.skills.length > 0 && (
+//         <div className="d-flex flex-wrap gap-1">
+//           {job.skills.slice(0, 4).map((s) => (
+//             <span key={s} className="cd-skill-tag">
+//               {s}
+//             </span>
+//           ))}
+//         </div>
+//       )}
 
-      {/* Footer */}
-      <div className="d-flex align-items-center justify-content-between mt-auto">
-        <div
-          className="d-flex align-items-center gap-2"
-          style={{ fontSize: ".76rem" }}
-        >
-          {job.newCount > 0 && (
-            <span
-              style={{
-                background: "rgba(239,68,68,.1)",
-                color: "var(--danger)",
-                border: "1px solid rgba(239,68,68,.2)",
-                borderRadius: 999,
-                padding: ".12rem .6rem",
-                fontFamily: "Syne",
-                fontWeight: 700,
-                fontSize: ".7rem",
-              }}
-            >
-              {job.newCount} new
-            </span>
-          )}
-          {job.postedDays > 0 && (
-            <span style={{ color: "var(--muted)" }}>
-              Posted {job.postedDays}d ago
-            </span>
-          )}
-          {job.deadline && (
-            <span style={{ color: "var(--muted)" }}>
-              Deadline:{" "}
-              {new Date(job.deadline).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-              })}
-            </span>
-          )}
-        </div>
-        <span
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: ".3rem",
-            color: "var(--primary)",
-            fontFamily: "Syne",
-            fontWeight: 700,
-            fontSize: ".78rem",
-          }}
-        >
-          View Pipeline <ArrowRight size={12} />
-        </span>
-      </div>
-    </div>
-  );
-}
+//       {/* Footer */}
+//       <div className="d-flex align-items-center justify-content-between mt-auto">
+//         <div
+//           className="d-flex align-items-center gap-2"
+//           style={{ fontSize: ".76rem" }}
+//         >
+//           {job.newCount > 0 && (
+//             <span
+//               style={{
+//                 background: "rgba(239,68,68,.1)",
+//                 color: "var(--danger)",
+//                 border: "1px solid rgba(239,68,68,.2)",
+//                 borderRadius: 999,
+//                 padding: ".12rem .6rem",
+//                 fontFamily: "Syne",
+//                 fontWeight: 700,
+//                 fontSize: ".7rem",
+//               }}
+//             >
+//               {job.newCount} new
+//             </span>
+//           )}
+//           {job.postedDays > 0 && (
+//             <span style={{ color: "var(--muted)" }}>
+//               Posted {job.postedDays}d ago
+//             </span>
+//           )}
+//           {job.deadline && (
+//             <span style={{ color: "var(--muted)" }}>
+//               Deadline:{" "}
+//               {new Date(job.deadline).toLocaleDateString("en-US", {
+//                 month: "short",
+//                 day: "numeric",
+//               })}
+//             </span>
+//           )}
+//         </div>
+//         <span
+//           style={{
+//             display: "flex",
+//             alignItems: "center",
+//             gap: ".3rem",
+//             color: "var(--primary)",
+//             fontFamily: "Syne",
+//             fontWeight: 700,
+//             fontSize: ".78rem",
+//           }}
+//         >
+//           View Pipeline <ArrowRight size={12} />
+//         </span>
+//       </div>
+//     </div>
+//   );
+// }

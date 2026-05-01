@@ -52,7 +52,7 @@ function statusBadgeClass(s: string) {
 }
 
 function cardStripeClass(s: string) {
-  return `cj-job-card--${s.toLowerCase()}`;
+  return `cj-job-card--${s?.toLowerCase()}`;
 }
 
 function fmtSalary(min: number | "", max: number | "") {
