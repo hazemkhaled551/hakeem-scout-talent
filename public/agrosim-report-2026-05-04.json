@@ -1,0 +1,4822 @@
+{
+  "config": {
+    "rows": 16,
+    "cols": 16,
+    "soil": "loam",
+    "crops": [
+      "wheat",
+      "corn",
+      "tomato"
+    ],
+    "budget": 5000,
+    "location": {
+      "name": "Cairo, Egypt",
+      "lat": 30.06263,
+      "lon": 31.24967
+    },
+    "startDate": "2026-05-04",
+    "seasonDays": 90
+  },
+  "day": 90,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.5400000000000014,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": "irrigate"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.41454545454545527,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": "irrigate"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.6675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": "irrigate"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.4957894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": "irrigate"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": "irrigate"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.5875000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": "irrigate"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.4545454545454555,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": "irrigate"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.5621052631578953,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": "irrigate"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.4945454545454557,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.5757894736842111,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.6875000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.4345454545454554,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.5621052631578953,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.5000000000000012,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 0,
+      "moisture": 0,
+      "growth": 0.5557894736842112,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.5557894736842112,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.6675000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.4745454545454556,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.4800000000000011,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.5675000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.6075000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.5421052631578954,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.6157894736842107,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.4145454545454552,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.46000000000000096,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.5200000000000014,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.6675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.5557894736842112,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.4800000000000011,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 0.15,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "moisture": 0,
+      "growth": 0.6475000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.5875000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.5675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.4345454545454554,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.6475000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.5357894736842113,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.5200000000000014,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.46000000000000096,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.5357894736842113,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.6421052631578947,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.47694545454545556,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 0.75,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.4800000000000011,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.5475000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.5157894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.5357894736842113,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.6059250000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 0.44999999999999996,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 2,
+      "moisture": 0,
+      "growth": 0.4343545454545463,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 0.3,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.5675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.4545454545454555,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.4400000000000009,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.5875000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.5000000000000012,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.5000000000000012,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.5675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.6059250000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 0.44999999999999996,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.5663250000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.5242736842105272,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.5244000000000011,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.5821052631578951,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.4345454545454554,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.6024000000000004,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 3,
+      "moisture": 0,
+      "growth": 0.4992363636363648,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 0.44999999999999996,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.5821052631578951,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.5157894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.5157894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.5950000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.6221052631578949,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.4945454545454557,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.6421052631578947,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.5757894736842111,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.48587272727272834,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.4543473684210533,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.5970526315789478,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.3839818181818186,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.6162249999999998,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.5665272727272742,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.46145263157894806,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 4,
+      "moisture": 0,
+      "growth": 0.6153473684210528,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 0.3,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.5200000000000014,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.5557894736842112,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.5675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.6075000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.4345454545454554,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.5284947368421062,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 0.9,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.625725,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.46761818181818277,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.5244000000000009,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.51282105263158,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.5687090909090926,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.3860545454545457,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.46147368421052715,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.43850526315789534,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 5,
+      "moisture": 0,
+      "growth": 0.5307157894736853,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.46000000000000096,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.5875000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.5400000000000014,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.5400000000000014,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.5357894736842113,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.6675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.4757894736842113,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.4487090909090916,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.42361818181818234,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.5369374999999993,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.5169374999999999,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.46987368421052716,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.5178736842105274,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 6,
+      "moisture": 0,
+      "growth": 0.4034545454545459,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.5875000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.5557894736842112,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.4800000000000011,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.6475000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.6075000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.6843500000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 0.6,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.5357894736842113,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 0.15,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.426163636363637,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.4672545454545463,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.5642736842105269,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.4185272727272733,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.3958909090909097,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.5074750000000001,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.4721894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 7,
+      "moisture": 0,
+      "growth": 0.406136363636364,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.4745454545454556,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.5475000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.5875000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.5675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.4345454545454554,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.6675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 0.15,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.5594526315789481,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 0.6,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.6538250000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.4978736842105272,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.3530727272727273,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.37250000000000033,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.4921894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.4518500000000002,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.44153684210526395,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.255890909090909,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 8,
+      "moisture": 0,
+      "growth": 0.41777272727272774,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.6475000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.5675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.5200000000000014,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.5157894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.6875000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.6059250000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 0.44999999999999996,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.49963636363636477,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.6171250000000004,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.40580000000000044,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.46252727272727356,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.51265,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.4764750000000003,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.2783157894736843,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.25198181818181814,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.4499272727272732,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 9,
+      "moisture": 0,
+      "growth": 0.4234750000000002,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.6075000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.6350000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.46000000000000096,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.5357894736842113,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.5576842105263166,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 0.75,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.5620375000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.5557894736842112,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.46920000000000095,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 0.9,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.42275454545454616,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.44388421052631644,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.34220909090909085,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.4361263157894745,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.3153684210526321,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.4042250000000001,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 10,
+      "moisture": 0,
+      "growth": 0.24434545454545437,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.5875000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.6421052631578947,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.6021052631578949,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.5821052631578951,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.5869750000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 0.3,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.6069750000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 0.3,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.6421052631578947,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.533136842105264,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 0.6,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.4396363636363644,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.4288909090909096,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.4561263157894743,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.40122500000000016,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.41384210526315846,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.21114545454545447,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 11,
+      "moisture": 0,
+      "growth": 0.34432500000000016,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.5675000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.6475000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.5157894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.4400000000000009,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.5200000000000014,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.4800000000000011,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.5797249999999999,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.3621636363636367,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.5482249999999994,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.44644210526315853,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.362209090909091,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.3892421052631585,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.32816363636363655,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.256781818181818,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 12,
+      "moisture": 0,
+      "growth": 0.3064421052631581,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.4957894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.5157894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.5000000000000012,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.5357894736842113,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.49578947368421145,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.5357894736842113,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.45829473684210587,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.4397875000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.41797500000000026,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.45047500000000024,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.39297500000000024,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.2793473684210526,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.32143636363636346,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.4381125000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 13,
+      "moisture": 0,
+      "growth": 0.42240000000000016,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.6875000000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.5757894736842111,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.4345454545454554,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.4800000000000011,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.6950000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.5757894736842111,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.4545454545454555,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 0.15,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.43125454545454606,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.40641818181818234,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.4955000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.3688909090909092,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.4212250000000003,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.5039750000000001,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.41624210526315847,
+      "stage": "dead",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.4034818181818187,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 14,
+      "moisture": 0,
+      "growth": 0.36143636363636367,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 0,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.4345454545454554,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 1,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.3945454545454552,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 2,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.4957894736842114,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 3,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.6357894736842106,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 4,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.6275000000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 5,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.5557894736842112,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": false,
+      "diseaseLevel": 0,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 6,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.5822500000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 0.75,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 7,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.5614750000000001,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 8,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.363718181818182,
+      "stage": "growing",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 9,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.4914750000000002,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 10,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.38924210526315833,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 11,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.4974750000000003,
+      "stage": "growing",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 12,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.4832250000000003,
+      "stage": "dead",
+      "cropId": "tomato",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 13,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.43190526315789557,
+      "stage": "growing",
+      "cropId": "corn",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 14,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.29002727272727263,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    },
+    {
+      "x": 15,
+      "y": 15,
+      "moisture": 0,
+      "growth": 0.2742363636363635,
+      "stage": "dead",
+      "cropId": "wheat",
+      "diseased": true,
+      "diseaseLevel": 1,
+      "irrigatedToday": false,
+      "taskToday": null
+    }
+  ],
+  "weather": [
+    {
+      "day": 0,
+      "date": "2026-05-04",
+      "tempC": 22.081223495304585,
+      "precipMm": 0,
+      "humidity": 0.45461130957119167,
+      "windKmh": 8.433718774933368
+    },
+    {
+      "day": 1,
+      "date": "2026-05-05",
+      "tempC": 24.05656103603542,
+      "precipMm": 0,
+      "humidity": 0.450726341502741,
+      "windKmh": 10.100228181574494
+    },
+    {
+      "day": 2,
+      "date": "2026-05-06",
+      "tempC": 25.61648598406464,
+      "precipMm": 2.1229815459810197,
+      "humidity": 0.4157982322853059,
+      "windKmh": 8.335830375086516
+    },
+    {
+      "day": 3,
+      "date": "2026-05-07",
+      "tempC": 25.5650881100446,
+      "precipMm": 0,
+      "humidity": 0.4383737968746573,
+      "windKmh": 8.049098761286587
+    },
+    {
+      "day": 4,
+      "date": "2026-05-08",
+      "tempC": 27.33282116148621,
+      "precipMm": 0,
+      "humidity": 0.4746880827238783,
+      "windKmh": 6.941310204565525
+    },
+    {
+      "day": 5,
+      "date": "2026-05-09",
+      "tempC": 26.373380861245096,
+      "precipMm": 0,
+      "humidity": 0.4644884083885699,
+      "windKmh": 7.240234883502126
+    },
+    {
+      "day": 6,
+      "date": "2026-05-10",
+      "tempC": 28.29038841370493,
+      "precipMm": 0,
+      "humidity": 0.4676826316863298,
+      "windKmh": 7.0945924539119005
+    },
+    {
+      "day": 7,
+      "date": "2026-05-11",
+      "tempC": 28.98926368355751,
+      "precipMm": 4.506238792091608,
+      "humidity": 0.43171498067677017,
+      "windKmh": 8.354385359212756
+    },
+    {
+      "day": 8,
+      "date": "2026-05-12",
+      "tempC": 27.23667344264686,
+      "precipMm": 0,
+      "humidity": 0.47043776172213253,
+      "windKmh": 9.775776966940612
+    },
+    {
+      "day": 9,
+      "date": "2026-05-13",
+      "tempC": 25.33290854562074,
+      "precipMm": 0,
+      "humidity": 0.46448850056622176,
+      "windKmh": 7.345145662780851
+    },
+    {
+      "day": 10,
+      "date": "2026-05-14",
+      "tempC": 24.754769381135702,
+      "precipMm": 0,
+      "humidity": 0.4443710903869942,
+      "windKmh": 7.50831812620163
+    },
+    {
+      "day": 11,
+      "date": "2026-05-15",
+      "tempC": 23.93523935135454,
+      "precipMm": 0,
+      "humidity": 0.485422237822786,
+      "windKmh": 7.6692755948752165
+    },
+    {
+      "day": 12,
+      "date": "2026-05-16",
+      "tempC": 22.35824704915285,
+      "precipMm": 5.257826512679458,
+      "humidity": 0.4637856008019298,
+      "windKmh": 6.544505703262985
+    },
+    {
+      "day": 13,
+      "date": "2026-05-17",
+      "tempC": 21.848926625214517,
+      "precipMm": 3.5901886876672506,
+      "humidity": 0.4163796851877123,
+      "windKmh": 7.205773779656738
+    },
+    {
+      "day": 14,
+      "date": "2026-05-18",
+      "tempC": 20.34122317843139,
+      "precipMm": 4.359601950272918,
+      "humidity": 0.40272242058999835,
+      "windKmh": 6.177263225894421
+    },
+    {
+      "day": 15,
+      "date": "2026-05-19",
+      "tempC": 20.384367790073156,
+      "precipMm": 0,
+      "humidity": 0.4414815162308514,
+      "windKmh": 4.29289252217859
+    },
+    {
+      "day": 16,
+      "date": "2026-05-20",
+      "tempC": 18.67530278302729,
+      "precipMm": 0,
+      "humidity": 0.4436519579263404,
+      "windKmh": 4.336659152060747
+    },
+    {
+      "day": 17,
+      "date": "2026-05-21",
+      "tempC": 19.6981056407094,
+      "precipMm": 0.1369810733012855,
+      "humidity": 0.4908406291157007,
+      "windKmh": 6.487815111875534
+    },
+    {
+      "day": 18,
+      "date": "2026-05-22",
+      "tempC": 21.162991599179804,
+      "precipMm": 0,
+      "humidity": 0.5275911278789863,
+      "windKmh": 7.942826582118869
+    },
+    {
+      "day": 19,
+      "date": "2026-05-23",
+      "tempC": 22.034989724867046,
+      "precipMm": 0,
+      "humidity": 0.5091454326175153,
+      "windKmh": 10.58733227243647
+    },
+    {
+      "day": 20,
+      "date": "2026-05-24",
+      "tempC": 23.878273589536548,
+      "precipMm": 0,
+      "humidity": 0.556935839052312,
+      "windKmh": 8.91637735022232
+    },
+    {
+      "day": 21,
+      "date": "2026-05-25",
+      "tempC": 24.74403742607683,
+      "precipMm": 0,
+      "humidity": 0.5389274866553023,
+      "windKmh": 11.473881099838763
+    },
+    {
+      "day": 22,
+      "date": "2026-05-26",
+      "tempC": 22.996530301868916,
+      "precipMm": 0,
+      "humidity": 0.5408010520972312,
+      "windKmh": 12.232088772580028
+    },
+    {
+      "day": 23,
+      "date": "2026-05-27",
+      "tempC": 24.70630280394107,
+      "precipMm": 3.6108075664378703,
+      "humidity": 0.5067314104177058,
+      "windKmh": 12.552467748522758
+    },
+    {
+      "day": 24,
+      "date": "2026-05-28",
+      "tempC": 24.440607199445367,
+      "precipMm": 0,
+      "humidity": 0.4747072776313871,
+      "windKmh": 14.43496617116034
+    },
+    {
+      "day": 25,
+      "date": "2026-05-29",
+      "tempC": 25.271369173191488,
+      "precipMm": 0,
+      "humidity": 0.4662508594337851,
+      "windKmh": 15.045048637315631
+    },
+    {
+      "day": 26,
+      "date": "2026-05-30",
+      "tempC": 24.712587893009186,
+      "precipMm": 0,
+      "humidity": 0.5092220542952418,
+      "windKmh": 15.081005398184061
+    },
+    {
+      "day": 27,
+      "date": "2026-05-31",
+      "tempC": 26.037901854142547,
+      "precipMm": 0,
+      "humidity": 0.5069892719155177,
+      "windKmh": 16.47053023101762
+    },
+    {
+      "day": 28,
+      "date": "2026-06-01",
+      "tempC": 24.461116717197,
+      "precipMm": 0,
+      "humidity": 0.5139728365465998,
+      "windKmh": 17.428247046191245
+    },
+    {
+      "day": 29,
+      "date": "2026-06-02",
+      "tempC": 23.161246723495424,
+      "precipMm": 0,
+      "humidity": 0.48279412030242375,
+      "windKmh": 15.998718556482345
+    },
+    {
+      "day": 30,
+      "date": "2026-06-03",
+      "tempC": 24.895450558513403,
+      "precipMm": 0,
+      "humidity": 0.5167861486785112,
+      "windKmh": 13.424221759662032
+    },
+    {
+      "day": 31,
+      "date": "2026-06-04",
+      "tempC": 24.132513905875385,
+      "precipMm": 0,
+      "humidity": 0.5422802152112125,
+      "windKmh": 11.946232546586543
+    },
+    {
+      "day": 32,
+      "date": "2026-06-05",
+      "tempC": 23.89947133883834,
+      "precipMm": 0,
+      "humidity": 0.5006489228457212,
+      "windKmh": 9.154075463302433
+    },
+    {
+      "day": 33,
+      "date": "2026-06-06",
+      "tempC": 23.217735948972404,
+      "precipMm": 6.631740326993167,
+      "humidity": 0.45098798968829207,
+      "windKmh": 9.094725808128715
+    },
+    {
+      "day": 34,
+      "date": "2026-06-07",
+      "tempC": 24.304483181796968,
+      "precipMm": 0,
+      "humidity": 0.42033860178198656,
+      "windKmh": 8.302158648148179
+    },
+    {
+      "day": 35,
+      "date": "2026-06-08",
+      "tempC": 25.986198890954256,
+      "precipMm": 2.2781549138017,
+      "humidity": 0.411498148064129,
+      "windKmh": 9.648885772563517
+    },
+    {
+      "day": 36,
+      "date": "2026-06-09",
+      "tempC": 26.244704666547477,
+      "precipMm": 0,
+      "humidity": 0.4334321301197632,
+      "windKmh": 11.830556974280626
+    },
+    {
+      "day": 37,
+      "date": "2026-06-10",
+      "tempC": 27.63405000139028,
+      "precipMm": 0,
+      "humidity": 0.44471376263536505,
+      "windKmh": 13.367239723913372
+    },
+    {
+      "day": 38,
+      "date": "2026-06-11",
+      "tempC": 25.969994043000042,
+      "precipMm": 0,
+      "humidity": 0.4888723534531891,
+      "windKmh": 15.012143573723733
+    },
+    {
+      "day": 39,
+      "date": "2026-06-12",
+      "tempC": 25.918887455947697,
+      "precipMm": 0,
+      "humidity": 0.5016342702787369,
+      "windKmh": 17.872893006075174
+    },
+    {
+      "day": 40,
+      "date": "2026-06-13",
+      "tempC": 26.94205859862268,
+      "precipMm": 0,
+      "humidity": 0.5451296218438073,
+      "windKmh": 16.382588473614305
+    },
+    {
+      "day": 41,
+      "date": "2026-06-14",
+      "tempC": 28.722200055606663,
+      "precipMm": 0,
+      "humidity": 0.5691509063355624,
+      "windKmh": 15.06879477435723
+    },
+    {
+      "day": 42,
+      "date": "2026-06-15",
+      "tempC": 27.674409940838814,
+      "precipMm": 3.247287853155285,
+      "humidity": 0.5939532067859545,
+      "windKmh": 16.620846298057586
+    },
+    {
+      "day": 43,
+      "date": "2026-06-16",
+      "tempC": 26.576982624828815,
+      "precipMm": 5.810543256811798,
+      "humidity": 0.5596448042895645,
+      "windKmh": 14.707740530371666
+    },
+    {
+      "day": 44,
+      "date": "2026-06-17",
+      "tempC": 28.191881303675473,
+      "precipMm": 0,
+      "humidity": 0.5180461602285504,
+      "windKmh": 16.866894274484366
+    },
+    {
+      "day": 45,
+      "date": "2026-06-18",
+      "tempC": 27.485161554068327,
+      "precipMm": 0,
+      "humidity": 0.49259706793818625,
+      "windKmh": 16.383988755755126
+    },
+    {
+      "day": 46,
+      "date": "2026-06-19",
+      "tempC": 25.90319785475731,
+      "precipMm": 0,
+      "humidity": 0.49931617330294104,
+      "windKmh": 14.762802185490727
+    },
+    {
+      "day": 47,
+      "date": "2026-06-20",
+      "tempC": 24.6715105175972,
+      "precipMm": 0,
+      "humidity": 0.5348535458790138,
+      "windKmh": 17.012093629688025
+    },
+    {
+      "day": 48,
+      "date": "2026-06-21",
+      "tempC": 23.5908540263772,
+      "precipMm": 0,
+      "humidity": 0.4959633902879431,
+      "windKmh": 16.427614029031247
+    },
+    {
+      "day": 49,
+      "date": "2026-06-22",
+      "tempC": 24.243246943689883,
+      "precipMm": 4.467170708812773,
+      "humidity": 0.45921090142801396,
+      "windKmh": 13.805904610548168
+    },
+    {
+      "day": 50,
+      "date": "2026-06-23",
+      "tempC": 23.46934984344989,
+      "precipMm": 5.399600141681731,
+      "humidity": 0.4902813485125079,
+      "windKmh": 16.730243854224682
+    },
+    {
+      "day": 51,
+      "date": "2026-06-24",
+      "tempC": 23.068258973769844,
+      "precipMm": 0,
+      "humidity": 0.49075046195648603,
+      "windKmh": 16.492456219624728
+    },
+    {
+      "day": 52,
+      "date": "2026-06-25",
+      "tempC": 23.527711340226233,
+      "precipMm": 0,
+      "humidity": 0.45509573328308756,
+      "windKmh": 19.288691914640367
+    },
+    {
+      "day": 53,
+      "date": "2026-06-26",
+      "tempC": 22.04004544764757,
+      "precipMm": 5.247325578238815,
+      "humidity": 0.48062888535205267,
+      "windKmh": 20.549937773961574
+    },
+    {
+      "day": 54,
+      "date": "2026-06-27",
+      "tempC": 22.66248186863959,
+      "precipMm": 0,
+      "humidity": 0.5157876055454834,
+      "windKmh": 18.80722291721031
+    },
+    {
+      "day": 55,
+      "date": "2026-06-28",
+      "tempC": 23.57468541059643,
+      "precipMm": 0,
+      "humidity": 0.4812447037314995,
+      "windKmh": 21.786718361079693
+    },
+    {
+      "day": 56,
+      "date": "2026-06-29",
+      "tempC": 24.977746197022498,
+      "precipMm": 0,
+      "humidity": 0.46971802916377775,
+      "windKmh": 24.42621800303459
+    },
+    {
+      "day": 57,
+      "date": "2026-06-30",
+      "tempC": 26.096988569013774,
+      "precipMm": 0,
+      "humidity": 0.4666788787581026,
+      "windKmh": 22.45440093195066
+    },
+    {
+      "day": 58,
+      "date": "2026-07-01",
+      "tempC": 24.77722803875804,
+      "precipMm": 0,
+      "humidity": 0.5144941034493967,
+      "windKmh": 19.664325295947492
+    },
+    {
+      "day": 59,
+      "date": "2026-07-02",
+      "tempC": 23.7686007861048,
+      "precipMm": 0,
+      "humidity": 0.5286963932448997,
+      "windKmh": 21.174534213729203
+    },
+    {
+      "day": 60,
+      "date": "2026-07-03",
+      "tempC": 24.138060729950666,
+      "precipMm": 0,
+      "humidity": 0.5390337378950788,
+      "windKmh": 18.97417023498565
+    },
+    {
+      "day": 61,
+      "date": "2026-07-04",
+      "tempC": 22.853740799240768,
+      "precipMm": 0,
+      "humidity": 0.5056089123478158,
+      "windKmh": 16.374118079897016
+    },
+    {
+      "day": 62,
+      "date": "2026-07-05",
+      "tempC": 22.271208196878433,
+      "precipMm": 0,
+      "humidity": 0.5250710791209712,
+      "windKmh": 19.304975260514766
+    },
+    {
+      "day": 63,
+      "date": "2026-07-06",
+      "tempC": 20.280529335141182,
+      "precipMm": 9.475388647988439,
+      "humidity": 0.5452416603220626,
+      "windKmh": 17.467757921200246
+    },
+    {
+      "day": 64,
+      "date": "2026-07-07",
+      "tempC": 21.752424970269203,
+      "precipMm": 0,
+      "humidity": 0.5720260502537712,
+      "windKmh": 15.248975183814764
+    },
+    {
+      "day": 65,
+      "date": "2026-07-08",
+      "tempC": 21.186899991706014,
+      "precipMm": 0,
+      "humidity": 0.5917721528094261,
+      "windKmh": 17.6632084636949
+    },
+    {
+      "day": 66,
+      "date": "2026-07-09",
+      "tempC": 21.385880649089813,
+      "precipMm": 0,
+      "humidity": 0.5708330087596549,
+      "windKmh": 15.82095018774271
+    },
+    {
+      "day": 67,
+      "date": "2026-07-10",
+      "tempC": 21.74620216526091,
+      "precipMm": 0,
+      "humidity": 0.5780900991754605,
+      "windKmh": 15.029231117106974
+    },
+    {
+      "day": 68,
+      "date": "2026-07-11",
+      "tempC": 20.995519953779876,
+      "precipMm": 0,
+      "humidity": 0.5426438022870569,
+      "windKmh": 12.310756816063076
+    },
+    {
+      "day": 69,
+      "date": "2026-07-12",
+      "tempC": 22.305102597922087,
+      "precipMm": 0,
+      "humidity": 0.5228956878650932,
+      "windKmh": 13.11219682265073
+    },
+    {
+      "day": 70,
+      "date": "2026-07-13",
+      "tempC": 23.693995310924947,
+      "precipMm": 0,
+      "humidity": 0.47889003753662096,
+      "windKmh": 13.92510461807251
+    },
+    {
+      "day": 71,
+      "date": "2026-07-14",
+      "tempC": 25.32319299969822,
+      "precipMm": 0,
+      "humidity": 0.44822574651334424,
+      "windKmh": 14.805844102054834
+    },
+    {
+      "day": 72,
+      "date": "2026-07-15",
+      "tempC": 24.735556597821414,
+      "precipMm": 0,
+      "humidity": 0.40898361639119674,
+      "windKmh": 12.029694116674364
+    },
+    {
+      "day": 73,
+      "date": "2026-07-16",
+      "tempC": 23.838367184624076,
+      "precipMm": 4.046043029520661,
+      "humidity": 0.38075277265161267,
+      "windKmh": 10.973521752748638
+    },
+    {
+      "day": 74,
+      "date": "2026-07-17",
+      "tempC": 23.172121550887823,
+      "precipMm": 0,
+      "humidity": 0.3653657255461439,
+      "windKmh": 11.144517697393894
+    },
+    {
+      "day": 75,
+      "date": "2026-07-18",
+      "tempC": 24.509397078305483,
+      "precipMm": 0,
+      "humidity": 0.35575730795972044,
+      "windKmh": 9.274494406301528
+    },
+    {
+      "day": 76,
+      "date": "2026-07-19",
+      "tempC": 23.76969317905605,
+      "precipMm": 0,
+      "humidity": 0.31754436839837574,
+      "windKmh": 7.51442268723622
+    },
+    {
+      "day": 77,
+      "date": "2026-07-20",
+      "tempC": 24.030467577278614,
+      "precipMm": 1.4052423858083785,
+      "humidity": 0.28460339307785026,
+      "windKmh": 7.367275905795395
+    },
+    {
+      "day": 78,
+      "date": "2026-07-21",
+      "tempC": 23.3099102973938,
+      "precipMm": 0,
+      "humidity": 0.31385310876648864,
+      "windKmh": 9.34298381023109
+    },
+    {
+      "day": 79,
+      "date": "2026-07-22",
+      "tempC": 24.378736412152648,
+      "precipMm": 0,
+      "humidity": 0.30836917224805793,
+      "windKmh": 12.209185072686523
+    },
+    {
+      "day": 80,
+      "date": "2026-07-23",
+      "tempC": 25.61489777173847,
+      "precipMm": 0,
+      "humidity": 0.3342094509629532,
+      "windKmh": 11.509226305875927
+    },
+    {
+      "day": 81,
+      "date": "2026-07-24",
+      "tempC": 23.643367308191955,
+      "precipMm": 0,
+      "humidity": 0.31138974328059693,
+      "windKmh": 10.229056242387742
+    },
+    {
+      "day": 82,
+      "date": "2026-07-25",
+      "tempC": 24.55164466239512,
+      "precipMm": 0,
+      "humidity": 0.2822463091928511,
+      "windKmh": 10.313835932407528
+    },
+    {
+      "day": 83,
+      "date": "2026-07-26",
+      "tempC": 26.226519903168082,
+      "precipMm": 0,
+      "humidity": 0.24202404019888482,
+      "windKmh": 12.787575391121209
+    },
+    {
+      "day": 84,
+      "date": "2026-07-27",
+      "tempC": 27.801919690333307,
+      "precipMm": 1.640676218084991,
+      "humidity": 0.27859638433437783,
+      "windKmh": 15.547811687923968
+    },
+    {
+      "day": 85,
+      "date": "2026-07-28",
+      "tempC": 26.274171072989702,
+      "precipMm": 8.903424334712327,
+      "humidity": 0.2939559309277682,
+      "windKmh": 15.125652361195534
+    },
+    {
+      "day": 86,
+      "date": "2026-07-29",
+      "tempC": 26.622153553180397,
+      "precipMm": 0,
+      "humidity": 0.2840185588225721,
+      "windKmh": 14.259495029225945
+    },
+    {
+      "day": 87,
+      "date": "2026-07-30",
+      "tempC": 26.479133054614067,
+      "precipMm": 4.027907559648156,
+      "humidity": 0.26861821487545956,
+      "windKmh": 13.624969245865941
+    },
+    {
+      "day": 88,
+      "date": "2026-07-31",
+      "tempC": 28.3501709792763,
+      "precipMm": 0,
+      "humidity": 0.31819702256470905,
+      "windKmh": 11.698342113289982
+    },
+    {
+      "day": 89,
+      "date": "2026-08-01",
+      "tempC": 30.051722490228713,
+      "precipMm": 0,
+      "humidity": 0.3264213429763912,
+      "windKmh": 11.669318995438516
+    }
+  ],
+  "budget": 10,
+  "waterReservoirL": 0,
+  "log": [
+    {
+      "day": 0,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 0,
+      "algorithm": "Hill Climb + BFS",
+      "message": "Irrigated 182 cells (+0.00 moisture, threshold 0.33)",
+      "delta": {
+        "water": -9100
+      }
+    },
+    {
+      "day": 0,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 1,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 1,
+      "algorithm": "Hill Climb + BFS",
+      "message": "Irrigated 182 cells (+0.00 moisture, threshold 0.34)",
+      "delta": {
+        "water": -9100
+      }
+    },
+    {
+      "day": 1,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 2,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 2,
+      "algorithm": "Hill Climb + BFS",
+      "message": "Irrigated 182 cells (+0.00 moisture, threshold 0.45)",
+      "delta": {
+        "water": -9100
+      }
+    },
+    {
+      "day": 2,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 3,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 3,
+      "algorithm": "Hill Climb + BFS",
+      "message": "Irrigated 182 cells (+0.00 moisture, threshold 0.32)",
+      "delta": {
+        "water": -9100
+      }
+    },
+    {
+      "day": 3,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 4,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 4,
+      "algorithm": "Hill Climb + BFS",
+      "message": "Irrigated 182 cells (+0.00 moisture, threshold 0.38)",
+      "delta": {
+        "water": -9100
+      }
+    },
+    {
+      "day": 4,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 5,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 5,
+      "algorithm": "Hill Climb + BFS",
+      "message": "Irrigated 114 cells (+0.00 moisture, threshold 0.43)",
+      "delta": {
+        "water": -5700
+      }
+    },
+    {
+      "day": 5,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 6,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 6,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 7,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 7,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 8,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 8,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 9,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 9,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 10,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 10,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 11,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 11,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 12,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 12,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 13,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 13,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 14,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 14,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 15,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 15,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 16,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 16,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 17,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 17,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 18,
+      "algorithm": "Knapsack",
+      "message": "Allocated $200 → fert-A, fert-B, pest",
+      "delta": {
+        "budget": -200
+      }
+    },
+    {
+      "day": 18,
+      "algorithm": "Minimax (α-β)",
+      "message": "Pre-emptive spray (worst-case payoff -9.0)",
+      "delta": {
+        "budget": -60
+      }
+    },
+    {
+      "day": 19,
+      "algorithm": "Knapsack",
+      "message": "Allocated $50 → fert-B",
+      "delta": {
+        "budget": -50
+      }
+    }
+  ],
+  "kpis": {
+    "avgMoisture": 0,
+    "avgHealth": 0.6645539906103286,
+    "predictedYieldKg": 669.7973033283496,
+    "projectedProfit": -4588.1216180029905,
+    "riskScore": 0.8848613556338029,
+    "diseasedPct": 0.48828125
+  },
+  "history": [
+    {
+      "day": 1,
+      "moisture": 0.21718587860595368,
+      "health": 1,
+      "yield": 19.070873205741687,
+      "profit": -248.557476076555
+    },
+    {
+      "day": 2,
+      "moisture": 0.0057529610644010635,
+      "health": 1,
+      "yield": 29.569820574162687,
+      "profit": -502.2581076555024
+    },
+    {
+      "day": 3,
+      "moisture": 0,
+      "health": 1,
+      "yield": 37.198169856459316,
+      "profit": -757.6810980861244
+    },
+    {
+      "day": 4,
+      "moisture": 0,
+      "health": 1,
+      "yield": 44.826519138756,
+      "profit": -1013.1040885167464
+    },
+    {
+      "day": 5,
+      "moisture": 0,
+      "health": 1,
+      "yield": 52.45486842105248,
+      "profit": -1268.5270789473684
+    },
+    {
+      "day": 6,
+      "moisture": 0,
+      "health": 1,
+      "yield": 60.083217703349305,
+      "profit": -1523.9500693779905
+    },
+    {
+      "day": 7,
+      "moisture": 0,
+      "health": 1,
+      "yield": 68.43156698564599,
+      "profit": -1778.9410598086124
+    },
+    {
+      "day": 8,
+      "moisture": 0,
+      "health": 1,
+      "yield": 77.49991626794254,
+      "profit": -2033.5000502392345
+    },
+    {
+      "day": 9,
+      "moisture": 0,
+      "health": 1,
+      "yield": 97.58826555023929,
+      "profit": -2281.4470406698565
+    },
+    {
+      "day": 10,
+      "moisture": 0,
+      "health": 1,
+      "yield": 115.0166148325357,
+      "profit": -2530.9900311004785
+    },
+    {
+      "day": 11,
+      "moisture": 0,
+      "health": 1,
+      "yield": 138.40496411483267,
+      "profit": -2776.9570215311005
+    },
+    {
+      "day": 12,
+      "moisture": 0,
+      "health": 1,
+      "yield": 167.4533133971293,
+      "profit": -3019.5280119617223
+    },
+    {
+      "day": 13,
+      "moisture": 0.008388684256369405,
+      "health": 1,
+      "yield": 206.1841866028708,
+      "profit": -3256.2894880382773
+    },
+    {
+      "day": 14,
+      "moisture": 0,
+      "health": 1,
+      "yield": 235.17253588516743,
+      "profit": -3498.8964784688997
+    },
+    {
+      "day": 15,
+      "moisture": 0,
+      "health": 1,
+      "yield": 269.59590909090906,
+      "profit": -3738.2424545454546
+    },
+    {
+      "day": 16,
+      "moisture": 0,
+      "health": 1,
+      "yield": 296.30425837320564,
+      "profit": -3982.2174449760764
+    },
+    {
+      "day": 17,
+      "moisture": 0,
+      "health": 1,
+      "yield": 322.972607655503,
+      "profit": -4226.216435406698
+    },
+    {
+      "day": 18,
+      "moisture": 0,
+      "health": 1,
+      "yield": 350.00095693779895,
+      "profit": -4469.999425837321
+    },
+    {
+      "day": 19,
+      "moisture": 0,
+      "health": 1,
+      "yield": 374.1893062200952,
+      "profit": -4715.486416267943
+    },
+    {
+      "day": 20,
+      "moisture": 0,
+      "health": 0.998828125,
+      "yield": 391.85024072966536,
+      "profit": -4754.889855562201
+    },
+    {
+      "day": 21,
+      "moisture": 0,
+      "health": 0.9976562499999999,
+      "yield": 399.2169289892345,
+      "profit": -4750.46984260646
+    },
+    {
+      "day": 22,
+      "moisture": 0,
+      "health": 0.9964843750000001,
+      "yield": 406.5707777601673,
+      "profit": -4746.057533343899
+    },
+    {
+      "day": 23,
+      "moisture": 0,
+      "health": 0.9953125,
+      "yield": 413.9131938038277,
+      "profit": -4741.652083717703
+    },
+    {
+      "day": 24,
+      "moisture": 0,
+      "health": 0.994140625,
+      "yield": 421.2455838815792,
+      "profit": -4737.2526496710525
+    },
+    {
+      "day": 25,
+      "moisture": 0,
+      "health": 0.99296875,
+      "yield": 428.56935475478457,
+      "profit": -4732.858387147129
+    },
+    {
+      "day": 26,
+      "moisture": 0,
+      "health": 0.9921875,
+      "yield": 435.97403415071767,
+      "profit": -4728.415579509569
+    },
+    {
+      "day": 27,
+      "moisture": 0,
+      "health": 0.9921875,
+      "yield": 443.5517697966508,
+      "profit": -4723.868938122009
+    },
+    {
+      "day": 28,
+      "moisture": 0,
+      "health": 0.9916015625,
+      "yield": 451.01566333732063,
+      "profit": -4719.3906019976075
+    },
+    {
+      "day": 29,
+      "moisture": 0,
+      "health": 0.991015625,
+      "yield": 458.4725052990431,
+      "profit": -4714.916496820574
+    },
+    {
+      "day": 30,
+      "moisture": 0,
+      "health": 0.988671875,
+      "yield": 465.6117079066985,
+      "profit": -4710.632975255981
+    },
+    {
+      "day": 31,
+      "moisture": 0,
+      "health": 0.9857421874999999,
+      "yield": 472.504775316986,
+      "profit": -4706.497134809809
+    },
+    {
+      "day": 32,
+      "moisture": 0,
+      "health": 0.9810546875,
+      "yield": 478.8523287828943,
+      "profit": -4702.6886027302635
+    },
+    {
+      "day": 33,
+      "moisture": 0,
+      "health": 0.9757812499999999,
+      "yield": 484.9661074192584,
+      "profit": -4699.020335548445
+    },
+    {
+      "day": 34,
+      "moisture": 0.04262852579856625,
+      "health": 0.9689453125,
+      "yield": 501.7958221770339,
+      "profit": -4688.92250669378
+    },
+    {
+      "day": 35,
+      "moisture": 0,
+      "health": 0.9613281249999999,
+      "yield": 507.17228221142346,
+      "profit": -4685.696630673146
+    },
+    {
+      "day": 36,
+      "moisture": 0,
+      "health": 0.9537109375,
+      "yield": 512.5209618092107,
+      "profit": -4682.487422914473
+    },
+    {
+      "day": 37,
+      "moisture": 0,
+      "health": 0.946875,
+      "yield": 518.0253725777511,
+      "profit": -4679.1847764533495
+    },
+    {
+      "day": 38,
+      "moisture": 0,
+      "health": 0.9404296875,
+      "yield": 523.7054082416271,
+      "profit": -4675.776755055023
+    },
+    {
+      "day": 39,
+      "moisture": 0,
+      "health": 0.9390196078431372,
+      "yield": 529.352835956938,
+      "profit": -4672.388298425837
+    },
+    {
+      "day": 40,
+      "moisture": 0,
+      "health": 0.9337254901960784,
+      "yield": 535.3668001495214,
+      "profit": -4668.779919910287
+    },
+    {
+      "day": 41,
+      "moisture": 0,
+      "health": 0.9299999999999999,
+      "yield": 541.7465799880383,
+      "profit": -4664.952052007177
+    },
+    {
+      "day": 42,
+      "moisture": 0,
+      "health": 0.929724409448819,
+      "yield": 547.4207986632782,
+      "profit": -4661.547520802033
+    },
+    {
+      "day": 43,
+      "moisture": 0,
+      "health": 0.9257874015748031,
+      "yield": 553.5366356818189,
+      "profit": -4657.878018590909
+    },
+    {
+      "day": 44,
+      "moisture": 0.00030420236158963123,
+      "health": 0.9212598425196851,
+      "yield": 564.3627257745216,
+      "profit": -4651.382364535287
+    },
+    {
+      "day": 45,
+      "moisture": 0,
+      "health": 0.9191699604743082,
+      "yield": 567.3743119198568,
+      "profit": -4649.575412848086
+    },
+    {
+      "day": 46,
+      "moisture": 0,
+      "health": 0.9130434782608695,
+      "yield": 573.0171867015557,
+      "profit": -4646.189687979067
+    },
+    {
+      "day": 47,
+      "moisture": 0,
+      "health": 0.9085317460317458,
+      "yield": 577.6303700717707,
+      "profit": -4643.421777956937
+    },
+    {
+      "day": 48,
+      "moisture": 0,
+      "health": 0.9088,
+      "yield": 579.6547905053825,
+      "profit": -4642.20712569677
+    },
+    {
+      "day": 49,
+      "moisture": 0,
+      "health": 0.9018,
+      "yield": 584.317943436005,
+      "profit": -4639.409233938397
+    },
+    {
+      "day": 50,
+      "moisture": 0,
+      "health": 0.8948,
+      "yield": 588.8960609838526,
+      "profit": -4636.662363409689
+    },
+    {
+      "day": 51,
+      "moisture": 0.0008833957618642047,
+      "health": 0.8876,
+      "yield": 598.1913692015553,
+      "profit": -4631.085178479067
+    },
+    {
+      "day": 52,
+      "moisture": 0,
+      "health": 0.8807999999999999,
+      "yield": 602.5705319377994,
+      "profit": -4628.45768083732
+    },
+    {
+      "day": 53,
+      "moisture": 0,
+      "health": 0.8752,
+      "yield": 607.0748141178237,
+      "profit": -4625.755111529305
+    },
+    {
+      "day": 54,
+      "moisture": 0.0008462228064370408,
+      "health": 0.8702,
+      "yield": 616.6080289055024,
+      "profit": -4620.035182656698
+    },
+    {
+      "day": 55,
+      "moisture": 0,
+      "health": 0.8672690763052208,
+      "yield": 620.1442972458137,
+      "profit": -4617.913421652512
+    },
+    {
+      "day": 56,
+      "moisture": 0,
+      "health": 0.8596385542168673,
+      "yield": 624.2087695334939,
+      "profit": -4615.474738279903
+    },
+    {
+      "day": 57,
+      "moisture": 0,
+      "health": 0.8548387096774194,
+      "yield": 627.1172665610048,
+      "profit": -4613.729640063397
+    },
+    {
+      "day": 58,
+      "moisture": 0,
+      "health": 0.8487854251012146,
+      "yield": 629.9038840131581,
+      "profit": -4612.057669592105
+    },
+    {
+      "day": 59,
+      "moisture": 0,
+      "health": 0.841260162601626,
+      "yield": 632.0226946740435,
+      "profit": -4610.786383195574
+    },
+    {
+      "day": 60,
+      "moisture": 0,
+      "health": 0.839139344262295,
+      "yield": 631.7085350448577,
+      "profit": -4610.974878973086
+    },
+    {
+      "day": 61,
+      "moisture": 0,
+      "health": 0.830122950819672,
+      "yield": 635.146477437201,
+      "profit": -4608.912113537679
+    },
+    {
+      "day": 62,
+      "moisture": 0,
+      "health": 0.8253086419753085,
+      "yield": 636.8708154126798,
+      "profit": -4607.8775107523925
+    },
+    {
+      "day": 63,
+      "moisture": 0,
+      "health": 0.8266666666666665,
+      "yield": 637.4416851674642,
+      "profit": -4607.5349888995215
+    },
+    {
+      "day": 64,
+      "moisture": 0.17879114754270617,
+      "health": 0.8185416666666667,
+      "yield": 650.1093381190193,
+      "profit": -4599.934397128589
+    },
+    {
+      "day": 65,
+      "moisture": 0.00313590093778979,
+      "health": 0.811875,
+      "yield": 654.0533284240439,
+      "profit": -4597.568002945573
+    },
+    {
+      "day": 66,
+      "moisture": 0,
+      "health": 0.8075313807531381,
+      "yield": 655.9261342434215,
+      "profit": -4596.444319453947
+    },
+    {
+      "day": 67,
+      "moisture": 0,
+      "health": 0.8037815126050419,
+      "yield": 658.5158163845699,
+      "profit": -4594.890510169258
+    },
+    {
+      "day": 68,
+      "moisture": 0,
+      "health": 0.7960084033613445,
+      "yield": 661.8808780651918,
+      "profit": -4592.871473160885
+    },
+    {
+      "day": 69,
+      "moisture": 0,
+      "health": 0.7925847457627119,
+      "yield": 662.4938722368422,
+      "profit": -4592.503676657895
+    },
+    {
+      "day": 70,
+      "moisture": 0,
+      "health": 0.7859574468085103,
+      "yield": 664.3973333014357,
+      "profit": -4591.361600019139
+    },
+    {
+      "day": 71,
+      "moisture": 0,
+      "health": 0.7830472103004293,
+      "yield": 663.7822592194983,
+      "profit": -4591.730644468301
+    },
+    {
+      "day": 72,
+      "moisture": 0,
+      "health": 0.7740343347639487,
+      "yield": 666.5819834061008,
+      "profit": -4590.050809956339
+    },
+    {
+      "day": 73,
+      "moisture": 0,
+      "health": 0.7731601731601732,
+      "yield": 667.9530148863644,
+      "profit": -4589.228191068181
+    },
+    {
+      "day": 74,
+      "moisture": 0,
+      "health": 0.7700873362445412,
+      "yield": 667.8848447368431,
+      "profit": -4589.2690931578945
+    },
+    {
+      "day": 75,
+      "moisture": 0,
+      "health": 0.7638157894736842,
+      "yield": 667.0825124461734,
+      "profit": -4589.7504925322955
+    },
+    {
+      "day": 76,
+      "moisture": 0,
+      "health": 0.7641592920353982,
+      "yield": 667.647207054426,
+      "profit": -4589.411675767345
+    },
+    {
+      "day": 77,
+      "moisture": 0,
+      "health": 0.7602222222222222,
+      "yield": 669.7589559988043,
+      "profit": -4588.144626400717
+    },
+    {
+      "day": 78,
+      "moisture": 0,
+      "health": 0.7582959641255606,
+      "yield": 668.3414676255985,
+      "profit": -4588.9951194246405
+    },
+    {
+      "day": 79,
+      "moisture": 0,
+      "health": 0.7495515695067263,
+      "yield": 670.6273992763165,
+      "profit": -4587.62356043421
+    },
+    {
+      "day": 80,
+      "moisture": 0,
+      "health": 0.7466063348416289,
+      "yield": 668.2755883612439,
+      "profit": -4589.034646983254
+    },
+    {
+      "day": 81,
+      "moisture": 0,
+      "health": 0.7411363636363636,
+      "yield": 669.596747296651,
+      "profit": -4588.24195162201
+    },
+    {
+      "day": 82,
+      "moisture": 0,
+      "health": 0.7304545454545454,
+      "yield": 671.0298344557424,
+      "profit": -4587.382099326554
+    },
+    {
+      "day": 83,
+      "moisture": 0,
+      "health": 0.7272935779816514,
+      "yield": 670.3604193391155,
+      "profit": -4587.78374839653
+    },
+    {
+      "day": 84,
+      "moisture": 0,
+      "health": 0.7214285714285715,
+      "yield": 670.3703100179433,
+      "profit": -4587.777813989234
+    },
+    {
+      "day": 85,
+      "moisture": 0,
+      "health": 0.7183720930232558,
+      "yield": 669.2504033612449,
+      "profit": -4588.449757983253
+    },
+    {
+      "day": 86,
+      "moisture": 0.07774334712415,
+      "health": 0.7072093023255813,
+      "yield": 677.5234078319389,
+      "profit": -4583.485955300836
+    },
+    {
+      "day": 87,
+      "moisture": 0,
+      "health": 0.6960465116279069,
+      "yield": 677.8149291148328,
+      "profit": -4583.311042531101
+    },
+    {
+      "day": 88,
+      "moisture": 0,
+      "health": 0.6846511627906977,
+      "yield": 677.667302517943,
+      "profit": -4583.399618489234
+    },
+    {
+      "day": 89,
+      "moisture": 0,
+      "health": 0.6759345794392524,
+      "yield": 674.3776228080152,
+      "profit": -4585.373426315191
+    },
+    {
+      "day": 90,
+      "moisture": 0,
+      "health": 0.6645539906103286,
+      "yield": 669.7973033283496,
+      "profit": -4588.1216180029905
+    }
+  ],
+  "finished": true
+}

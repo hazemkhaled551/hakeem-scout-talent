@@ -52,9 +52,6 @@ const CANDIDATE_FEATURE_DEFS: Omit<FeatureLimit, "value" | "enabled">[] = [
   { key: "cv_uploads", label: "CV Uploads" },
   { key: "job_applications", label: "Job Applications" },
   { key: "job_suggestions", label: "Job Suggestions" },
-  { key: "profile_visibility", label: "Profile Visibility Boosts" },
-  { key: "saved_jobs", label: "Saved Jobs" },
-  { key: "resume_reviews", label: "AI Resume Reviews" },
 ];
 
 // ─── Company feature definitions ─────────────────────────────────────────────
@@ -63,10 +60,7 @@ const COMPANY_FEATURE_DEFS: Omit<FeatureLimit, "value" | "enabled">[] = [
   { key: "job_posts", label: "Job Posts" },
   { key: "candidate_suggestions", label: "Candidate Suggestions" },
   { key: "received_applications", label: "Received Applications" },
-  { key: "featured_posts", label: "Featured Job Posts" },
-  { key: "team_members", label: "Team Members" },
-  { key: "analytics_exports", label: "Analytics Exports" },
-  { key: "api_access", label: "API Access (calls/month)" },
+
 ];
 
 // ─── Default features factory ────────────────────────────────────────────────

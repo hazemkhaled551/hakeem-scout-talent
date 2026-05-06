@@ -20,10 +20,10 @@ GET /api/v1/admin/dashboard
 
 Returns all data required for the Admin Dashboard screen:
 
-* KPI statistics
-* Activity summary
-* Recent users
-* Recent jobs
+- KPI statistics
+- Activity summary
+- Recent users
+- Recent jobs
 
 ---
 
@@ -57,8 +57,7 @@ Content-Type: application/json
       "totalUsers": 4821,
       "activeJobs": 138,
       "revenueMRR": 8240,
-      "offersSent":312,
-  
+      "offersSent": 312
     },
 
     "activity": {
@@ -115,11 +114,11 @@ GET /api/v1/admin/users
 
 Returns paginated users list with filtering and search support:
 
-* Users list
-* Filters (role, status)
-* Search
-* Pagination
-* Users stats
+- Users list
+- Filters (role, status)
+- Search
+- Pagination
+- Users stats
 
 ---
 
@@ -134,13 +133,13 @@ Content-Type: application/json
 
 ### Query Parameters (Optional)
 
-| Param  | Type   | Description                                         |
-| ------ | ------ | --------------------------------------------------- |
-| page   | number | Current page number                                 |
+| Param  | Type   | Description                       |
+| ------ | ------ | --------------------------------- |
+| page   | number | Current page number               |
 | limit  | number | عدد العناصر في الصفحة (Page size) |
-| search | string | Search by name or email                             |
-| role   | string | Applicant                                           |
-| status | string | Active                                              |
+| search | string | Search by name or email           |
+| role   | string | Applicant                         |
+| status | string | Active                            |
 
 ---
 
@@ -231,7 +230,7 @@ Returns full details of a specific user.
     "email": "string",
     "jobTitle": "string",
     "linkedin_Profile": "string",
-    "location":"string",
+    "location": "string",
     "role": "Applicant | Company",
     "status": "Online | offline",
     "verified": true,
@@ -297,11 +296,11 @@ Restore a suspended user.
 
 This set of endpoints fully supports:
 
-* Users table
-* Filters & search
-* Pagination
-* User actions (ban / unban)
-* User details view
+- Users table
+- Filters & search
+- Pagination
+- User actions (ban / unban)
+- User details view
 
 Optimized for scalable admin panel usage.
 
@@ -327,11 +326,11 @@ GET /api/v1/admin/companies
 
 Returns paginated companies list with filtering and search support:
 
-* Companies list
-* Filters (plan, status)
-* Search
-* Pagination
-* Companies stats
+- Companies list
+- Filters (plan, status)
+- Search
+- Pagination
+- Companies stats
 
 ---
 
@@ -444,7 +443,7 @@ Returns full details of a specific company.
     "name": "string",
     "email": "string",
     "location": "string",
-    "linkedin_profile":"string",
+    "linkedin_profile": "string",
     "plan": "Free | Pro | Enterprise",
     "status": "Online | Offline",
     "verified": true,
@@ -511,8 +510,8 @@ Restore a suspended company account.
 
 # 🧠 Notes
 
-* `jobs` → number of posted jobs
-* `hires` → number of successful hires
+- `jobs` → number of posted jobs
+- `hires` → number of successful hires
 
 ---
 
@@ -520,11 +519,11 @@ Restore a suspended company account.
 
 This set of endpoints fully supports:
 
-* Companies table
-* Filters & search
-* Pagination
-* Company actions (suspend / activate)
-* Company details view
+- Companies table
+- Filters & search
+- Pagination
+- Company actions (suspend / activate)
+- Company details view
 
 Optimized for admin dashboard scalability.
 
@@ -550,11 +549,11 @@ GET /api/v1/admin/jobs
 
 Returns paginated jobs list with filtering and search support:
 
-* Jobs list
-* Filter by status
-* Search (title / company)
-* Pagination
-* Jobs stats
+- Jobs list
+- Filter by status
+- Search (title / company)
+- Pagination
+- Jobs stats
 
 ---
 
@@ -683,20 +682,20 @@ Returns full details of a specific job.
 
 # 🧠 Notes
 
-* `type`:
-  * Full_Time, Part_Time, Contract...
-* `workMode`:
-  * Remote / Onsite / Hybrid
-* `status`:
-  * Published → visible
-  * Draft → not published
-  * Paused → temporarily hidden
-  * Closed → manually closed
-  * Filled → hiring completed
-  * Expired → deadline passed
-* `applicants` → total applications
-* `hired` → successful hires
-* Dates must be ISO format:
+- `type`:
+  - Full_Time, Part_Time, Contract...
+- `workMode`:
+  - Remote / Onsite / Hybrid
+- `status`:
+  - Published → visible
+  - Draft → not published
+  - Paused → temporarily hidden
+  - Closed → manually closed
+  - Filled → hiring completed
+  - Expired → deadline passed
+- `applicants` → total applications
+- `hired` → successful hires
+- Dates must be ISO format:
 
 ```id=
 2026-04-17T12:00:00Z
@@ -708,11 +707,11 @@ Returns full details of a specific job.
 
 This set of endpoints fully supports:
 
-* Jobs table
-* Search & filtering
-* Pagination
-* Job actions (pause / resume / delete)
-* Job details view
+- Jobs table
+- Search & filtering
+- Pagination
+- Job actions (pause / resume / delete)
+- Job details view
 
 Optimized for admin job management.
 
@@ -738,11 +737,11 @@ GET /api/v1/admin/subscriptions
 
 Returns paginated subscriptions list with filtering and search support:
 
-* Subscriptions list
-* Filter by plan
-* Search (company / email)
-* Pagination
-* Subscription stats (including MRR)
+- Subscriptions list
+- Filter by plan
+- Search (company / email)
+- Pagination
+- Subscription stats (including MRR)
 
 ---
 
@@ -893,22 +892,22 @@ Delete a subscription.
 
 # 🧠 Notes
 
-* `plan`:
-  * Free → no payment
-  * Pro → standard paid
-  * Enterprise → custom pricing
-* `billing`:
-  * Monthly
-  * Annual
-* `status`:
-  * Active → subscription running
-  * Cancelled → stopped
-  * Past Due → payment issue
-* `mrr`:
-  * Monthly Recurring Revenue (number only)
-* `amount`:
-  * string for flexibility (e.g. "$49/mo", "Custom")
-* Dates must be ISO format:
+- `plan`:
+  - Free → no payment
+  - Pro → standard paid
+  - Enterprise → custom pricing
+- `billing`:
+  - Monthly
+  - Annual
+- `status`:
+  - Active → subscription running
+  - Cancelled → stopped
+  - Past Due → payment issue
+- `mrr`:
+  - Monthly Recurring Revenue (number only)
+- `amount`:
+  - string for flexibility (e.g. "$49/mo", "Custom")
+- Dates must be ISO format:
 
 ```id=
 2026-04-17T12:00:00Z
@@ -920,12 +919,12 @@ Delete a subscription.
 
 This set of endpoints fully supports:
 
-* Subscriptions table
-* Search & filtering
-* Pagination
-* Plan management (create / update / delete)
-* Subscription tracking
-* Revenue metrics (MRR)
+- Subscriptions table
+- Search & filtering
+- Pagination
+- Plan management (create / update / delete)
+- Subscription tracking
+- Revenue metrics (MRR)
 
 Optimized for admin billing management.
 
@@ -951,11 +950,11 @@ GET /api/v1/admin/payments
 
 Returns paginated payments (transactions) list with filtering and search support:
 
-* Payments list
-* Filter by status
-* Search (company / invoice)
-* Pagination
-* Payments stats (revenue, transactions, failed, pending)
+- Payments list
+- Filter by status
+- Search (company / invoice)
+- Pagination
+- Payments stats (revenue, transactions, failed, pending)
 
 ---
 
@@ -1071,21 +1070,21 @@ Retry a failed payment transaction.
 
 # 🧠 Notes
 
-* `amount`:
-  * Number only (no `$` or commas)
-  * Currency handled separately
-* `currency`:
-  * Example: USD
-* `status`:
-  * Paid → successful transaction
-  * Pending → awaiting processing
-  * Failed → payment failed
-  * Refunded → refunded payment
-* `method`:
-  * Masked payment method (e.g. Visa ••4242)
-* `invoice`:
-  * Unique invoice identifier
-* Dates must be ISO format:
+- `amount`:
+  - Number only (no `$` or commas)
+  - Currency handled separately
+- `currency`:
+  - Example: USD
+- `status`:
+  - Paid → successful transaction
+  - Pending → awaiting processing
+  - Failed → payment failed
+  - Refunded → refunded payment
+- `method`:
+  - Masked payment method (e.g. Visa ••4242)
+- `invoice`:
+  - Unique invoice identifier
+- Dates must be ISO format:
 
 ```id=
 2026-04-17T12:00:00Z
@@ -1097,16 +1096,14 @@ Retry a failed payment transaction.
 
 This set of endpoints fully supports:
 
-* Payments table
-* Search & filtering
-* Pagination
-* Payment tracking
-* Retry failed transactions
-* Revenue analytics
+- Payments table
+- Search & filtering
+- Pagination
+- Payment tracking
+- Retry failed transactions
+- Revenue analytics
 
 Optimized for admin financial monitoring.
-
-
 
 # 📊 Admin Company Plans API Contract
 
@@ -1126,11 +1123,11 @@ Optimized for admin financial monitoring.
 
 Returns all company plans with:
 
-* Plan details
-* Limits (jobs & users)
-* Features
-* Subscribers count
-* Status
+- Plan details
+- Limits (jobs & users)
+- Features
+- Subscribers count
+- Status
 
 ---
 
@@ -1155,7 +1152,49 @@ Returns all company plans with:
 
 ### ✅ Success Response (200)
 
-<pre class="overflow-visible! px-0!" data-start="825" data-end="1548"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼk ͼy"><div class="cm-scroller"><div class="cm-content q9tKkq_readonly"><span>{</span><br/><span>  "success": </span><span class="ͼq">true</span><span>,</span><br/><span>  "data": {</span><br/><span>    "plans": [</span><br/><span>      {</span><br/><span>        "id": </span><span class="ͼr">"string"</span><span>,</span><br/><span>        "name": </span><span class="ͼr">"string"</span><span>,</span><br/><span>        "slug": </span><span class="ͼr">"string"</span><span>,</span><br/><span>        "price": </span><span class="ͼr">"string"</span><span>,</span><br/><span>        "billing": </span><span class="ͼr">"Monthly | Annual | Custom"</span><span>,</span><br/><span>        "limits": {</span><br/><span>          "maxJobs": </span><span class="ͼr">"number | Unlimited"</span><span>,</span><br/><span>          "maxUsers": </span><span class="ͼr">"number | Unlimited"</span><br/><span>        },</span><br/><span>        "features": [</span><span class="ͼr">"string"</span><span>],</span><br/><span>        "status": </span><span class="ͼr">"Active | Inactive | Draft"</span><span>,</span><br/><span>        "subscribers": </span><span class="ͼq">0</span><span>,</span><br/><span>        "createdAt": </span><span class="ͼr">"ISO Date"</span><br/><span>      }</span><br/><span>    ],</span><br/><br/><span>    "stats": {</span><br/><span>      "totalPlans": </span><span class="ͼq">0</span><span>,</span><br/><span>      "activePlans": </span><span class="ͼq">0</span><span>,</span><br/><span>      "totalSubscribers": </span><span class="ͼq">0</span><span>,</span><br/><span>      "enterpriseSubscribers": </span><span class="ͼq">0</span><br/><span>    },</span><br/><br/><span>    "pagination": {</span><br/><span>      "page": </span><span class="ͼq">1</span><span>,</span><br/><span>      "limit": </span><span class="ͼq">10</span><span>,</span><br/><span>      "total": </span><span class="ͼq">0</span><span>,</span><br/><span>      "pages": </span><span class="ͼq">0</span><br/><span>    }</span><br/><span>  }</span><br/><span>}</span></div></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+{
+"success": true,
+"data": {
+"plans": [
+{
+"id": "1",
+"type": "candidate",
+"name": "Pro Seeker",
+"slug": "pro-seeker",
+"price": "$12/mo",
+"billing": "Monthly",
+"status": "Active",
+"subscribers": 312,
+"createdAt": "2026-01-01T00:00:00Z",
+"features": [
+{
+"key": "cv_uploads",
+"value": 5,
+"enabled": true
+},
+{
+"key": "job_applications",
+"value": "unlimited",
+"enabled": true
+}
+]
+}
+],
+"pagination": {
+"page": 1,
+"limit": 6,
+"total": 20
+},
+"stats": {
+"totalPlans": 20,
+"activePlans": 15,
+"candidatePlans": 8,
+"companyPlans": 12,
+"totalSubscribers": 2000,
+"enterpriseSubscribers": 120
+}
+}
+}
 
 ---
 
@@ -1173,13 +1212,58 @@ Create a new subscription plan.
 
 ## 📥 Request Body
 
-<pre class="overflow-visible! px-0!" data-start="1702" data-end="1938"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼk ͼy"><div class="cm-scroller"><div class="cm-content q9tKkq_readonly"><span>{</span><br/><span>  "name": </span><span class="ͼr">"Pro"</span><span>,</span><br/><span>  "slug": </span><span class="ͼr">"pro"</span><span>,</span><br/><span>  "price": </span><span class="ͼr">"$49/mo"</span><span>,</span><br/><span>  "billing": </span><span class="ͼr">"Monthly"</span><span>,</span><br/><span>  "maxJobs": </span><span class="ͼq">50</span><span>,</span><br/><span>  "maxUsers": </span><span class="ͼq">10</span><span>,</span><br/><span>  "features": [</span><br/><span></span><span class="ͼr">"50 Job Posts"</span><span>,</span><br/><span></span><span class="ͼr">"Full Analytics"</span><span>,</span><br/><span></span><span class="ͼr">"Priority Support"</span><br/><span>  ],</span><br/><span>  "status": </span><span class="ͼr">"Active"</span><br/><span>}</span></div></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+{
+"type": "candidate",
+"name": "Pro Seeker",
+"slug": "pro-seeker",
+"price": "$12/mo",
+"billing": "Monthly",
+"status": "Active",
+"features": [
+{
+"key": "cv_uploads",
+"value": 5,
+"enabled": true
+},
+{
+"key": "job_applications",
+"value": "unlimited",
+"enabled": true
+}
+]
+}
 
 ---
 
 ## 📤 Response
 
-<pre class="overflow-visible! px-0!" data-start="1961" data-end="2036"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼk ͼy"><div class="cm-scroller"><div class="cm-content q9tKkq_readonly"><span>{</span><br/><span>  "success": </span><span class="ͼq">true</span><span>,</span><br/><span>  "message": </span><span class="ͼr">"Plan created successfully"</span><br/><span>}</span></div></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+{
+"success": true,
+"message": "Plan created successfully",
+"data": {
+"id": "plan_123",
+"type": "candidate",
+"name": "Pro Seeker",
+"slug": "pro-seeker",
+"price": "$12/mo",
+"billing": "Monthly",
+"status": "Active",
+"subscribers": 0,
+"createdAt": "2026-05-06T10:30:00Z",
+"features": [
+{
+"key": "cv_uploads",
+"value": 5,
+"enabled": true
+},
+{
+"key": "job_applications",
+"value": "unlimited",
+"enabled": true
+}
+]
+}
+}
 
 ---
 
@@ -1197,13 +1281,45 @@ Update an existing plan.
 
 ## 📥 Request Body
 
-<pre class="overflow-visible! px-0!" data-start="2186" data-end="2268"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼk ͼy"><div class="cm-scroller"><div class="cm-content q9tKkq_readonly"><span>{</span><br/><span>  "name": </span><span class="ͼr">"Pro Updated"</span><span>,</span><br/><span>  "price": </span><span class="ͼr">"$59/mo"</span><span>,</span><br/><span>  "status": </span><span class="ͼr">"Active"</span><br/><span>}</span></div></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+{
+"name": "Pro Seeker Updated",
+"price": "$15/mo",
+"status": "Inactive",
+"features": [
+{
+"key": "cv_uploads",
+"value": 10,
+"enabled": true
+}
+]
+}
 
 ---
 
 ## 📤 Response
 
-<pre class="overflow-visible! px-0!" data-start="2291" data-end="2366"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼk ͼy"><div class="cm-scroller"><div class="cm-content q9tKkq_readonly"><span>{</span><br/><span>  "success": </span><span class="ͼq">true</span><span>,</span><br/><span>  "message": </span><span class="ͼr">"Plan updated successfully"</span><br/><span>}</span></div></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+{
+"success": true,
+"message": "Plan updated",
+"data": {
+"id": "1",
+"type": "candidate",
+"name": "Pro Seeker Updated",
+"slug": "pro-seeker",
+"price": "$15/mo",
+"billing": "Monthly",
+"status": "Inactive",
+"subscribers": 312,
+"createdAt": "2026-01-01T00:00:00Z",
+"features": [
+{
+"key": "cv_uploads",
+"value": 10,
+"enabled": true
+}
+]
+}
+}
 
 ---
 
@@ -1222,3 +1338,7 @@ Delete a plan.
 ## 📤 Response
 
 <pre class="overflow-visible! px-0!" data-start="2505" data-end="2580"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼk ͼy"><div class="cm-scroller"><div class="cm-content q9tKkq_readonly"><span>{</span><br/><span>  "success": </span><span class="ͼq">true</span><span>,</span><br/><span>  "message": </span><span class="ͼr">"Plan deleted successfully"</span><br/><span>}</span></div></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+
+# 🧩 Feature Object Structure
+
+<pre class="overflow-visible! px-0!" data-start="3369" data-end="3461"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span>{</span><br/><span>  "key": </span><span class="ͼz">"string"</span><span>,</span><br/><span>  "value": </span><span class="ͼz">"number | 'unlimited'"</span><span>,</span><br/><span>  "enabled": </span><span class="ͼz">"boolean"</span><br/><span>}</span></code></pre></div></div></div></div></div></div></div></div></div></div></div></div></pre>
