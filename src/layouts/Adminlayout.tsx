@@ -5,7 +5,7 @@ import {
   Users,
   Briefcase,
   CreditCard,
-  BarChart2,
+  // BarChart2,
   Settings,
   LogOut,
   Bell,
@@ -13,6 +13,12 @@ import {
   ChevronRight,
   Menu,
   X,
+  BadgeDollarSign,
+  BarChart3,
+  Building2,
+  Receipt,
+  Shield,
+  ShieldCheck,
 } from "lucide-react";
 import "../styles/Admin.css";
 
@@ -23,37 +29,66 @@ const NAV_GROUPS = [
   {
     label: "Main",
     items: [
-      { label: "Dashboard", icon: <LayoutDashboard size={16} />, to: "/admin" },
-      { label: "Admins", icon: <LayoutDashboard size={16} />, to: "/admin/admins" },
-      { label: "Amin Roles", icon: <LayoutDashboard size={16} />, to: "/admin/roles" },
-      { label: "Users", icon: <Users size={16} />, to: "/admin/users" },
+      {
+        label: "Dashboard",
+        icon: <LayoutDashboard size={16} />,
+        to: "/admin",
+      },
+      {
+        label: "Admins",
+        icon: <ShieldCheck size={16} />,
+        to: "/admin/admins",
+      },
+      {
+        label: "Admin Roles",
+        icon: <Shield size={16} />,
+        to: "/admin/roles",
+      },
+      {
+        label: "Users",
+        icon: <Users size={16} />,
+        to: "/admin/users",
+      },
       {
         label: "Companies",
-        icon: <Briefcase size={16} />,
+        icon: <Building2 size={16} />,
         to: "/admin/companies",
       },
-      { label: "Jobs", icon: <Briefcase size={16} />, to: "/admin/jobs" },
+      {
+        label: "Jobs",
+        icon: <Briefcase size={16} />,
+        to: "/admin/jobs",
+      },
     ],
   },
+
   {
     label: "Finance",
     items: [
-
-      { label: "Subscriptions", icon: <CreditCard size={16} />, to: "/admin/subscriptions" },
-      { label: "Plans", icon: <CreditCard size={16} />, to: "/admin/plans" },
+      {
+        label: "Subscriptions",
+        icon: <CreditCard size={16} />,
+        to: "/admin/subscriptions",
+      },
+      {
+        label: "Plans",
+        icon: <BadgeDollarSign size={16} />,
+        to: "/admin/plans",
+      },
       {
         label: "Payments",
-        icon: <CreditCard size={16} />,
+        icon: <Receipt size={16} />,
         to: "/admin/payments",
       },
     ],
   },
+
   {
     label: "System",
     items: [
       {
         label: "Analytics",
-        icon: <BarChart2 size={16} />,
+        icon: <BarChart3 size={16} />,
         to: "/admin/analytics",
       },
       {

@@ -4,7 +4,7 @@ import {
   Search,
   Edit2,
   Trash2,
-  Plus,
+  // Plus,
   CheckCircle,
 } from "lucide-react";
 import AdminLayout from "../../layouts/Adminlayout";
@@ -143,7 +143,7 @@ export default function AdminSubscriptions() {
   const COLS: Column<Subscription>[] = [
     {
       key: "company",
-      label: "Company",
+      label: "Name",
       render: (r) => (
         <div>
           <div style={{ fontWeight: 600, fontSize: ".85rem" }}>
@@ -261,11 +261,7 @@ export default function AdminSubscriptions() {
           pageSize={PAGE_SIZE}
           total={filtered.length}
           onPageChange={setPage}
-          actions={
-            <button className="adm-btn adm-btn--primary adm-btn--sm">
-              <Plus size={13} /> Add Plan
-            </button>
-          }
+        
           searchSlot={
             <div className="d-flex align-items-center gap-2">
               <div className="adm-search-wrap">

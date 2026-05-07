@@ -2,6 +2,10 @@ import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import "./SelectRolePage.css";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import useLocationSearch from "../../../hooks/useLocationSearch";
+import Select from "react-select";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Role = "Applicant" | "Company" | null;
@@ -41,6 +45,8 @@ export default function SelectRolePage() {
   const navigate = useNavigate();
   const id = searchParams.get("id") || "";
   const { selectRole } = useAuth();
+  const { locationOptions, locationLoading, searchLocations } =
+    useLocationSearch();
 
   const [form, setForm] = useState<ExtraForm>({
     phone: "",
@@ -63,6 +69,11 @@ export default function SelectRolePage() {
       setError("Location is required.");
       return;
     }
+    if (selected === "Applicant" && !isValidPhoneNumber(form.phone)) {
+      setError("Invalid phone number.");
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -248,14 +259,19 @@ export default function SelectRolePage() {
                   <label className="sr-label">
                     Location <em className="sr-req">*</em>
                   </label>
-                  <input
-                    className="sr-input"
-                    type="text"
-                    placeholder="Cairo, Egypt"
-                    value={form.location}
-                    onChange={(e) =>
-                      setForm({ ...form, location: e.target.value })
-                    }
+                  <Select
+                    options={locationOptions}
+                    isLoading={locationLoading}
+                    placeholder="Search location..."
+                    onInputChange={(value) => {
+                      searchLocations(value);
+                    }}
+                    onChange={(selected: any) => {
+                      setForm({
+                        ...form,
+                        location: selected?.value || "",
+                      });
+                    }}
                   />
                 </div>
 
@@ -264,14 +280,14 @@ export default function SelectRolePage() {
                   <>
                     <div className="sr-field">
                       <label className="sr-label">Phone</label>
-                      <input
-                        className="sr-input"
-                        type="tel"
-                        placeholder="+20 10 0000 0000"
+                      <PhoneInput
+                        international
+                        defaultCountry="EG"
                         value={form.phone}
-                        onChange={(e) =>
-                          setForm({ ...form, phone: e.target.value })
+                        onChange={(vaiue) =>
+                          setForm({ ...form, phone: vaiue || "" })
                         }
+                        className="ap-phone-input"
                       />
                     </div>
 
@@ -319,12 +335,10 @@ export default function SelectRolePage() {
                 <div
                   className={`sr-field ${selected === "Company" ? "sr-span-2" : ""}`}
                 >
-                  <label className="sr-label">
-                    LinkedIn URL <span className="sr-opt">(optional)</span>
-                  </label>
+                  <label className="sr-label">LinkedIn URL</label>
                   <input
                     className="sr-input"
-                    type="url"
+                    type="text"
                     placeholder="https://linkedin.com/in/yourname"
                     value={form.linkedin}
                     onChange={(e) =>

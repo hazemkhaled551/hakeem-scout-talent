@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 import { useState } from "react";
 import {
   Settings,
@@ -8,6 +9,9 @@ import {
   Eye,
   EyeOff,
   CheckCircle,
+  Cpu,
+  Database,
+  Zap,
 } from "lucide-react";
 import AdminLayout from "../../layouts/Adminlayout";
 
@@ -113,6 +117,41 @@ function Input({
         </button>
       )}
     </div>
+  );
+}
+
+function Select({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      style={{
+        width: "100%",
+        padding: ".62rem 1rem",
+        border: "1.5px solid var(--border)",
+        borderRadius: 10,
+        fontFamily: "DM Sans",
+        fontSize: ".9rem",
+        color: "var(--text)",
+        outline: "none",
+        background: "var(--white)",
+        cursor: "pointer",
+      }}
+    >
+      {options.map((o) => (
+        <option key={o.value} value={o.value}>
+          {o.label}
+        </option>
+      ))}
+    </select>
   );
 }
 
@@ -225,6 +264,39 @@ export default function AdminSettings() {
   const [maxJobs, setMaxJobs] = useState("3");
   const [maxApps, setMaxApps] = useState("15");
 
+  /* AI Settings */
+  const [generationBackend, setGenerationBackend] = useState("openai");
+  const [embeddingBackend, setEmbeddingBackend] = useState("cohere");
+  const [vectorDbBackend, setVectorDbBackend] = useState("qdrant");
+
+  const [openaiApiKey, setOpenaiApiKey] = useState("");
+  const [openaiApiUrl, setOpenaiApiUrl] = useState("");
+  const [cohereApiKey, setCohereApiKey] = useState("");
+  const [geminiApiKey, setGeminiApiKey] = useState("");
+  const [groqApiKey, setGroqApiKey] = useState("");
+
+  const [generationModelId, setGenerationModelId] =
+    useState("gpt-3.5-turbo-0125");
+  const [embeddingModelId, setEmbeddingModelId] = useState(
+    "embed-multilingual-light-v3.0",
+  );
+  const [embeddingModelSize, setEmbeddingModelSize] = useState("384");
+
+  const [maxInputChars, setMaxInputChars] = useState("1024");
+  const [maxTokens, setMaxTokens] = useState("200");
+  const [temperature, setTemperature] = useState("0.1");
+
+  const [vectorDbPath, setVectorDbPath] = useState("");
+  const [vectorDbDistance, setVectorDbDistance] = useState("cosine");
+  const [qdrantUrl, setQdrantUrl] = useState("");
+  const [qdrantApiKey, setQdrantApiKey] = useState("");
+
+  const [primaryLang, setPrimaryLang] = useState("en");
+  const [defaultLang, setDefaultLang] = useState("en");
+
+  const [fileMaxSize, setFileMaxSize] = useState("10");
+  const [fileChunkSize, setFileChunkSize] = useState("512000");
+
   function handleSave() {
     // 🔥 await updateAdminSettings({ ... });
     setSaved(true);
@@ -247,6 +319,35 @@ export default function AdminSettings() {
     >
       <span style={{ fontSize: ".86rem", color: "var(--text)" }}>{label}</span>
       <Toggle value={value} onChange={onChange} />
+    </div>
+  );
+
+  /* Sub-header inside a section */
+  const SubHeading = ({
+    label,
+    icon,
+  }: {
+    label: string;
+    icon: React.ReactNode;
+  }) => (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: ".4rem",
+        fontSize: ".78rem",
+        fontWeight: 700,
+        color: "var(--primary)",
+        textTransform: "uppercase",
+        letterSpacing: ".07em",
+        marginTop: "1.1rem",
+        marginBottom: ".75rem",
+        paddingBottom: ".4rem",
+        borderBottom: "1px dashed var(--border)",
+      }}
+    >
+      {icon}
+      {label}
     </div>
   );
 
@@ -400,6 +501,289 @@ export default function AdminSettings() {
               </div>
             </div>
           </Section>
+
+          {/* ── AI Settings ─────────────────────────────────────── */}
+          <Section title="AI Settings" icon={<Cpu size={15} />}>
+            {/* Backends */}
+            <SubHeading label="Backends" icon={<Zap size={12} />} />
+            <div className="row g-3">
+              <div className="col-12 col-sm-4">
+                <Field label="Generation Backend">
+                  <Select
+                    value={generationBackend}
+                    onChange={setGenerationBackend}
+                    options={[
+                      { value: "openai", label: "OpenAI" },
+                      { value: "cohere", label: "Cohere" },
+                      { value: "gemini", label: "Gemini" },
+                      { value: "groq", label: "Groq" },
+                    ]}
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-4">
+                <Field label="Embedding Backend">
+                  <Select
+                    value={embeddingBackend}
+                    onChange={setEmbeddingBackend}
+                    options={[
+                      { value: "openai", label: "OpenAI" },
+                      { value: "cohere", label: "Cohere" },
+                      { value: "gemini", label: "Gemini" },
+                    ]}
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-4">
+                <Field label="Vector DB Backend">
+                  <Select
+                    value={vectorDbBackend}
+                    onChange={setVectorDbBackend}
+                    options={[
+                      { value: "qdrant", label: "Qdrant" },
+                      { value: "chroma", label: "Chroma" },
+                      { value: "pinecone", label: "Pinecone" },
+                    ]}
+                  />
+                </Field>
+              </div>
+            </div>
+
+            {/* API Keys */}
+            <SubHeading label="API Keys" icon={<Shield size={12} />} />
+            <div className="row g-3">
+              <div className="col-12 col-sm-6">
+                <Field label="OpenAI API Key">
+                  <Input
+                    value={openaiApiKey}
+                    onChange={setOpenaiApiKey}
+                    type="password"
+                    placeholder="sk-..."
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-6">
+                <Field
+                  label="OpenAI API URL"
+                  hint="Leave blank for default endpoint"
+                >
+                  <Input
+                    value={openaiApiUrl}
+                    onChange={setOpenaiApiUrl}
+                    placeholder="https://api.openai.com/v1"
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-6">
+                <Field label="Cohere API Key">
+                  <Input
+                    value={cohereApiKey}
+                    onChange={setCohereApiKey}
+                    type="password"
+                    placeholder="co-..."
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-6">
+                <Field label="Gemini API Key">
+                  <Input
+                    value={geminiApiKey}
+                    onChange={setGeminiApiKey}
+                    type="password"
+                    placeholder="AIza..."
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-6">
+                <Field label="Groq API Key">
+                  <Input
+                    value={groqApiKey}
+                    onChange={setGroqApiKey}
+                    type="password"
+                    placeholder="gsk_..."
+                  />
+                </Field>
+              </div>
+            </div>
+
+            {/* Models */}
+            <SubHeading label="Models" icon={<Cpu size={12} />} />
+            <div className="row g-3">
+              <div className="col-12 col-sm-6">
+                <Field label="Generation Model ID">
+                  <Input
+                    value={generationModelId}
+                    onChange={setGenerationModelId}
+                    placeholder="gpt-3.5-turbo-0125"
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-6">
+                <Field label="Embedding Model ID">
+                  <Input
+                    value={embeddingModelId}
+                    onChange={setEmbeddingModelId}
+                    placeholder="embed-multilingual-light-v3.0"
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-4">
+                <Field label="Embedding Model Size" hint="Dimensions, e.g. 384">
+                  <Input
+                    value={embeddingModelSize}
+                    onChange={setEmbeddingModelSize}
+                    placeholder="384"
+                  />
+                </Field>
+              </div>
+            </div>
+
+            {/* Generation Params */}
+            <SubHeading
+              label="Generation Parameters"
+              icon={<Zap size={12} />}
+            />
+            <div className="row g-3">
+              <div className="col-12 col-sm-4">
+                <Field label="Max Input Characters" hint="Default: 1024">
+                  <Input
+                    value={maxInputChars}
+                    onChange={setMaxInputChars}
+                    placeholder="1024"
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-4">
+                <Field label="Max Output Tokens" hint="Default: 200">
+                  <Input
+                    value={maxTokens}
+                    onChange={setMaxTokens}
+                    placeholder="200"
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-4">
+                <Field
+                  label="Temperature"
+                  hint="0.0 (precise) → 1.0 (creative)"
+                >
+                  <Input
+                    value={temperature}
+                    onChange={setTemperature}
+                    placeholder="0.1"
+                  />
+                </Field>
+              </div>
+            </div>
+
+            {/* Vector DB */}
+            <SubHeading
+              label="Vector DB Config"
+              icon={<Database size={12} />}
+            />
+            <div className="row g-3">
+              <div className="col-12 col-sm-6">
+                <Field
+                  label="Vector DB Path"
+                  hint="Local path (for file-based DBs)"
+                >
+                  <Input
+                    value={vectorDbPath}
+                    onChange={setVectorDbPath}
+                    placeholder="./vector_store"
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-6">
+                <Field label="Distance Method">
+                  <Select
+                    value={vectorDbDistance}
+                    onChange={setVectorDbDistance}
+                    options={[
+                      { value: "cosine", label: "Cosine" },
+                      { value: "euclidean", label: "Euclidean" },
+                      { value: "dot", label: "Dot Product" },
+                    ]}
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-6">
+                <Field label="Qdrant URL">
+                  <Input
+                    value={qdrantUrl}
+                    onChange={setQdrantUrl}
+                    placeholder="http://localhost:6333"
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-6">
+                <Field label="Qdrant API Key">
+                  <Input
+                    value={qdrantApiKey}
+                    onChange={setQdrantApiKey}
+                    type="password"
+                    placeholder="qdrant-key..."
+                  />
+                </Field>
+              </div>
+            </div>
+
+            {/* File & Language */}
+            <SubHeading
+              label="File & Language Config"
+              icon={<Globe size={12} />}
+            />
+            <div className="row g-3">
+              <div className="col-12 col-sm-4">
+                <Field label="Max File Size (MB)" hint="Default: 10 MB">
+                  <Input
+                    value={fileMaxSize}
+                    onChange={setFileMaxSize}
+                    placeholder="10"
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-4">
+                <Field
+                  label="Default Chunk Size (bytes)"
+                  hint="Default: 512000"
+                >
+                  <Input
+                    value={fileChunkSize}
+                    onChange={setFileChunkSize}
+                    placeholder="512000"
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-2">
+                <Field label="Primary Lang">
+                  <Select
+                    value={primaryLang}
+                    onChange={setPrimaryLang}
+                    options={[
+                      { value: "en", label: "EN" },
+                      { value: "ar", label: "AR" },
+                      { value: "fr", label: "FR" },
+                    ]}
+                  />
+                </Field>
+              </div>
+              <div className="col-12 col-sm-2">
+                <Field label="Default Lang">
+                  <Select
+                    value={defaultLang}
+                    onChange={setDefaultLang}
+                    options={[
+                      { value: "en", label: "EN" },
+                      { value: "ar", label: "AR" },
+                      { value: "fr", label: "FR" },
+                    ]}
+                  />
+                </Field>
+              </div>
+            </div>
+          </Section>
+          {/* ── End AI Settings ──────────────────────────────────── */}
         </div>
 
         {/* Right: Save card */}

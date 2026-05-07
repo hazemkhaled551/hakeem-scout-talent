@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import Select from "react-select";
+import useLocationSearch from "../../../hooks/useLocationSearch";
+
+import "react-phone-number-input/style.css";
 import "./AuthPage.css";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -73,6 +78,8 @@ export default function AuthPage() {
     type: "error" | "success";
     msg: string;
   } | null>(null);
+  const { locationOptions, locationLoading, searchLocations } =
+    useLocationSearch();
 
   const [loginForm, setLoginForm] = useState<LoginForm>({
     email: "",
@@ -139,6 +146,18 @@ export default function AuthPage() {
     }
     if (regForm.password !== regForm.confirmPassword) {
       setAlert({ type: "error", msg: "Passwords do not match." });
+      return;
+    }
+
+    if (
+      regForm.type === "applicant" &&
+      regForm.phone &&
+      !isValidPhoneNumber(regForm.phone)
+    ) {
+      setAlert({
+        type: "error",
+        msg: "Invalid phone number.",
+      });
       return;
     }
     try {
@@ -406,14 +425,17 @@ export default function AuthPage() {
                 {regForm.type === "applicant" ? (
                   <div className="ap-field">
                     <label className="ap-label">Phone</label>
-                    <input
-                      className="ap-input"
-                      type="tel"
-                      placeholder="+20 10 0000 0000"
+                    <PhoneInput
+                      international
+                      defaultCountry="EG"
                       value={regForm.phone}
-                      onChange={(e) =>
-                        setRegForm({ ...regForm, phone: e.target.value })
+                      onChange={(value) =>
+                        setRegForm({
+                          ...regForm,
+                          phone: value || "",
+                        })
                       }
+                      className="ap-phone-input"
                     />
                   </div>
                 ) : (
@@ -421,14 +443,19 @@ export default function AuthPage() {
                     <label className="ap-label">
                       Location <em className="ap-req">*</em>
                     </label>
-                    <input
-                      className="ap-input"
-                      type="text"
-                      placeholder="Cairo, Egypt"
-                      value={regForm.location}
-                      onChange={(e) =>
-                        setRegForm({ ...regForm, location: e.target.value })
-                      }
+                    <Select
+                      options={locationOptions}
+                      isLoading={locationLoading}
+                      placeholder="Search location..."
+                      onInputChange={(value) => {
+                        searchLocations(value);
+                      }}
+                      onChange={(selected: any) => {
+                        setRegForm({
+                          ...regForm,
+                          location: selected?.value || "",
+                        });
+                      }}
                     />
                   </div>
                 )}
@@ -494,14 +521,19 @@ export default function AuthPage() {
                       <label className="ap-label">
                         Location <em className="ap-req">*</em>
                       </label>
-                      <input
-                        className="ap-input"
-                        type="text"
-                        placeholder="Cairo, Egypt"
-                        value={regForm.location}
-                        onChange={(e) =>
-                          setRegForm({ ...regForm, location: e.target.value })
-                        }
+                      <Select
+                        options={locationOptions}
+                        isLoading={locationLoading}
+                        placeholder="Search location..."
+                        onInputChange={(value) => {
+                          searchLocations(value);
+                        }}
+                        onChange={(selected: any) => {
+                          setRegForm({
+                            ...regForm,
+                            location: selected?.value || "",
+                          });
+                        }}
                       />
                     </div>
                   </>
@@ -516,7 +548,7 @@ export default function AuthPage() {
                   </label>
                   <input
                     className="ap-input"
-                    type="url"
+                    type="text"
                     placeholder="https://linkedin.com/in/yourname"
                     value={regForm.linkedin}
                     onChange={(e) =>
