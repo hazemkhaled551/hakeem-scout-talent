@@ -339,15 +339,17 @@ export default function ApplicantDashboard() {
                           {formatDate(app.createdAt)}
                         </div>
                       </div>
-                      <div className="col-4">
-                        <div className="dk-app-meta-label">
-                          <BrainCircuit size={11} className="me-1" />
-                          AI Match
+                      {app.result !== null && (
+                        <div className="col-4">
+                          <div className="dk-app-meta-label">
+                            <BrainCircuit size={11} className="me-1" />
+                            AI Match
+                          </div>
+                          <div className="dk-app-meta-value dk-app-meta-value--indigo">
+                            {app.result?.analysis_report?.match_score}%
+                          </div>
                         </div>
-                        <div className="dk-app-meta-value dk-app-meta-value--indigo">
-                          {app.result.analysis_report.match_score}%
-                        </div>
-                      </div>
+                      )}
                       <div className="col-4">
                         <div className="dk-app-meta-label">
                           <MapPin size={11} className="me-1" />
