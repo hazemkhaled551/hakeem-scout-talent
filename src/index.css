@@ -46,65 +46,112 @@ h6 {
   background: var(--dark);
   color: #fff;
   font-family: "DM Sans", sans-serif;
+  margin-top: 5rem;
 }
+
+/* =========================
+   TOP
+========================= */
 
 .footer__top {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 2rem;
-  padding: 3rem 2.5rem 2rem;
+  gap: 2.5rem;
+  padding: 4rem 2.5rem 2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.footer__logo {
-  font-family: "Syne", sans-serif;
-  font-size: 22px;
-  background: linear-gradient(135deg, var(--primary-light), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 0.75rem;
+.footer__brand {
+  max-width: 340px;
 }
 
 .footer__desc {
   font-size: 14px;
   color: var(--muted);
-  line-height: 1.7;
-  max-width: 260px;
+  line-height: 1.8;
+  margin-top: 1rem;
 }
+
+/* =========================
+   SOCIALS
+========================= */
+
+.footer__socials {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.footer__social-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+
+  transition: all 0.25s ease;
+}
+
+.footer__social-btn:hover {
+  background: var(--primary-light);
+  transform: translateY(-3px);
+}
+
+/* =========================
+   COLUMNS
+========================= */
 
 .footer__col-title {
   font-family: "Syne", sans-serif;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: #fff;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 }
 
 .footer__links {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.9rem;
+  padding: 0;
+  margin: 0;
 }
 
 .footer__links a {
   font-size: 14px;
   color: var(--muted);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: all 0.2s ease;
 }
 
 .footer__links a:hover {
   color: var(--primary-light);
+  padding-left: 4px;
 }
+
+/* =========================
+   BOTTOM
+========================= */
 
 .footer__bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 2.5rem;
+  gap: 1rem;
+
+  padding: 1.3rem 2.5rem;
   background: rgba(0, 0, 0, 0.2);
 }
 
@@ -115,6 +162,7 @@ h6 {
 
 .footer__copy span {
   color: var(--primary-light);
+  font-weight: 600;
 }
 
 .footer__badge {
@@ -122,6 +170,95 @@ h6 {
   background: rgba(79, 70, 229, 0.15);
   border: 1px solid rgba(79, 70, 229, 0.3);
   color: var(--primary-light);
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: 100px;
+  white-space: nowrap;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 992px) {
+  .footer__top {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer__brand {
+    max-width: 100%;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .footer__top {
+    grid-template-columns: 1fr;
+    padding: 3rem 1.5rem 2rem;
+    gap: 2rem;
+  }
+
+  .footer__brand {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer__desc {
+    max-width: 100%;
+  }
+
+  .footer__socials {
+    justify-content: center;
+  }
+
+  .footer__col {
+    text-align: center;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.2rem 1rem;
+  }
+
+  .footer__badge {
+    width: fit-content;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .footer__top {
+    padding: 2.5rem 1rem 1.5rem;
+  }
+
+  .footer__col-title {
+    font-size: 12px;
+  }
+
+  .footer__links a {
+    font-size: 13px;
+  }
+
+  .footer__copy {
+    font-size: 12px;
+  }
+
+  .footer__badge {
+    font-size: 11px;
+    padding: 5px 12px;
+  }
+
+  .footer__social-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 14px;
+  }
 }
