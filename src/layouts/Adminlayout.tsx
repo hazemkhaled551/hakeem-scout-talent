@@ -19,6 +19,7 @@ import {
   Receipt,
   Shield,
   ShieldCheck,
+  Feather,
 } from "lucide-react";
 import "../styles/Admin.css";
 
@@ -74,6 +75,11 @@ const NAV_GROUPS = [
         label: "Plans",
         icon: <BadgeDollarSign size={16} />,
         to: "/admin/plans",
+      },
+      {
+        label: "Plan Features",
+        icon: <Feather size={16} />,
+        to: "/admin/features-plans",
       },
       {
         label: "Payments",

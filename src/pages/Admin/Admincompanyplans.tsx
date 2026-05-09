@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Package,
   Search,
@@ -9,9 +9,10 @@ import {
   Users,
   Zap,
   X,
-  Briefcase,
-  UserCheck,
-  // Infinity,
+  Loader2,
+  AlertCircle,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import AdminLayout from "../../layouts/Adminlayout";
 import AdminTable, {
@@ -19,458 +20,165 @@ import AdminTable, {
   Badge,
   type Column,
 } from "../../components/Admintable";
+import {
+  getPlans,
+  createPlan,
+} from "../../services/AdminDashboard/plansService";
+import { getFeatures } from "../../services/AdminDashboard/featurePlanService";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type PlanType = "candidate" | "company";
-type BillingCycle = "Monthly" | "Annual" | "Custom";
-type PlanStatus = "Active" | "Inactive" | "Draft";
-
-interface FeatureLimit {
-  key: string;
-  label: string;
-  value: number | "unlimited";
-  enabled: boolean;
-}
-
-interface Plan {
+interface ApiPermission {
   id: string;
-  type: PlanType;
   name: string;
-  slug: string;
-  price: string;
-  billing: BillingCycle;
-  status: PlanStatus;
-  subscribers: number;
+  description: string;
+  method: string;
   createdAt: string;
-  features: FeatureLimit[];
+  updatedAt: string;
 }
 
-// ─── Candidate feature definitions ───────────────────────────────────────────
+interface ApiFeaturePermission {
+  id: string;
+  createdAt: string;
+  permission: ApiPermission;
+}
 
-const CANDIDATE_FEATURE_DEFS: Omit<FeatureLimit, "value" | "enabled">[] = [
-  { key: "cv_uploads", label: "CV Uploads" },
-  { key: "job_applications", label: "Job Applications" },
-  { key: "job_suggestions", label: "Job Suggestions" },
-];
+interface ApiFeature {
+  id: string;
+  name: string;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+  featurePermissions: ApiFeaturePermission[];
+}
 
-// ─── Company feature definitions ─────────────────────────────────────────────
+interface ApiPlan {
+  id: string;
+  name: string;
+  description: string | null;
+  price: string;
+  currency: string;
+  durationInDays: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
-const COMPANY_FEATURE_DEFS: Omit<FeatureLimit, "value" | "enabled">[] = [
-  { key: "job_posts", label: "Job Posts" },
-  { key: "candidate_suggestions", label: "Candidate Suggestions" },
-  { key: "received_applications", label: "Received Applications" },
+interface ApiStats {
+  totalPlans: number;
+  activePlans: number;
+  totalSubscribers: number;
+  enterpriseSubscribers: number;
+}
 
-];
+// Permission with limit (local state for modal)
+interface PermissionWithLimit {
+  permissionId: string;
+  permissionName: string;
+  permissionDescription: string;
+  enabled: boolean;
+  limit: number | "unlimited";
+}
 
-// ─── Default features factory ────────────────────────────────────────────────
-
-const defaultFeatures = (type: PlanType): FeatureLimit[] =>
-  (type === "candidate" ? CANDIDATE_FEATURE_DEFS : COMPANY_FEATURE_DEFS).map(
-    (f) => ({ ...f, value: 10, enabled: false }),
-  );
-
-// ─── Dummy Data ───────────────────────────────────────────────────────────────
-
-const DUMMY: Plan[] = [
-  {
-    id: "1",
-    type: "candidate",
-    name: "Free Seeker",
-    slug: "free-seeker",
-    price: "$0",
-    billing: "Monthly",
-    status: "Active",
-    subscribers: 842,
-    createdAt: "Jan 1, 2026",
-    features: [
-      { key: "cv_uploads", label: "CV Uploads", value: 1, enabled: true },
-      {
-        key: "job_applications",
-        label: "Job Applications",
-        value: 5,
-        enabled: true,
-      },
-      {
-        key: "job_suggestions",
-        label: "Job Suggestions",
-        value: 0,
-        enabled: false,
-      },
-      {
-        key: "profile_visibility",
-        label: "Profile Visibility Boosts",
-        value: 0,
-        enabled: false,
-      },
-      { key: "saved_jobs", label: "Saved Jobs", value: 10, enabled: true },
-      {
-        key: "resume_reviews",
-        label: "AI Resume Reviews",
-        value: 0,
-        enabled: false,
-      },
-    ],
-  },
-  {
-    id: "2",
-    type: "candidate",
-    name: "Pro Seeker",
-    slug: "pro-seeker",
-    price: "$12/mo",
-    billing: "Monthly",
-    status: "Active",
-    subscribers: 312,
-    createdAt: "Jan 1, 2026",
-    features: [
-      { key: "cv_uploads", label: "CV Uploads", value: 5, enabled: true },
-      {
-        key: "job_applications",
-        label: "Job Applications",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "job_suggestions",
-        label: "Job Suggestions",
-        value: 10,
-        enabled: true,
-      },
-      {
-        key: "profile_visibility",
-        label: "Profile Visibility Boosts",
-        value: 3,
-        enabled: true,
-      },
-      {
-        key: "saved_jobs",
-        label: "Saved Jobs",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "resume_reviews",
-        label: "AI Resume Reviews",
-        value: 2,
-        enabled: true,
-      },
-    ],
-  },
-  {
-    id: "3",
-    type: "candidate",
-    name: "Elite Seeker",
-    slug: "elite-seeker",
-    price: "$29/mo",
-    billing: "Monthly",
-    status: "Active",
-    subscribers: 98,
-    createdAt: "Feb 1, 2026",
-    features: [
-      {
-        key: "cv_uploads",
-        label: "CV Uploads",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "job_applications",
-        label: "Job Applications",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "job_suggestions",
-        label: "Job Suggestions",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "profile_visibility",
-        label: "Profile Visibility Boosts",
-        value: 10,
-        enabled: true,
-      },
-      {
-        key: "saved_jobs",
-        label: "Saved Jobs",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "resume_reviews",
-        label: "AI Resume Reviews",
-        value: "unlimited",
-        enabled: true,
-      },
-    ],
-  },
-  {
-    id: "4",
-    type: "company",
-    name: "Starter Hire",
-    slug: "starter-hire",
-    price: "$19/mo",
-    billing: "Monthly",
-    status: "Active",
-    subscribers: 87,
-    createdAt: "Jan 1, 2026",
-    features: [
-      { key: "job_posts", label: "Job Posts", value: 5, enabled: true },
-      {
-        key: "candidate_suggestions",
-        label: "Candidate Suggestions",
-        value: 0,
-        enabled: false,
-      },
-      {
-        key: "received_applications",
-        label: "Received Applications",
-        value: 50,
-        enabled: true,
-      },
-      {
-        key: "featured_posts",
-        label: "Featured Job Posts",
-        value: 0,
-        enabled: false,
-      },
-      { key: "team_members", label: "Team Members", value: 2, enabled: true },
-      {
-        key: "analytics_exports",
-        label: "Analytics Exports",
-        value: 0,
-        enabled: false,
-      },
-      {
-        key: "api_access",
-        label: "API Access (calls/month)",
-        value: 0,
-        enabled: false,
-      },
-    ],
-  },
-  {
-    id: "5",
-    type: "company",
-    name: "Pro Hire",
-    slug: "pro-hire",
-    price: "$49/mo",
-    billing: "Monthly",
-    status: "Active",
-    subscribers: 214,
-    createdAt: "Jan 1, 2026",
-    features: [
-      { key: "job_posts", label: "Job Posts", value: 25, enabled: true },
-      {
-        key: "candidate_suggestions",
-        label: "Candidate Suggestions",
-        value: 50,
-        enabled: true,
-      },
-      {
-        key: "received_applications",
-        label: "Received Applications",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "featured_posts",
-        label: "Featured Job Posts",
-        value: 3,
-        enabled: true,
-      },
-      { key: "team_members", label: "Team Members", value: 10, enabled: true },
-      {
-        key: "analytics_exports",
-        label: "Analytics Exports",
-        value: 10,
-        enabled: true,
-      },
-      {
-        key: "api_access",
-        label: "API Access (calls/month)",
-        value: 0,
-        enabled: false,
-      },
-    ],
-  },
-  {
-    id: "6",
-    type: "company",
-    name: "Enterprise",
-    slug: "enterprise",
-    price: "Custom",
-    billing: "Custom",
-    status: "Active",
-    subscribers: 12,
-    createdAt: "Jan 1, 2026",
-    features: [
-      {
-        key: "job_posts",
-        label: "Job Posts",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "candidate_suggestions",
-        label: "Candidate Suggestions",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "received_applications",
-        label: "Received Applications",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "featured_posts",
-        label: "Featured Job Posts",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "team_members",
-        label: "Team Members",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "analytics_exports",
-        label: "Analytics Exports",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "api_access",
-        label: "API Access (calls/month)",
-        value: "unlimited",
-        enabled: true,
-      },
-    ],
-  },
-  {
-    id: "7",
-    type: "company",
-    name: "Agency Pro",
-    slug: "agency-pro",
-    price: "$199/mo",
-    billing: "Monthly",
-    status: "Draft",
-    subscribers: 0,
-    createdAt: "Apr 20, 2026",
-    features: [
-      {
-        key: "job_posts",
-        label: "Job Posts",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "candidate_suggestions",
-        label: "Candidate Suggestions",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "received_applications",
-        label: "Received Applications",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "featured_posts",
-        label: "Featured Job Posts",
-        value: 10,
-        enabled: true,
-      },
-      { key: "team_members", label: "Team Members", value: 50, enabled: true },
-      {
-        key: "analytics_exports",
-        label: "Analytics Exports",
-        value: "unlimited",
-        enabled: true,
-      },
-      {
-        key: "api_access",
-        label: "API Access (calls/month)",
-        value: 10000,
-        enabled: true,
-      },
-    ],
-  },
-];
-
-// ─── Badge helpers ────────────────────────────────────────────────────────────
-
-const STATUS_COLOR: Record<PlanStatus, "green" | "amber" | "gray"> = {
-  Active: "green",
-  Inactive: "amber",
-  Draft: "gray",
-};
-
-const BILLING_COLOR: Record<BillingCycle, "indigo" | "cyan" | "amber"> = {
-  Monthly: "indigo",
-  Annual: "cyan",
-  Custom: "amber",
-};
-
-// ─── Feature summary helper ───────────────────────────────────────────────────
-
-const featureSummary = (features: FeatureLimit[]): string => {
-  const enabled = features.filter((f) => f.enabled);
-  if (enabled.length === 0) return "No features";
-  const first = enabled
-    .slice(0, 2)
-    .map((f) => `${f.value === "unlimited" ? "∞" : f.value} ${f.label}`)
-    .join(", ");
-  const more = enabled.length > 2 ? ` +${enabled.length - 2} more` : "";
-  return first + more;
-};
+interface FeatureWithPermissions {
+  featureId: string;
+  featureName: string;
+  expanded: boolean;
+  permissions: PermissionWithLimit[];
+}
 
 // ─── Modal form state ─────────────────────────────────────────────────────────
 
 interface ModalForm {
-  type: PlanType;
   name: string;
-  slug: string;
+  description: string;
   price: string;
-  billing: BillingCycle;
-  status: PlanStatus;
-  features: FeatureLimit[];
+  currency: string;
+  durationInDays: number;
+  isDefault: boolean;
+  isAutoRenew: boolean;
+  features: FeatureWithPermissions[];
 }
 
-const emptyForm = (): ModalForm => ({
-  type: "candidate",
+const emptyForm = (apiFeatures: ApiFeature[]): ModalForm => ({
   name: "",
-  slug: "",
+  description: "",
   price: "",
-  billing: "Monthly",
-  status: "Active",
-  features: defaultFeatures("candidate"),
+  currency: "EGP",
+  durationInDays: 30,
+  isDefault: false,
+  isAutoRenew: false,
+  features: apiFeatures.map((f) => ({
+    featureId: f.id,
+    featureName: f.name,
+    expanded: false,
+    permissions: f.featurePermissions.map((fp) => ({
+      permissionId: fp.permission.id,
+      permissionName: fp.permission.name,
+      permissionDescription: fp.permission.description,
+      enabled: false,
+      limit: 10,
+    })),
+  })),
 });
+
+// ─── Badge helpers ────────────────────────────────────────────────────────────
+
+const STATUS_COLOR: Record<string, "green" | "amber" | "gray"> = {
+  true: "green",
+  false: "amber",
+};
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function AdminPlans() {
-  const [plans, setPlans] = useState<Plan[]>(DUMMY);
+  const [plans, setPlans] = useState<ApiPlan[]>([]);
+  const [stats, setStats] = useState<ApiStats | null>(null);
+  const [apiFeatures, setApiFeatures] = useState<ApiFeature[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"all" | PlanType>("all");
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 6;
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
-  const [form, setForm] = useState<ModalForm>(emptyForm());
+  const [form, setForm] = useState<ModalForm>(emptyForm([]));
+  const [saving, setSaving] = useState(false);
 
-  // ── Computed stats ──────────────────────────────────────────────────────────
+  // ── Fetch plans & features ──────────────────────────────────────────────────
 
-  const totalSubs = plans.reduce((a, p) => a + p.subscribers, 0);
-  const activePlans = plans.filter((p) => p.status === "Active").length;
-  const candidatePlans = plans.filter((p) => p.type === "candidate").length;
-  const companyPlans = plans.filter((p) => p.type === "company").length;
+  const fetchPlans = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await getPlans(); // adjust base URL as needed
+
+      setPlans(res.data.data.plans);
+      setStats(res.data.data.stats);
+    } catch {
+      setError("Network error — could not load plans");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchFeatures = async () => {
+    try {
+      const res = await getFeatures(); // adjust base URL as needed
+      setApiFeatures(res.data.data);
+    } catch (e: any) {
+      // silently fail — features will just be empty
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlans();
+    fetchFeatures();
+  }, []);
 
   // ── Filtering ───────────────────────────────────────────────────────────────
 
@@ -478,13 +186,11 @@ export default function AdminPlans() {
     const q = search.toLowerCase();
     return plans.filter(
       (p) =>
-        (!q ||
-          p.name.toLowerCase().includes(q) ||
-          p.slug.toLowerCase().includes(q)) &&
-        (!statusFilter || p.status === statusFilter) &&
-        (typeFilter === "all" || p.type === typeFilter),
+        (!q || p.name.toLowerCase().includes(q)) &&
+        (!statusFilter ||
+          (statusFilter === "Active" ? p.isActive : !p.isActive)),
     );
-  }, [plans, search, statusFilter, typeFilter]);
+  }, [plans, search, statusFilter]);
 
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
@@ -492,89 +198,137 @@ export default function AdminPlans() {
 
   const openCreate = () => {
     setEditId(null);
-    setForm(emptyForm());
+    setForm(emptyForm(apiFeatures));
     setModalOpen(true);
   };
 
-  const openEdit = (plan: Plan) => {
+  const openEdit = (plan: ApiPlan) => {
     setEditId(plan.id);
     setForm({
-      type: plan.type,
       name: plan.name,
-      slug: plan.slug,
+      description: plan.description ?? "",
       price: plan.price,
-      billing: plan.billing,
-      status: plan.status,
-      features: plan.features.map((f) => ({ ...f })),
+      currency: plan.currency,
+      durationInDays: plan.durationInDays,
+      isDefault: false,
+      isAutoRenew: false,
+      features: apiFeatures.map((f) => ({
+        featureId: f.id,
+        featureName: f.name,
+        expanded: false,
+        permissions: f.featurePermissions.map((fp) => ({
+          permissionId: fp.permission.id,
+          permissionName: fp.permission.name,
+          permissionDescription: fp.permission.description,
+          enabled: false,
+          limit: 10,
+        })),
+      })),
     });
     setModalOpen(true);
   };
 
-  const closeModal = () => setModalOpen(false);
-
-  const updateFormType = (type: PlanType) => {
-    setForm((prev) => ({
-      ...prev,
-      type,
-      features: defaultFeatures(type),
-    }));
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditId(null);
   };
 
-  const updateFeatureEnabled = (key: string, enabled: boolean) => {
+  const toggleFeatureExpanded = (featureId: string) => {
     setForm((prev) => ({
       ...prev,
       features: prev.features.map((f) =>
-        f.key === key ? { ...f, enabled } : f,
+        f.featureId === featureId ? { ...f, expanded: !f.expanded } : f,
       ),
     }));
   };
 
-  const updateFeatureValue = (key: string, value: number | "unlimited") => {
-    setForm((prev) => ({
-      ...prev,
-      features: prev.features.map((f) => (f.key === key ? { ...f, value } : f)),
-    }));
-  };
-
-  const updateFeatureUnlimited = (key: string, unlimited: boolean) => {
+  const updatePermissionEnabled = (
+    featureId: string,
+    permId: string,
+    enabled: boolean,
+  ) => {
     setForm((prev) => ({
       ...prev,
       features: prev.features.map((f) =>
-        f.key === key ? { ...f, value: unlimited ? "unlimited" : 10 } : f,
+        f.featureId === featureId
+          ? {
+              ...f,
+              permissions: f.permissions.map((p) =>
+                p.permissionId === permId ? { ...p, enabled } : p,
+              ),
+            }
+          : f,
       ),
     }));
   };
 
-  const saveForm = () => {
-    if (!form.name || !form.slug || !form.price) return;
+  const updatePermissionLimit = (
+    featureId: string,
+    permId: string,
+    limit: number | "unlimited",
+  ) => {
+    setForm((prev) => ({
+      ...prev,
+      features: prev.features.map((f) =>
+        f.featureId === featureId
+          ? {
+              ...f,
+              permissions: f.permissions.map((p) =>
+                p.permissionId === permId ? { ...p, limit } : p,
+              ),
+            }
+          : f,
+      ),
+    }));
+  };
 
-    if (editId) {
-      setPlans((prev) =>
-        prev.map((p) => (p.id === editId ? { ...p, ...form } : p)),
-      );
-    } else {
-      const newPlan: Plan = {
-        ...form,
-        id: String(Date.now()),
-        subscribers: 0,
-        createdAt: new Date().toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }),
-      };
-      setPlans((prev) => [...prev, newPlan]);
+  const buildPayload = () => {
+    const permissions: string[] = [];
+    form.features.forEach((f) => {
+      f.permissions.forEach((p) => {
+        if (p.enabled) permissions.push(p.permissionId);
+      });
+    });
+
+    return {
+      name: form.name,
+      description: form.description || null,
+      price: parseFloat(form.price),
+      currency: form.currency,
+      durationInDays: form.durationInDays,
+      isDefault: form.isDefault,
+      isAutoRenew: form.isAutoRenew,
+      permissions,
+    };
+  };
+
+  const saveForm = async () => {
+    if (!form.name || !form.price) return;
+    setSaving(true);
+    try {
+      const payload = buildPayload();
+      await createPlan(payload);
+      await fetchPlans();
+    } catch (e: any) {
+      console.log(e);
+    } finally {
+      setSaving(false);
     }
-    closeModal();
   };
 
-  const deletePlan = (id: string) => {
-    setPlans((prev) => prev.filter((p) => p.id !== id));
+  const deletePlan = async (id: string) => {
+    if (!confirm("Delete this plan?")) return;
+    try {
+      await fetch(`/api/plans/${id}`, { method: "DELETE" });
+      await fetchPlans();
+    } catch {
+      alert("Delete failed");
+    }
   };
 
   // ── Table columns ───────────────────────────────────────────────────────────
 
-  const COLS: Column<Plan>[] = [
+  const COLS: Column<ApiPlan>[] = [
     {
       key: "name",
       label: "Plan Name",
@@ -589,28 +343,15 @@ export default function AdminPlans() {
               fontSize: ".85rem",
             }}
           >
-            {r.type === "candidate" ? (
-              <UserCheck size={13} color="var(--primary)" />
-            ) : (
-              <Briefcase size={13} color="var(--accent)" />
-            )}
+            <Package size={13} color="var(--primary)" />
             {r.name}
           </div>
-          <div style={{ fontSize: ".74rem", color: "var(--muted)" }}>
-            /{r.slug}
-          </div>
+          {r.description && (
+            <div style={{ fontSize: ".74rem", color: "var(--muted)" }}>
+              {r.description}
+            </div>
+          )}
         </div>
-      ),
-    },
-    {
-      key: "type",
-      label: "Type",
-      render: (r) => (
-        <Badge
-          label={r.type === "candidate" ? "Candidate" : "Company"}
-          color={r.type === "candidate" ? "indigo" : "cyan"}
-          dot={false}
-        />
       ),
     },
     {
@@ -620,47 +361,39 @@ export default function AdminPlans() {
         <span
           style={{ fontFamily: "Syne", fontWeight: 700, fontSize: ".85rem" }}
         >
-          {r.price}
+          {parseFloat(r.price).toLocaleString()} {r.currency}
         </span>
       ),
     },
     {
-      key: "billing",
-      label: "Billing",
+      key: "durationInDays",
+      label: "Duration",
       render: (r) => (
-        <Badge label={r.billing} color={BILLING_COLOR[r.billing]} dot={false} />
-      ),
-    },
-    {
-      key: "features",
-      label: "Features",
-      render: (r) => (
-        <div
-          style={{ fontSize: ".74rem", color: "var(--muted)", maxWidth: 220 }}
-        >
-          {featureSummary(r.features).split(" +")[0]}
-          {r.features.filter((f) => f.enabled).length > 2 && (
-            <span style={{ color: "var(--accent)" }}>
-              {" "}
-              +{r.features.filter((f) => f.enabled).length - 2} more
-            </span>
-          )}
-        </div>
-      ),
-    },
-    {
-      key: "subscribers",
-      label: "Subscribers",
-      render: (r) => (
-        <span style={{ fontWeight: 600, fontSize: ".85rem" }}>
-          {r.subscribers}
-        </span>
+        <span style={{ fontSize: ".82rem" }}>{r.durationInDays} days</span>
       ),
     },
     {
       key: "status",
       label: "Status",
-      render: (r) => <Badge label={r.status} color={STATUS_COLOR[r.status]} />,
+      render: (r) => (
+        <Badge
+          label={r.isActive ? "Active" : "Inactive"}
+          color={STATUS_COLOR[String(r.isActive)]}
+        />
+      ),
+    },
+    {
+      key: "createdAt",
+      label: "Created",
+      render: (r) => (
+        <span style={{ fontSize: ".78rem", color: "var(--muted)" }}>
+          {new Date(r.createdAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </span>
+      ),
     },
     {
       key: "actions",
@@ -682,6 +415,54 @@ export default function AdminPlans() {
     },
   ];
 
+  // ── Loading / Error states ──────────────────────────────────────────────────
+
+  if (loading) {
+    return (
+      <AdminLayout title="Plans" breadcrumb="Plans">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: 300,
+            gap: 10,
+            color: "var(--muted)",
+          }}
+        >
+          <Loader2 size={20} className="spin" />
+          <span>Loading plans…</span>
+        </div>
+      </AdminLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <AdminLayout title="Plans" breadcrumb="Plans">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: 300,
+            gap: 10,
+            color: "var(--danger, #ef4444)",
+          }}
+        >
+          <AlertCircle size={20} />
+          <span>{error}</span>
+          <button
+            className="adm-btn adm-btn--outline adm-btn--sm"
+            onClick={fetchPlans}
+          >
+            Retry
+          </button>
+        </div>
+      </AdminLayout>
+    );
+  }
+
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
@@ -691,48 +472,34 @@ export default function AdminPlans() {
         {[
           {
             label: "Total Plans",
-            value: plans.length,
+            value: stats?.totalPlans ?? plans.length,
             icon: <Package size={16} />,
             color: "indigo" as const,
             hint: "",
           },
           {
             label: "Active Plans",
-            value: activePlans,
+            value: stats?.activePlans ?? plans.filter((p) => p.isActive).length,
             icon: <CheckCircle size={16} />,
             color: "green" as const,
             hint: "",
           },
           {
-            label: "Candidate Plans",
-            value: candidatePlans,
-            icon: <UserCheck size={16} />,
+            label: "Total Subscribers",
+            value: stats?.totalSubscribers ?? 0,
+            icon: <Users size={16} />,
             color: "cyan" as const,
             hint: "",
           },
           {
-            label: "Company Plans",
-            value: companyPlans,
-            icon: <Briefcase size={16} />,
-            color: "amber" as const,
-            hint: "",
-          },
-          {
-            label: "Total Subscribers",
-            value: totalSubs,
-            icon: <Users size={16} />,
-            color: "indigo" as const,
-            hint: "",
-          },
-          {
             label: "Enterprise Clients",
-            value: plans.find((p) => p.slug === "enterprise")?.subscribers ?? 0,
+            value: stats?.enterpriseSubscribers ?? 0,
             icon: <Zap size={16} />,
             color: "amber" as const,
             hint: "",
           },
         ].map((s, i) => (
-          <div key={i} className={`col-6 col-md-2 adm-au adm-d${i + 1}`}>
+          <div key={i} className={`col-6 col-md-3 adm-au adm-d${i + 1}`}>
             <StatCard {...s} />
           </div>
         ))}
@@ -740,7 +507,7 @@ export default function AdminPlans() {
 
       {/* Table */}
       <div className="adm-au adm-d2">
-        <AdminTable<Plan>
+        <AdminTable<ApiPlan>
           title="All Plans"
           columns={COLS}
           data={paged}
@@ -760,38 +527,6 @@ export default function AdminPlans() {
           }
           searchSlot={
             <div className="d-flex align-items-center gap-2 flex-wrap">
-              {/* Type filter tabs */}
-              <div className="d-flex gap-1">
-                {(["all", "candidate", "company"] as const).map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => {
-                      setTypeFilter(t);
-                      setPage(1);
-                    }}
-                    style={{
-                      padding: "4px 12px",
-                      borderRadius: 20,
-                      fontSize: ".76rem",
-                      fontFamily: "Syne",
-                      fontWeight: 700,
-                      cursor: "pointer",
-                      border: "1.5px solid",
-                      borderColor:
-                        typeFilter === t ? "var(--primary)" : "var(--border)",
-                      background:
-                        typeFilter === t ? "var(--primary)" : "transparent",
-                      color: typeFilter === t ? "#fff" : "var(--muted)",
-                      transition: "all .15s",
-                    }}
-                  >
-                    {t === "all"
-                      ? "All"
-                      : t.charAt(0).toUpperCase() + t.slice(1)}
-                  </button>
-                ))}
-              </div>
-
               <div className="adm-search-wrap">
                 <Search size={13} className="adm-search-icon" />
                 <input
@@ -816,7 +551,6 @@ export default function AdminPlans() {
                 <option value="">All Status</option>
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
-                <option value="Draft">Draft</option>
               </select>
             </div>
           }
@@ -843,7 +577,7 @@ export default function AdminPlans() {
               background: "#fff",
               borderRadius: 20,
               width: "100%",
-              maxWidth: 680,
+              maxWidth: 700,
               maxHeight: "90vh",
               overflowY: "auto",
               boxShadow: "0 24px 80px rgba(15,14,26,0.2)",
@@ -893,8 +627,8 @@ export default function AdminPlans() {
                 </div>
                 <div style={{ fontSize: ".74rem", color: "var(--muted)" }}>
                   {editId
-                    ? "Update plan details and features"
-                    : "Define features and limits for the new plan"}
+                    ? "Update plan details and permissions"
+                    : "Define details and permissions for the new plan"}
                 </div>
               </div>
               <button
@@ -925,89 +659,6 @@ export default function AdminPlans() {
                 gap: "1.5rem",
               }}
             >
-              {/* Plan type selector */}
-              <div>
-                <SectionLabel>Plan type</SectionLabel>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: 10,
-                  }}
-                >
-                  {(["candidate", "company"] as PlanType[]).map((t) => (
-                    <button
-                      key={t}
-                      onClick={() => updateFormType(t)}
-                      style={{
-                        padding: "14px 16px",
-                        borderRadius: 12,
-                        border:
-                          form.type === t
-                            ? "2px solid var(--primary)"
-                            : "1.5px solid var(--border)",
-                        background:
-                          form.type === t
-                            ? "rgba(79,70,229,0.06)"
-                            : "transparent",
-                        cursor: "pointer",
-                        textAlign: "left",
-                        transition: "all .15s",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 8,
-                          marginBottom: 4,
-                        }}
-                      >
-                        {t === "candidate" ? (
-                          <UserCheck
-                            size={15}
-                            color={
-                              form.type === t
-                                ? "var(--primary)"
-                                : "var(--muted)"
-                            }
-                          />
-                        ) : (
-                          <Briefcase
-                            size={15}
-                            color={
-                              form.type === t
-                                ? "var(--primary)"
-                                : "var(--muted)"
-                            }
-                          />
-                        )}
-                        <span
-                          style={{
-                            fontFamily: "Syne",
-                            fontWeight: 700,
-                            fontSize: ".85rem",
-                            color:
-                              form.type === t
-                                ? "var(--primary)"
-                                : "var(--text)",
-                          }}
-                        >
-                          {t === "candidate" ? "Candidate" : "Company"}
-                        </span>
-                      </div>
-                      <div
-                        style={{ fontSize: ".74rem", color: "var(--muted)" }}
-                      >
-                        {t === "candidate"
-                          ? "For job seekers — CVs, applications & suggestions"
-                          : "For employers — job posts, suggestions & applications"}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {/* Basic info */}
               <div>
                 <SectionLabel>Basic info</SectionLabel>
@@ -1018,221 +669,392 @@ export default function AdminPlans() {
                     gap: 12,
                   }}
                 >
-                  <FormField label="Plan name">
+                  <FormField label="Plan name *">
                     <input
                       className="adm-search"
                       style={{ width: "100%", paddingLeft: ".9rem" }}
-                      placeholder="e.g. Pro Seeker"
+                      placeholder="e.g. Pro Plan"
                       value={form.name}
-                      onChange={(e) => {
-                        const name = e.target.value;
-                        setForm((prev) => ({
-                          ...prev,
-                          name,
-                          slug:
-                            prev.slug ||
-                            name.toLowerCase().replace(/\s+/g, "-"),
-                        }));
-                      }}
-                    />
-                  </FormField>
-                  <FormField label="Slug">
-                    <input
-                      className="adm-search"
-                      style={{ width: "100%", paddingLeft: ".9rem" }}
-                      placeholder="e.g. pro-seeker"
-                      value={form.slug}
                       onChange={(e) =>
-                        setForm((prev) => ({ ...prev, slug: e.target.value }))
+                        setForm((prev) => ({ ...prev, name: e.target.value }))
                       }
                     />
                   </FormField>
-                  <FormField label="Price">
+
+                  <FormField label="Currency">
                     <input
                       className="adm-search"
                       style={{ width: "100%", paddingLeft: ".9rem" }}
-                      placeholder="e.g. $29/mo or Custom"
+                      placeholder="e.g. EGP"
+                      value={form.currency}
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          currency: e.target.value,
+                        }))
+                      }
+                    />
+                  </FormField>
+
+                  <FormField label="Price *">
+                    <input
+                      className="adm-search"
+                      style={{ width: "100%", paddingLeft: ".9rem" }}
+                      type="number"
+                      min={0}
+                      placeholder="e.g. 300"
                       value={form.price}
                       onChange={(e) =>
                         setForm((prev) => ({ ...prev, price: e.target.value }))
                       }
                     />
                   </FormField>
-                  <FormField label="Billing cycle">
-                    <select
-                      className="adm-select"
-                      style={{ width: "100%" }}
-                      value={form.billing}
+
+                  <FormField label="Duration (days)">
+                    <input
+                      className="adm-search"
+                      style={{ width: "100%", paddingLeft: ".9rem" }}
+                      type="number"
+                      min={1}
+                      placeholder="e.g. 30"
+                      value={form.durationInDays}
                       onChange={(e) =>
                         setForm((prev) => ({
                           ...prev,
-                          billing: e.target.value as BillingCycle,
+                          durationInDays: Number(e.target.value),
                         }))
                       }
-                    >
-                      <option value="Monthly">Monthly</option>
-                      <option value="Annual">Annual</option>
-                      <option value="Custom">Custom</option>
-                    </select>
+                    />
                   </FormField>
-                  <FormField label="Status">
-                    <select
-                      className="adm-select"
-                      style={{ width: "100%" }}
-                      value={form.status}
+
+                  <FormField label="Description">
+                    <input
+                      className="adm-search"
+                      style={{ width: "100%", paddingLeft: ".9rem" }}
+                      placeholder="Optional description"
+                      value={form.description}
                       onChange={(e) =>
                         setForm((prev) => ({
                           ...prev,
-                          status: e.target.value as PlanStatus,
+                          description: e.target.value,
                         }))
                       }
-                    >
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                      <option value="Draft">Draft</option>
-                    </select>
+                    />
                   </FormField>
+                </div>
+
+                {/* Toggles */}
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 20,
+                    marginTop: 12,
+                  }}
+                >
+                  {(
+                    [
+                      { key: "isDefault", label: "Default Plan" },
+                      { key: "isAutoRenew", label: "Auto Renew" },
+                    ] as { key: keyof ModalForm; label: string }[]
+                  ).map(({ key, label }) => (
+                    <label
+                      key={key}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        cursor: "pointer",
+                        fontSize: ".82rem",
+                        fontWeight: 600,
+                        color: "var(--text)",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={form[key] as boolean}
+                        onChange={(e) =>
+                          setForm((prev) => ({
+                            ...prev,
+                            [key]: e.target.checked,
+                          }))
+                        }
+                        style={{
+                          accentColor: "var(--primary)",
+                          cursor: "pointer",
+                        }}
+                      />
+                      {label}
+                    </label>
+                  ))}
                 </div>
               </div>
 
-              {/* Features & limits */}
+              {/* Features & Permissions */}
               <div>
-                <SectionLabel>Features & limits</SectionLabel>
-                <div
-                  style={{ display: "flex", flexDirection: "column", gap: 8 }}
-                >
-                  {form.features.map((feat) => (
-                    <div
-                      key={feat.key}
-                      style={{
-                        background: feat.enabled
-                          ? "rgba(79,70,229,0.03)"
-                          : "var(--surface)",
-                        border: `1.5px solid ${feat.enabled ? "rgba(79,70,229,0.15)" : "var(--border)"}`,
-                        borderRadius: 12,
-                        padding: "10px 14px",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 12,
-                        transition: "all .15s",
-                      }}
-                    >
-                      {/* Enable toggle */}
-                      <label
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 6,
-                          cursor: "pointer",
-                          flex: 1,
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={feat.enabled}
-                          onChange={(e) =>
-                            updateFeatureEnabled(feat.key, e.target.checked)
-                          }
-                          style={{
-                            accentColor: "var(--primary)",
-                            cursor: "pointer",
-                          }}
-                        />
-                        <span
-                          style={{
-                            fontWeight: 600,
-                            fontSize: ".82rem",
-                            color: feat.enabled
-                              ? "var(--text)"
-                              : "var(--muted)",
-                          }}
-                        >
-                          {feat.label}
-                        </span>
-                      </label>
-
-                      {/* Limit controls */}
-                      {feat.enabled && (
+                <SectionLabel>Features & Permissions</SectionLabel>
+                {form.features.length === 0 ? (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "1.5rem",
+                      color: "var(--muted)",
+                      fontSize: ".82rem",
+                      border: "1.5px dashed var(--border)",
+                      borderRadius: 12,
+                    }}
+                  >
+                    No features available
+                  </div>
+                ) : (
+                  <div
+                    style={{ display: "flex", flexDirection: "column", gap: 8 }}
+                  >
+                    {form.features.map((feat) => {
+                      const enabledCount = feat.permissions.filter(
+                        (p) => p.enabled,
+                      ).length;
+                      return (
                         <div
+                          key={feat.featureId}
                           style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
+                            border: `1.5px solid ${enabledCount > 0 ? "rgba(79,70,229,0.2)" : "var(--border)"}`,
+                            borderRadius: 12,
+                            overflow: "hidden",
+                            background:
+                              enabledCount > 0
+                                ? "rgba(79,70,229,0.02)"
+                                : "var(--surface)",
+                            transition: "all .15s",
                           }}
                         >
-                          {/* Unlimited toggle */}
-                          <label
+                          {/* Feature header */}
+                          <button
+                            onClick={() =>
+                              toggleFeatureExpanded(feat.featureId)
+                            }
                             style={{
+                              width: "100%",
+                              padding: "10px 14px",
                               display: "flex",
                               alignItems: "center",
-                              gap: 4,
+                              gap: 10,
+                              background: "transparent",
+                              border: "none",
                               cursor: "pointer",
-                              fontSize: ".74rem",
-                              color: "var(--muted)",
-                              whiteSpace: "nowrap",
+                              textAlign: "left",
                             }}
                           >
-                            <input
-                              type="checkbox"
-                              checked={feat.value === "unlimited"}
-                              onChange={(e) =>
-                                updateFeatureUnlimited(
-                                  feat.key,
-                                  e.target.checked,
-                                )
-                              }
+                            <span
                               style={{
-                                accentColor: "var(--accent)",
-                                cursor: "pointer",
+                                fontWeight: 700,
+                                fontSize: ".84rem",
+                                color:
+                                  enabledCount > 0
+                                    ? "var(--primary)"
+                                    : "var(--text)",
+                                flex: 1,
+                                textTransform: "capitalize",
                               }}
-                            />
-                            {/* <Infinity size={12} color="var(--accent)" /> */}
-                            Unlimited
-                          </label>
+                            >
+                              {feat.featureName}
+                            </span>
+                            {enabledCount > 0 && (
+                              <span
+                                style={{
+                                  fontSize: ".72rem",
+                                  background: "rgba(79,70,229,0.1)",
+                                  color: "var(--primary)",
+                                  borderRadius: 20,
+                                  padding: "2px 8px",
+                                  fontWeight: 700,
+                                }}
+                              >
+                                {enabledCount} enabled
+                              </span>
+                            )}
+                            {feat.expanded ? (
+                              <ChevronUp size={14} color="var(--muted)" />
+                            ) : (
+                              <ChevronDown size={14} color="var(--muted)" />
+                            )}
+                          </button>
 
-                          {/* Number input */}
-                          <input
-                            type="number"
-                            min={0}
-                            disabled={feat.value === "unlimited"}
-                            value={feat.value === "unlimited" ? "" : feat.value}
-                            onChange={(e) =>
-                              updateFeatureValue(
-                                feat.key,
-                                Number(e.target.value),
-                              )
-                            }
-                            placeholder="Limit"
-                            style={{
-                              width: 80,
-                              padding: "4px 8px",
-                              borderRadius: 8,
-                              border: "1.5px solid var(--border)",
-                              fontFamily: "DM Sans",
-                              fontSize: ".82rem",
-                              color: "var(--text)",
-                              background:
-                                feat.value === "unlimited"
-                                  ? "var(--surface)"
-                                  : "#fff",
-                              opacity: feat.value === "unlimited" ? 0.5 : 1,
-                              textAlign: "center",
-                              outline: "none",
-                            }}
-                          />
+                          {/* Permissions list */}
+                          {feat.expanded && (
+                            <div
+                              style={{
+                                borderTop: "1px solid var(--border)",
+                                padding: "8px 14px 12px",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 8,
+                              }}
+                            >
+                              {feat.permissions.map((perm) => (
+                                <div
+                                  key={perm.permissionId}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 12,
+                                    padding: "8px 10px",
+                                    borderRadius: 8,
+                                    background: perm.enabled
+                                      ? "rgba(79,70,229,0.04)"
+                                      : "#fff",
+                                    border: `1px solid ${perm.enabled ? "rgba(79,70,229,0.12)" : "var(--border)"}`,
+                                    transition: "all .12s",
+                                  }}
+                                >
+                                  {/* Enable checkbox */}
+                                  <label
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "flex-start",
+                                      gap: 8,
+                                      cursor: "pointer",
+                                      flex: 1,
+                                    }}
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={perm.enabled}
+                                      onChange={(e) =>
+                                        updatePermissionEnabled(
+                                          feat.featureId,
+                                          perm.permissionId,
+                                          e.target.checked,
+                                        )
+                                      }
+                                      style={{
+                                        accentColor: "var(--primary)",
+                                        cursor: "pointer",
+                                        marginTop: 2,
+                                      }}
+                                    />
+                                    <div>
+                                      <div
+                                        style={{
+                                          fontWeight: 600,
+                                          fontSize: ".78rem",
+                                          color: perm.enabled
+                                            ? "var(--text)"
+                                            : "var(--muted)",
+                                          fontFamily: "monospace",
+                                        }}
+                                      >
+                                        {perm.permissionName}
+                                      </div>
+                                      <div
+                                        style={{
+                                          fontSize: ".72rem",
+                                          color: "var(--muted)",
+                                          marginTop: 1,
+                                        }}
+                                      >
+                                        {perm.permissionDescription}
+                                      </div>
+                                    </div>
+                                  </label>
 
-                          {/* Current value badge */}
-                          <div
-                            className="adm-badge adm-badge--indigo"
-                            style={{ fontSize: ".7rem" }}
-                          >
-                            {feat.value === "unlimited" ? "∞" : feat.value}
-                          </div>
+                                  {/* Limit controls */}
+                                  {perm.enabled && (
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 8,
+                                        flexShrink: 0,
+                                      }}
+                                    >
+                                      <label
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          gap: 4,
+                                          cursor: "pointer",
+                                          fontSize: ".72rem",
+                                          color: "var(--muted)",
+                                          whiteSpace: "nowrap",
+                                        }}
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          checked={perm.limit === "unlimited"}
+                                          onChange={(e) =>
+                                            updatePermissionLimit(
+                                              feat.featureId,
+                                              perm.permissionId,
+                                              e.target.checked
+                                                ? "unlimited"
+                                                : 10,
+                                            )
+                                          }
+                                          style={{
+                                            accentColor: "var(--accent)",
+                                            cursor: "pointer",
+                                          }}
+                                        />
+                                        Unlimited
+                                      </label>
+
+                                      <input
+                                        type="number"
+                                        min={0}
+                                        disabled={perm.limit === "unlimited"}
+                                        value={
+                                          perm.limit === "unlimited"
+                                            ? ""
+                                            : perm.limit
+                                        }
+                                        onChange={(e) =>
+                                          updatePermissionLimit(
+                                            feat.featureId,
+                                            perm.permissionId,
+                                            Number(e.target.value),
+                                          )
+                                        }
+                                        placeholder="Limit"
+                                        style={{
+                                          width: 72,
+                                          padding: "4px 8px",
+                                          borderRadius: 8,
+                                          border: "1.5px solid var(--border)",
+                                          fontFamily: "DM Sans",
+                                          fontSize: ".8rem",
+                                          color: "var(--text)",
+                                          background:
+                                            perm.limit === "unlimited"
+                                              ? "var(--surface)"
+                                              : "#fff",
+                                          opacity:
+                                            perm.limit === "unlimited"
+                                              ? 0.5
+                                              : 1,
+                                          textAlign: "center",
+                                          outline: "none",
+                                        }}
+                                      />
+
+                                      <div
+                                        className="adm-badge adm-badge--indigo"
+                                        style={{ fontSize: ".68rem" }}
+                                      >
+                                        {perm.limit === "unlimited"
+                                          ? "∞"
+                                          : perm.limit}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -1253,15 +1075,24 @@ export default function AdminPlans() {
               <button
                 className="adm-btn adm-btn--outline adm-btn--sm"
                 onClick={closeModal}
+                disabled={saving}
               >
                 Cancel
               </button>
               <button
                 className="adm-btn adm-btn--primary adm-btn--sm"
                 onClick={saveForm}
-                disabled={!form.name || !form.slug || !form.price}
+                disabled={!form.name || !form.price || saving}
               >
-                {editId ? "Save changes" : "Create plan"}
+                {saving ? (
+                  <>
+                    <Loader2 size={12} className="spin" /> Saving…
+                  </>
+                ) : editId ? (
+                  "Save changes"
+                ) : (
+                  "Create plan"
+                )}
               </button>
             </div>
           </div>
