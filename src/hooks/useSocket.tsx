@@ -35,7 +35,7 @@ export default function useSocket(
   useEffect(() => {
     if (!token) return;
 
-    const socket = io("https://scout-talent-production-b128.up.railway.app/", {
+    const socket = io("https://scout-talent-production-b6a3.up.railway.app/", {
       auth: { token },
     });
 
