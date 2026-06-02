@@ -4,17 +4,17 @@ import {
   LayoutDashboard,
   Users,
   Briefcase,
-  CreditCard,
+  // CreditCard,
   // BarChart2,
-  Settings,
+ 
   LogOut,
-  Bell,
+ 
   ChevronLeft,
   ChevronRight,
   Menu,
   X,
   BadgeDollarSign,
-  BarChart3,
+  // BarChart3,
   Building2,
   Receipt,
   Feather,
@@ -66,11 +66,11 @@ const NAV_GROUPS = [
   {
     label: "Finance",
     items: [
-      {
-        label: "Subscriptions",
-        icon: <CreditCard size={16} />,
-        to: "/admin/subscriptions",
-      },
+      // {
+      //   label: "Subscriptions",
+      //   icon: <CreditCard size={16} />,
+      //   to: "/admin/subscriptions",
+      // },
       {
         label: "Plans",
         icon: <BadgeDollarSign size={16} />,
@@ -89,21 +89,21 @@ const NAV_GROUPS = [
     ],
   },
 
-  {
-    label: "System",
-    items: [
-      {
-        label: "Analytics",
-        icon: <BarChart3 size={16} />,
-        to: "/admin/analytics",
-      },
-      {
-        label: "Settings",
-        icon: <Settings size={16} />,
-        to: "/admin/settings",
-      },
-    ],
-  },
+  // {
+  //   label: "System",
+  //   items: [
+  //     {
+  //       label: "Analytics",
+  //       icon: <BarChart3 size={16} />,
+  //       to: "/admin/analytics",
+  //     },
+  //     {
+  //       label: "Settings",
+  //       icon: <Settings size={16} />,
+  //       to: "/admin/settings",
+  //     },
+  //   ],
+  // },
 ];
 
 /* ════════════════════════════════════════════════════════════
@@ -244,7 +244,7 @@ export default function AdminLayout({
 
         {/* Right: actions */}
         <div className="adm-topbar-right">
-          <button
+          {/* <button
             className="adm-tb-btn"
             onClick={() => navigate("/admin/settings")}
           >
@@ -256,7 +256,7 @@ export default function AdminLayout({
             onClick={() => navigate("/admin/settings")}
           >
             <Settings size={15} />
-          </button>
+          </button> */}
   
           <div
             className="adm-admin-avatar"

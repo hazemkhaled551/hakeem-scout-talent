@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { CreditCard, Search, Eye, RefreshCw, TrendingUp } from "lucide-react";
 import AdminLayout from "../../layouts/Adminlayout";
 import AdminTable, {
@@ -6,6 +6,7 @@ import AdminTable, {
   Badge,
   type Column,
 } from "../../components/Admintable";
+import { getPayments } from "../../services/AdminDashboard/payments";
 
 /* ════════════════════════════════════════════════════════════
    TYPES & DUMMY
@@ -23,104 +24,104 @@ interface Payment {
   invoice: string;
 }
 
-const DUMMY: Payment[] = [
-  {
-    id: "pay_001",
-    company: "TechCorp Inc.",
-    email: "hr@techcorp.com",
-    plan: "Pro",
-    amount: "$468.00",
-    billing: "Annual",
-    method: "Visa ••4242",
-    status: "Paid",
-    date: "Apr 1, 2026",
-    invoice: "INV-0041",
-  },
-  {
-    id: "pay_002",
-    company: "CloudBase",
-    email: "team@cloudbase.com",
-    plan: "Enterprise",
-    amount: "$2,400.00",
-    billing: "Annual",
-    method: "MC ••9999",
-    status: "Paid",
-    date: "Apr 1, 2026",
-    invoice: "INV-0042",
-  },
-  {
-    id: "pay_003",
-    company: "DesignStudio",
-    email: "jobs@design.io",
-    plan: "Pro",
-    amount: "$49.00",
-    billing: "Monthly",
-    method: "Visa ••1234",
-    status: "Paid",
-    date: "Apr 3, 2026",
-    invoice: "INV-0043",
-  },
-  {
-    id: "pay_004",
-    company: "InnovateLabs",
-    email: "jobs@innov.io",
-    plan: "Pro",
-    amount: "$49.00",
-    billing: "Monthly",
-    method: "MC ••5678",
-    status: "Failed",
-    date: "Apr 5, 2026",
-    invoice: "INV-0044",
-  },
-  {
-    id: "pay_005",
-    company: "MediaGroup",
-    email: "hr@media.com",
-    plan: "Free",
-    amount: "$0.00",
-    billing: "Monthly",
-    method: "—",
-    status: "Paid",
-    date: "Apr 10, 2026",
-    invoice: "INV-0045",
-  },
-  {
-    id: "pay_006",
-    company: "StartupXYZ",
-    email: "hi@startup.xyz",
-    plan: "Pro",
-    amount: "$49.00",
-    billing: "Monthly",
-    method: "Visa ••8888",
-    status: "Refunded",
-    date: "Mar 28, 2026",
-    invoice: "INV-0039",
-  },
-  {
-    id: "pay_007",
-    company: "DataFlow Systems",
-    email: "info@dataflow.io",
-    plan: "Enterprise",
-    amount: "$2,400.00",
-    billing: "Annual",
-    method: "Bank Transfer",
-    status: "Paid",
-    date: "Mar 1, 2026",
-    invoice: "INV-0038",
-  },
-  {
-    id: "pay_008",
-    company: "MobileFirst",
-    email: "hr@mobilefirst.dev",
-    plan: "Pro",
-    amount: "$468.00",
-    billing: "Annual",
-    method: "Amex ••0007",
-    status: "Pending",
-    date: "Apr 15, 2026",
-    invoice: "INV-0046",
-  },
-];
+// const DUMMY: Payment[] = [
+//   {
+//     id: "pay_001",
+//     company: "TechCorp Inc.",
+//     email: "hr@techcorp.com",
+//     plan: "Pro",
+//     amount: "$468.00",
+//     billing: "Annual",
+//     method: "Visa ••4242",
+//     status: "Paid",
+//     date: "Apr 1, 2026",
+//     invoice: "INV-0041",
+//   },
+//   {
+//     id: "pay_002",
+//     company: "CloudBase",
+//     email: "team@cloudbase.com",
+//     plan: "Enterprise",
+//     amount: "$2,400.00",
+//     billing: "Annual",
+//     method: "MC ••9999",
+//     status: "Paid",
+//     date: "Apr 1, 2026",
+//     invoice: "INV-0042",
+//   },
+//   {
+//     id: "pay_003",
+//     company: "DesignStudio",
+//     email: "jobs@design.io",
+//     plan: "Pro",
+//     amount: "$49.00",
+//     billing: "Monthly",
+//     method: "Visa ••1234",
+//     status: "Paid",
+//     date: "Apr 3, 2026",
+//     invoice: "INV-0043",
+//   },
+//   {
+//     id: "pay_004",
+//     company: "InnovateLabs",
+//     email: "jobs@innov.io",
+//     plan: "Pro",
+//     amount: "$49.00",
+//     billing: "Monthly",
+//     method: "MC ••5678",
+//     status: "Failed",
+//     date: "Apr 5, 2026",
+//     invoice: "INV-0044",
+//   },
+//   {
+//     id: "pay_005",
+//     company: "MediaGroup",
+//     email: "hr@media.com",
+//     plan: "Free",
+//     amount: "$0.00",
+//     billing: "Monthly",
+//     method: "—",
+//     status: "Paid",
+//     date: "Apr 10, 2026",
+//     invoice: "INV-0045",
+//   },
+//   {
+//     id: "pay_006",
+//     company: "StartupXYZ",
+//     email: "hi@startup.xyz",
+//     plan: "Pro",
+//     amount: "$49.00",
+//     billing: "Monthly",
+//     method: "Visa ••8888",
+//     status: "Refunded",
+//     date: "Mar 28, 2026",
+//     invoice: "INV-0039",
+//   },
+//   {
+//     id: "pay_007",
+//     company: "DataFlow Systems",
+//     email: "info@dataflow.io",
+//     plan: "Enterprise",
+//     amount: "$2,400.00",
+//     billing: "Annual",
+//     method: "Bank Transfer",
+//     status: "Paid",
+//     date: "Mar 1, 2026",
+//     invoice: "INV-0038",
+//   },
+//   {
+//     id: "pay_008",
+//     company: "MobileFirst",
+//     email: "hr@mobilefirst.dev",
+//     plan: "Pro",
+//     amount: "$468.00",
+//     billing: "Annual",
+//     method: "Amex ••0007",
+//     status: "Pending",
+//     date: "Apr 15, 2026",
+//     invoice: "INV-0046",
+//   },
+// ];
 
 const STATUS_COLOR: Record<string, "green" | "amber" | "red" | "gray"> = {
   Paid: "green",
@@ -135,29 +136,32 @@ const STATUS_COLOR: Record<string, "green" | "amber" | "red" | "gray"> = {
 export default function AdminPayments() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [payments, setPayments] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 6;
+  const fetchPayments = async () => {
+    try {
+      const res = await getPayments(page, PAGE_SIZE, statusFilter, search);
+      console.log(res.data.data);
 
-  const filtered = useMemo(
-    () =>
-      DUMMY.filter((p) => {
-        const q = search.toLowerCase();
-        return (
-          (!q ||
-            p.company.toLowerCase().includes(q) ||
-            p.invoice.toLowerCase().includes(q)) &&
-          (!statusFilter || p.status === statusFilter)
-        );
-      }),
-    [search, statusFilter],
-  );
+      setPayments(res.data.data.items);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  useEffect(() => {
+    async function load() {
+      await fetchPayments();
+    }
+    load();
+  }, [page, statusFilter, search]);
 
-  const totalRevenue = DUMMY.filter((p) => p.status === "Paid").reduce(
-    (sum, p) => sum + parseFloat(p.amount.replace(/[$,]/g, "")),
-    0,
-  );
+  const paged = payments.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const totalRevenue = payments
+    .filter((p) => p.status === "Paid")
+    .reduce((sum, p) => sum + parseFloat(p.amount.replace(/[$,]/g, "")), 0);
 
   const COLS: Column<Payment>[] = [
     {
@@ -281,21 +285,21 @@ export default function AdminPayments() {
           },
           {
             label: "Transactions",
-            value: DUMMY.length,
+            value: payments.length,
             icon: <TrendingUp size={16} />,
             color: "indigo" as const,
             hint: "Total",
           },
           {
             label: "Failed",
-            value: DUMMY.filter((p) => p.status === "Failed").length,
+            value: payments.filter((p) => p.status === "Failed").length,
             icon: <CreditCard size={16} />,
             color: "red" as const,
             hint: "Need attention",
           },
           {
             label: "Pending",
-            value: DUMMY.filter((p) => p.status === "Pending").length,
+            value: payments.filter((p) => p.status === "Pending").length,
             icon: <CreditCard size={16} />,
             color: "amber" as const,
             hint: "Awaiting",
@@ -317,7 +321,7 @@ export default function AdminPayments() {
           emptyIcon={<CreditCard size={22} />}
           page={page}
           pageSize={PAGE_SIZE}
-          total={filtered.length}
+          total={payments.length}
           onPageChange={setPage}
           searchSlot={
             <div className="d-flex align-items-center gap-2">
