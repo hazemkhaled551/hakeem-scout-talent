@@ -245,9 +245,8 @@ function useScrollReveal(): void {
 export default function LandingPage() {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+
   useScrollReveal();
-
-
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);

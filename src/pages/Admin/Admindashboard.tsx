@@ -356,7 +356,7 @@ export default function AdminDashboard() {
           <div key={i} className={`col-6 col-lg-3 adm-au adm-d${i + 1}`}>
             <div
               style={{
-                background: "var(--white)",
+                background: "var(--card-bg)",
                 borderRadius: 13,
                 border: "1px solid var(--border)",
                 padding: ".9rem 1.1rem",

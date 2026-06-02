@@ -151,7 +151,7 @@ function Donut({
             />
           );
         })}
-        <circle cx={cx} cy={cy} r={27} fill="var(--white)" />
+        <circle cx={cx} cy={cy} r={27} fill="var(--bg)" />
         <text
           x={cx}
           y={cy + 1}
@@ -271,7 +271,7 @@ function ChartCard({
   return (
     <div
       style={{
-        background: "var(--white)",
+        background: "var(--card-bg)",
         borderRadius: 16,
         border: "1px solid var(--border)",
         boxShadow: "0 2px 12px rgba(79,70,229,.04)",

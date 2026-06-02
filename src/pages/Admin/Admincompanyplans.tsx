@@ -23,6 +23,10 @@ import AdminTable, {
 import {
   getPlans,
   createPlan,
+  updatePlan,
+  deletePlan,
+  getPlanById,
+  setDefaultPlan,
 } from "../../services/AdminDashboard/plansService";
 import { getFeatures } from "../../services/AdminDashboard/featurePlanService";
 
@@ -49,10 +53,12 @@ interface ApiFeature {
   description: string | null;
   createdAt: string;
   updatedAt: string;
+
   featurePermissions: ApiFeaturePermission[];
 }
 
 interface ApiPlan {
+  isDefault: any;
   id: string;
   name: string;
   description: string | null;
@@ -74,6 +80,7 @@ interface ApiStats {
 // Permission with limit (local state for modal)
 interface PermissionWithLimit {
   permissionId: string;
+  featurePermissionId: string;
   permissionName: string;
   permissionDescription: string;
   enabled: boolean;
@@ -113,6 +120,7 @@ const emptyForm = (apiFeatures: ApiFeature[]): ModalForm => ({
     featureName: f.name,
     expanded: false,
     permissions: f.featurePermissions.map((fp) => ({
+      featurePermissionId: fp.id,
       permissionId: fp.permission.id,
       permissionName: fp.permission.name,
       permissionDescription: fp.permission.description,
@@ -202,32 +210,65 @@ export default function AdminPlans() {
     setModalOpen(true);
   };
 
-  const openEdit = (plan: ApiPlan) => {
+  const openEdit = async (plan: ApiPlan) => {
     setEditId(plan.id);
+
+    const res = await getPlanById(plan.id);
+    const editPlan = res.data.data;
+
+  
+    const selectedPermissions = new Map<
+      string,
+      {
+        enabled: boolean;
+        limit: number | null;
+      }
+    >(
+      editPlan.planFeaturePermissions.map((p: any) => [
+        p.id,
+        {
+          enabled: true,
+          limit: p.limitCount,
+        },
+      ]),
+    );
+
     setForm({
-      name: plan.name,
-      description: plan.description ?? "",
-      price: plan.price,
-      currency: plan.currency,
-      durationInDays: plan.durationInDays,
-      isDefault: false,
+      name: editPlan.name,
+      description: editPlan.description ?? "",
+      price: editPlan.price,
+      currency: editPlan.currency,
+      durationInDays: editPlan.durationInDays,
+      isDefault: editPlan.isDefault,
       isAutoRenew: false,
-      features: apiFeatures.map((f) => ({
-        featureId: f.id,
-        featureName: f.name,
+
+      // كل الـ features الأساسية
+      features: apiFeatures.map((feature: any) => ({
+        featureId: feature.id,
+        featureName: feature.name,
         expanded: false,
-        permissions: f.featurePermissions.map((fp) => ({
-          permissionId: fp.permission.id,
-          permissionName: fp.permission.name,
-          permissionDescription: fp.permission.description,
-          enabled: false,
-          limit: 10,
-        })),
+
+        permissions: feature.featurePermissions.map((fp: any) => {
+          const selected = selectedPermissions.get(fp.id);
+
+          return {
+            featurePermissionId: fp.id,
+            permissionId: fp.permission.id,
+            permissionName: fp.permission.name,
+            permissionDescription: fp.permission.description,
+
+            // لو موجودة فى البلان → enabled
+            enabled: !!selected,
+
+            // limit
+            limit: selected?.limit ?? null,
+          };
+        }),
       })),
     });
+
     setModalOpen(true);
   };
-
   const closeModal = () => {
     setModalOpen(false);
     setEditId(null);
@@ -240,6 +281,14 @@ export default function AdminPlans() {
         f.featureId === featureId ? { ...f, expanded: !f.expanded } : f,
       ),
     }));
+  };
+  const setDefault = async (id: string) => {
+    try {
+      await setDefaultPlan(id);
+      await fetchPlans();
+    } catch (e: any) {
+      console.error(e);
+    }
   };
 
   const updatePermissionEnabled = (
@@ -283,10 +332,17 @@ export default function AdminPlans() {
   };
 
   const buildPayload = () => {
-    const permissions: string[] = [];
+    const permissions: { featurePermissionId: string; limitCount: number }[] =
+      [];
+
     form.features.forEach((f) => {
       f.permissions.forEach((p) => {
-        if (p.enabled) permissions.push(p.permissionId);
+        if (p.enabled) {
+          permissions.push({
+            featurePermissionId: p.featurePermissionId,
+            limitCount: p.limit === "unlimited" ? -1 : p.limit,
+          });
+        }
       });
     });
 
@@ -296,8 +352,8 @@ export default function AdminPlans() {
       price: parseFloat(form.price),
       currency: form.currency,
       durationInDays: form.durationInDays,
-      isDefault: form.isDefault,
-      isAutoRenew: form.isAutoRenew,
+      // isDefault: form.isDefault,
+      // isAutoRenew: form.isAutoRenew,
       permissions,
     };
   };
@@ -305,21 +361,36 @@ export default function AdminPlans() {
   const saveForm = async () => {
     if (!form.name || !form.price) return;
     setSaving(true);
-    try {
-      const payload = buildPayload();
-      await createPlan(payload);
-      await fetchPlans();
-    } catch (e: any) {
-      console.log(e);
-    } finally {
-      setSaving(false);
+    if (editId) {
+      try {
+        const payload = buildPayload();
+        await updatePlan(editId, payload);
+        await fetchPlans();
+        setModalOpen(false);
+      } catch (e: any) {
+        console.log(e);
+      } finally {
+        setSaving(false);
+      }
+      return;
+    } else {
+      try {
+        const payload = buildPayload();
+        await createPlan(payload);
+        await fetchPlans();
+        setModalOpen(false);
+      } catch (e: any) {
+        console.log(e);
+      } finally {
+        setSaving(false);
+      }
     }
   };
 
-  const deletePlan = async (id: string) => {
-    if (!confirm("Delete this plan?")) return;
+  const deletePlans = async (id: string) => {
+    // if (!confirm("Delete this plan?")) return;
     try {
-      await fetch(`/api/plans/${id}`, { method: "DELETE" });
+      await deletePlan(id);
       await fetchPlans();
     } catch {
       alert("Delete failed");
@@ -329,6 +400,36 @@ export default function AdminPlans() {
   // ── Table columns ───────────────────────────────────────────────────────────
 
   const COLS: Column<ApiPlan>[] = [
+    {
+      key: "isDefault",
+      label: "Default",
+      width: "90px",
+      render: (r) => (
+        <label
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: r.isDefault ? "default" : "pointer",
+            gap: 6,
+          }}
+          title={r.isDefault ? "Current default plan" : "Set as default"}
+        >
+          <input
+            type="radio"
+            name="default-plan"
+            checked={r.isDefault}
+            onChange={() => !r.isDefault && setDefault(r.id)}
+            style={{
+              accentColor: "var(--primary)",
+              cursor: "pointer",
+              width: 15,
+              height: 15,
+            }}
+          />
+        </label>
+      ),
+    },
     {
       key: "name",
       label: "Plan Name",
@@ -406,7 +507,7 @@ export default function AdminPlans() {
           </button>
           <button
             className="adm-row-btn adm-row-btn--danger"
-            onClick={() => deletePlan(r.id)}
+            onClick={() => deletePlans(r.id)}
           >
             <Trash2 size={12} />
           </button>
@@ -574,7 +675,7 @@ export default function AdminPlans() {
         >
           <div
             style={{
-              background: "#fff",
+              background: "var(--card-bg)",
               borderRadius: 20,
               width: "100%",
               maxWidth: 700,
@@ -594,7 +695,7 @@ export default function AdminPlans() {
                 gap: 10,
                 position: "sticky",
                 top: 0,
-                background: "#fff",
+                background: "var(--surface)",
                 zIndex: 1,
                 borderRadius: "20px 20px 0 0",
               }}
@@ -751,7 +852,7 @@ export default function AdminPlans() {
                     marginTop: 12,
                   }}
                 >
-                  {(
+                  {/* {(
                     [
                       { key: "isDefault", label: "Default Plan" },
                       { key: "isAutoRenew", label: "Auto Renew" },
@@ -785,7 +886,7 @@ export default function AdminPlans() {
                       />
                       {label}
                     </label>
-                  ))}
+                  ))} */}
                 </div>
               </div>
 
@@ -901,7 +1002,7 @@ export default function AdminPlans() {
                                     borderRadius: 8,
                                     background: perm.enabled
                                       ? "rgba(79,70,229,0.04)"
-                                      : "#fff",
+                                      : "var(--surface)",
                                     border: `1px solid ${perm.enabled ? "rgba(79,70,229,0.12)" : "var(--border)"}`,
                                     transition: "all .12s",
                                   }}
@@ -1026,7 +1127,7 @@ export default function AdminPlans() {
                                           background:
                                             perm.limit === "unlimited"
                                               ? "var(--surface)"
-                                              : "#fff",
+                                              : "var(--card-bg)",
                                           opacity:
                                             perm.limit === "unlimited"
                                               ? 0.5
@@ -1068,7 +1169,7 @@ export default function AdminPlans() {
                 gap: 8,
                 position: "sticky",
                 bottom: 0,
-                background: "#fff",
+                background: "var(--card-bg)",
                 borderRadius: "0 0 20px 20px",
               }}
             >

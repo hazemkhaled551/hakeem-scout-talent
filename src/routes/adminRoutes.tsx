@@ -8,8 +8,7 @@ import AdminJobs from "../pages/Admin/Adminjobs";
 import AdminPayments from "../pages/Admin/Adminpayments";
 import AdminSettings from "../pages/Admin/Adminsettings";
 import AdminCompanyPlans from "../pages/Admin/Admincompanyplans";
-import AdminAdmins from "../pages/Admin/Adminadmins";
-import AdminRoles from "../pages/Admin/Adminroles";
+
 import AdminFeatures from "../pages/Admin/AdminfeaturesPlans";
 
 export const AdminRoutes = () => (
@@ -18,9 +17,9 @@ export const AdminRoutes = () => (
     <Route path="/admin/users" element={<AdminUsers />} />
     <Route path="/admin/plans" element={<AdminCompanyPlans />} />
     <Route path="/admin/subscriptions" element={<AdminSubscriptions />} />
-    <Route path="/admin/admins" element={<AdminAdmins />} />
+    {/* <Route path="/admin/admins" element={<AdminAdmins />} /> */}
     <Route path="/admin/features-plans" element={<AdminFeatures />} />
-    <Route path="/admin/roles" element={<AdminRoles />} />
+    {/* <Route path="/admin/roles" element={<AdminRoles />} /> */}
     <Route path="/admin/companies" element={<AdminCompanies />} />
     <Route path="/admin/jobs" element={<AdminJobs />} />
     <Route path="/admin/payments" element={<AdminPayments />} />

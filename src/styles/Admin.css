@@ -1,12 +1,6 @@
 :root {
   /* brand */
-  --primary: #4f46e5;
-  --primary-dark: #3730a3;
-  --primary-light: #818cf8;
-  --accent: #06b6d4;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+
   /* sidebar */
   --sb-bg: #0f0e1a;
   --sb-border: rgba(255, 255, 255, 0.07);
@@ -15,11 +9,7 @@
   --sb-active-bg: rgba(79, 70, 229, 0.22);
   --sb-hover-bg: rgba(255, 255, 255, 0.05);
   /* content */
-  --surface: #f8f7ff;
-  --white: #ffffff;
-  --text: #1e1b3a;
-  --muted: #64748b;
-  --border: #e2e0f5;
+
   /* sidebar width */
   --sb-w: 240px;
   --sb-w-sm: 60px;
@@ -243,7 +233,7 @@ h4 {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--text);
   white-space: nowrap;
   overflow: hidden;
 }
@@ -332,6 +322,9 @@ h4 {
   transition:
     left 0.25s ease,
     box-shadow 0.3s;
+}
+html.dark .adm-topbar {
+  background: rgba(2, 6, 23, 0.92);
 }
 .adm-topbar.scrolled {
   box-shadow: 0 4px 20px rgba(79, 70, 229, 0.07);
@@ -431,7 +424,7 @@ h4 {
    REUSABLE: STAT CARD
 ════════════════════════════════════════════════════════════ */
 .adm-stat {
-  background: var(--white);
+  background: var(--card-bg);
   border-radius: 16px;
   border: 1px solid var(--border);
   box-shadow: 0 2px 12px rgba(79, 70, 229, 0.04);
@@ -549,7 +542,7 @@ h4 {
    REUSABLE: TABLE
 ════════════════════════════════════════════════════════════ */
 .adm-table-wrap {
-  background: var(--white);
+  background: var(--card-bg);
   border-radius: 16px;
   border: 1px solid var(--border);
   box-shadow: 0 2px 12px rgba(79, 70, 229, 0.04);
@@ -621,17 +614,17 @@ h4 {
 }
 .adm-badge--green {
   background: rgba(16, 185, 129, 0.1);
-  color: #065f46;
+  color: var(--success);
   border: 1px solid rgba(16, 185, 129, 0.22);
 }
 .adm-badge--amber {
   background: rgba(245, 158, 11, 0.1);
-  color: #92400e;
+  color: var(--warning);
   border: 1px solid rgba(245, 158, 11, 0.22);
 }
 .adm-badge--red {
   background: rgba(239, 68, 68, 0.08);
-  color: #991b1b;
+  color:  var(--danger);
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 .adm-badge--indigo {
@@ -771,7 +764,7 @@ h4 {
 .adm-btn--success {
   background: rgba(16, 185, 129, 0.08);
   border: 1.5px solid rgba(16, 185, 129, 0.22);
-  color: #065f46;
+  color: var(--success);
 }
 .adm-btn--sm {
   padding: 0.3rem 0.75rem !important;
@@ -800,7 +793,7 @@ h4 {
   font-family: "DM Sans", sans-serif;
   font-size: 0.84rem;
   color: var(--text);
-  background: #fff;
+  background: var(--surface);
   outline: none;
   transition:
     border-color 0.2s,
@@ -817,7 +810,7 @@ h4 {
   font-family: "DM Sans", sans-serif;
   font-size: 0.84rem;
   color: var(--text);
-  background: #fff;
+  background: var(--surface);
   outline: none;
   cursor: pointer;
   transition: border-color 0.2s;

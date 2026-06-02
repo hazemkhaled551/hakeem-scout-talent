@@ -1,14 +1,3 @@
-/* ═══════════════════════════════════════════════════════════
-   Hakeem — Landing Page Styles
-   Brand tokens live in :root — edit here to change the whole site
-   ═══════════════════════════════════════════════════════════ */
-
-/* @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"); */
-
-
-
-
-
 /* ── Keyframe Animations ──────────────────────────────────── */
 @keyframes fadeUp {
   from {
@@ -161,10 +150,13 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   transition: box-shadow 0.3s;
+}
+html.dark .hk-header {
+  background: rgba(2, 6, 23, 0.8);
 }
 
 .hk-header.scrolled {
@@ -190,7 +182,7 @@
 .hk-nav-link {
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--muted);
+  color: var(--text);
   text-decoration: none;
   transition: color 0.2s;
   position: relative;
@@ -286,7 +278,7 @@
 /* ── Hero ─────────────────────────────────────────────────── */
 .hk-hero {
   min-height: 88vh;
-  background: linear-gradient(160deg, #fff 45%, var(--surface) 100%);
+  background: linear-gradient(160deg, var(--surface) 45%, var(--surface) 100%);
   display: flex;
   align-items: center;
   padding: 5rem 0 4rem;
@@ -316,7 +308,7 @@
 
 /* ── Hero Candidate Card ──────────────────────────────────── */
 .hk-hero-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(79, 70, 229, 0.12);
   padding: 1.8rem;
@@ -378,20 +370,20 @@
 
 .hk-stat-label {
   font-size: 0.82rem;
-  color: #94a3b8;
+  color: var(--muted);
   margin-top: 0.2rem;
 }
 
 /* ── How It Works ─────────────────────────────────────────── */
 .hk-how {
   padding: 6rem 0;
-  background: #fff;
+  background: var(--surface);
 }
 
 .hk-step-card {
   text-align: center;
   padding: 2rem 1.5rem;
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 16px;
   border: 1px solid var(--border);
   transition:
@@ -433,7 +425,7 @@
 }
 
 .hk-feature-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 20px;
   padding: 2rem;
   border: 1px solid var(--border);
@@ -462,11 +454,11 @@
 /* ── Testimonials ─────────────────────────────────────────── */
 .hk-testimonials {
   padding: 6rem 0;
-  background: #fff;
+  background: var(--surface);
 }
 
 .hk-testi-card {
-  background: var(--surface);
+  background: var(--card-bg);
   border-radius: 20px;
   padding: 2rem;
   border: 1px solid var(--border);
@@ -508,7 +500,7 @@
 }
 
 .hk-price-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 20px;
   padding: 2.2rem;
   border: 1.5px solid var(--border);
@@ -528,7 +520,7 @@
 .hk-price-card.featured {
   border-color: var(--primary);
   box-shadow: 0 8px 40px rgba(79, 70, 229, 0.18);
-  background: linear-gradient(160deg, #fff 60%, rgba(79, 70, 229, 0.04) 100%);
+  background: linear-gradient(160deg, var(--card-bg) 60%, rgba(79, 70, 229, 0.04) 100%);
 }
 
 .hk-popular-badge {

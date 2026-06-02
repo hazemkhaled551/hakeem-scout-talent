@@ -20,6 +20,8 @@ import {
   getFeatures,
   createFeature,
   getPermissions,
+  updateFeature,
+  deleteFeature,
 } from "../../services/AdminDashboard/featurePlanService";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -282,7 +284,9 @@ export default function AdminFeatures() {
   // ── Stats ───────────────────────────────────────────────────────────────────
 
   const totalPermissions = new Set(
-    features?.flatMap((f) => f?.featurePermissions.map((fp) => fp.permission.id)),
+    features?.flatMap((f) =>
+      f?.featurePermissions?.map((fp) => fp.permission.id),
+    ),
   ).size;
 
   //   const featuresWithDesc = features.filter((f) => !!f.description).length;
@@ -375,6 +379,16 @@ export default function AdminFeatures() {
           };
         }),
       );
+      try {
+        const payload: FeaturePayload = {
+          name: form.name,
+          description: form.description,
+          permissionsId: form.permissionsId,
+        };
+        await updateFeature(editId, payload);
+      } catch (error) {
+        console.error("Failed to update feature", error);
+      }
     } else {
       try {
         const payload: FeaturePayload = {
@@ -395,8 +409,13 @@ export default function AdminFeatures() {
     closeModal();
   };
 
-  const deleteFeature = (id: string) => {
-    setFeatures((prev) => prev.filter((f) => f.id !== id));
+  const deleteFeatures = async (id: string) => {
+    try {
+      await deleteFeature(id);
+      setFeatures((prev) => prev.filter((f) => f.id !== id));
+    } catch (error) {
+      console.error("Failed to delete feature", error);
+    }
   };
 
   // ── Format date ─────────────────────────────────────────────────────────────
@@ -451,11 +470,11 @@ export default function AdminFeatures() {
       label: "Permissions",
       render: (r) => {
         const perms = r.featurePermissions;
-        const shown = perms.slice(0, 2);
-        const rest = perms.length - shown.length;
+        const shown = perms?.slice(0, 2);
+        const rest = perms?.length - shown?.length;
         return (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-            {shown.map((fp) => (
+            {shown?.map((fp) => (
               <span
                 key={fp.id}
                 style={{
@@ -466,7 +485,7 @@ export default function AdminFeatures() {
                   borderRadius: 20,
                   fontSize: ".7rem",
                   fontWeight: 600,
-                  background: "rgba(79,70,229,0.07)",
+                  background: "var(--card-bg)",
                   color: "var(--primary)",
                   border: "1px solid rgba(79,70,229,0.15)",
                   fontFamily: "monospace",
@@ -492,7 +511,7 @@ export default function AdminFeatures() {
                 +{rest} more
               </span>
             )}
-            {perms.length === 0 && (
+            {perms?.length === 0 && (
               <span style={{ fontSize: ".74rem", color: "var(--muted)" }}>
                 No permissions
               </span>
@@ -530,7 +549,7 @@ export default function AdminFeatures() {
           </button>
           <button
             className="adm-row-btn adm-row-btn--danger"
-            onClick={() => deleteFeature(r.id)}
+            onClick={() => deleteFeatures(r.id)}
           >
             <Trash2 size={12} />
           </button>

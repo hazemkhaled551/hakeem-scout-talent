@@ -17,11 +17,11 @@ import {
   BarChart3,
   Building2,
   Receipt,
-  Shield,
-  ShieldCheck,
   Feather,
+
 } from "lucide-react";
 import "../styles/Admin.css";
+
 
 /* ════════════════════════════════════════════════════════════
    NAV CONFIG
@@ -35,16 +35,16 @@ const NAV_GROUPS = [
         icon: <LayoutDashboard size={16} />,
         to: "/admin",
       },
-      {
-        label: "Admins",
-        icon: <ShieldCheck size={16} />,
-        to: "/admin/admins",
-      },
-      {
-        label: "Admin Roles",
-        icon: <Shield size={16} />,
-        to: "/admin/roles",
-      },
+      // {
+      //   label: "Admins",
+      //   icon: <ShieldCheck size={16} />,
+      //   to: "/admin/admins",
+      // },
+      // {
+      //   label: "Admin Roles",
+      //   icon: <Shield size={16} />,
+      //   to: "/admin/roles",
+      // },
       {
         label: "Users",
         icon: <Users size={16} />,
@@ -127,6 +127,7 @@ export default function AdminLayout({
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 8);
@@ -256,6 +257,7 @@ export default function AdminLayout({
           >
             <Settings size={15} />
           </button>
+  
           <div
             className="adm-admin-avatar"
             onClick={() => navigate("/admin/settings")}

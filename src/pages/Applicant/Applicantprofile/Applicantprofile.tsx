@@ -155,7 +155,14 @@ export default function ApplicantProfile() {
 
   async function saveBasicInfo() {
     try {
-      await updateBasicInfo(basicInfo);
+      await updateBasicInfo({
+        name: basicInfo.name,
+        job_title: basicInfo.job_title,
+        // email: basicInfo.email,
+        phone: basicInfo.phone,
+        location: basicInfo.location,
+        linkedIn_profile: basicInfo.linkedIn_profile,
+      });
       setIsEditing(false);
     } catch (err) {
       console.log(err);
@@ -297,7 +304,7 @@ export default function ApplicantProfile() {
 
   return (
     <div className="pr-page">
-      {/* ══ HEADER ════════════════════════════════════════════ */}
+   
    
 
       {/* ══ MAIN ══════════════════════════════════════════════ */}

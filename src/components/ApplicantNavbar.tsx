@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import "../styles/navbar.css";
 import { useAuth } from "../contexts/AuthContext";
 
+
 const applicantLinks = [
   { label: "Dashboard", to: "/dashboard" },
   { label: "Jobs", to: "/jobs" },
@@ -16,6 +17,7 @@ export default function ApplicantNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { logout } = useAuth();
+
 
   const handleLogout = (navigate: ReturnType<typeof useNavigate>) => {
     logout();
@@ -55,6 +57,13 @@ export default function ApplicantNavbar() {
 
           {/* Right side */}
           <div className="navbar__right">
+                 {/* <button
+              className="upgrade-btn"
+              onClick={() => navigate("/plans")}
+              aria-label="Upgrade Plan"
+            >
+              Upgrade Plan
+            </button> */}
             <button
               className="navbar__notif-btn"
               onClick={() => navigate("/notification")}

@@ -444,6 +444,7 @@ export default function AuthPage() {
                       Location <em className="ap-req">*</em>
                     </label>
                     <Select
+                    
                       options={locationOptions}
                       isLoading={locationLoading}
                       placeholder="Search location..."

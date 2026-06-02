@@ -12,7 +12,7 @@
   left: 0.9rem;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--muted);
+  color: var(--text);
   pointer-events: none;
 }
 .jl-search-input {
@@ -30,7 +30,7 @@
   padding: 0.28rem 0.85rem;
   font-size: 0.78rem;
   font-weight: 500;
-  color: var(--muted);
+  color: var(--text);
   cursor: pointer;
   transition:
     border-color 0.2s,
@@ -49,7 +49,7 @@
 
 /* ── Job card ─────────────────────────────────────────────── */
 .jl-job-card {
-  background: var(--white);
+  background: var(--surface);
   border-radius: 16px;
   border: 1px solid var(--border);
   padding: 1.5rem 1.6rem;
@@ -150,5 +150,5 @@
 /* ── Results count ────────────────────────────────────────── */
 .jl-count {
   font-size: 0.8rem;
-  color: var(--muted);
+  color: var(--text);
 }

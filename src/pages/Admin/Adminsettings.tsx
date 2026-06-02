@@ -82,6 +82,7 @@ function Input({
           paddingRight: isPass ? "2.5rem" : "1rem",
           border: "1.5px solid var(--border)",
           borderRadius: 10,
+          background: "var(--card-bg)",
           fontFamily: "DM Sans, sans-serif",
           fontSize: ".9rem",
           color: "var(--text)",
@@ -89,7 +90,7 @@ function Input({
           transition: "border-color .2s, box-shadow .2s",
         }}
         onFocus={(e) => {
-          e.target.style.borderColor = "var(--primary)";
+          e.target.style.borderColor = "var(--card-bg )";
           e.target.style.boxShadow = "0 0 0 3px rgba(79,70,229,.09)";
         }}
         onBlur={(e) => {
@@ -140,9 +141,10 @@ function Select({
         borderRadius: 10,
         fontFamily: "DM Sans",
         fontSize: ".9rem",
+        background: "var(--card-bg)",
         color: "var(--text)",
         outline: "none",
-        background: "var(--white)",
+
         cursor: "pointer",
       }}
     >
@@ -207,7 +209,7 @@ function Section({
   return (
     <div
       style={{
-        background: "var(--white)",
+        background: "var(--card-bg)",
         borderRadius: 16,
         border: "1px solid var(--border)",
         overflow: "hidden",
@@ -385,6 +387,8 @@ export default function AdminSettings() {
                       width: "100%",
                       padding: ".62rem 1rem",
                       border: "1.5px solid var(--border)",
+                      background: "var(--card-bg)",
+                      color: "var(--text)",
                       borderRadius: 10,
                       fontFamily: "DM Sans",
                       fontSize: ".9rem",
@@ -790,7 +794,7 @@ export default function AdminSettings() {
         <div className="col-12 col-xl-4">
           <div
             style={{
-              background: "var(--white)",
+              background: "var(--card-bg)",
               borderRadius: 16,
               border: "1px solid var(--border)",
               padding: "1.4rem",

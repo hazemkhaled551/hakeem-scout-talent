@@ -34,7 +34,6 @@ import {
   responseToOffer,
 } from "../../../services/candidateService";
 
-
 /* ════════════════════════════════════════════════════════════
    TYPES — mirror the API response
 ════════════════════════════════════════════════════════════ */
@@ -295,10 +294,10 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
 
   const scoreGrad =
     score >= 70
-      ? "linear-gradient(90deg,var(--success),#059669)"
+      ? "linear-gradient(90deg,var(--success))"
       : score >= 45
-        ? "linear-gradient(90deg,var(--warning),#d97706)"
-        : "linear-gradient(90deg,var(--danger),#dc2626)";
+        ? "linear-gradient(90deg,var(--warning))"
+        : "linear-gradient(90deg,var(--danger))";
 
   const rec = r.recommendation ?? "";
   const isPositive =
@@ -316,7 +315,7 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
     : isNegative
       ? "rgba(239,68,68,.22)"
       : "rgba(245,158,11,.22)";
-  const recColor = isPositive ? "#065f46" : isNegative ? "#991b1b" : "#92400e";
+  const recColor = isPositive ? "var(--success)" : isNegative ? "var(--danger)" : "var(--warning)";
 
   return (
     <div
@@ -534,7 +533,7 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
                     style={{
                       background: "rgba(16,185,129,.08)",
                       border: "1px solid rgba(16,185,129,.2)",
-                      color: "#065f46",
+                      color: "var(--success)",
                       borderRadius: 8,
                       padding: ".18rem .62rem",
                       fontSize: ".74rem",
@@ -572,7 +571,7 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
                     style={{
                       background: "rgba(239,68,68,.07)",
                       border: "1px solid rgba(239,68,68,.18)",
-                      color: "#991b1b",
+                      color: "var(--danger)",
                       borderRadius: 8,
                       padding: ".18rem .62rem",
                       fontSize: ".74rem",
@@ -788,9 +787,6 @@ export default function ApplicationStatus() {
   /* ── Render ─────────────────────────────────────────────── */
   return (
     <div className="as-page">
-      {/* HEADER */}
-
-    
       <main className="as-main">
         {/* ── HERO ──────────────────────────────────────── */}
         <div className="as-hero mb-4 au">

@@ -43,7 +43,7 @@ export const PublicRoutes = () => (
 
     <Route path="/profile/applicant/:slug" element={<PublicProfile />} />
     <Route path="/profile/company/:slug" element={<PublicProfile />} />
-    <Route path="/company/plans" element={<Plans />} />
+    <Route path="/plans" element={<Plans />} />
     <Route path="/company/payment" element={<Payment />} />
   </>
 );

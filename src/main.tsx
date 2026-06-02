@@ -5,10 +5,13 @@ import App from "./App.tsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AuthProvider } from "./contexts/AuthProvider.tsx";
 
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+  
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+   
   </StrictMode>,
 );
