@@ -22,6 +22,7 @@ export type AuthContextType = {
   handleGoogleCallback: (token: string, user: User) => void;
   selectRole: (id: string, role: string) => Promise<any>;
   requestRestoreEmail: (email: string) => Promise<any>;
+  restoreEmail: (token: string) => Promise<any>;
 
   logout: () => Promise<void>;
   refreshToken: () => Promise<void>;

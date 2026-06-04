@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     setToken(data.accessToken);
     localStorage.setItem("token", data.accessToken);
-  };  
+  };
 
   /* ================= LOGOUT ================= */
 
@@ -97,16 +97,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   /* ================= RESET PASSWORD ================= */
 
   const resetPassword = async (
- 
     resetPasswordToken: string,
     password: string,
   ) => {
-    const res = await api.post(
-      `/auth/reset_password/${resetPasswordToken}`,
-      {
-        newPassword: password,
-      },
-    );
+    const res = await api.post(`/auth/reset_password/${resetPasswordToken}`, {
+      newPassword: password,
+    });
 
     return res.data;
   };
@@ -114,7 +110,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const requestRestoreEmail = async (email: string) => {
     const res = await api.post("/auth/restore/request", { email });
     return res.data;
-  }
+  };
 
   const googleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_BASE_URL}/auth/google`;
@@ -128,11 +124,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("user", JSON.stringify(user));
   };
 
-  const selectRole = async (id: string, payload :any) => {
+  const selectRole = async (id: string, payload: any) => {
     console.log(payload);
-    
-    const { data } = await api.post(`/auth/select-role/${id}`,  payload );
 
+    const { data } = await api.post(`/auth/select-role/${id}`, payload);
+
+    return data;
+  };
+  const restoreEmail = async (token: string) => {
+    const { data } = await api.post(`/auth/restore/${token}`);
     return data;
   };
 
@@ -147,6 +147,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         googleLogin,
         handleGoogleCallback,
         requestRestoreEmail,
+        restoreEmail,
         selectRole,
         refreshToken,
         resendEmailVerify,

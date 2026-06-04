@@ -13,6 +13,7 @@ import {
   Inbox,
 } from "lucide-react";
 import "./auth-pages.css";
+import { useAuth } from "../../../contexts/AuthContext";
 
 /* ════════════════════════════════════════════════════════════
    TYPES
@@ -47,6 +48,8 @@ export default function RestoreAccount() {
   const [message, setMessage] = useState("");
   const [accountEmail, setAccountEmail] = useState("");
 
+  const { restoreEmail } = useAuth();
+
   /* ── Run on mount ───────────────────────────────────────── */
   useEffect(() => {
     async function restore() {
@@ -66,7 +69,7 @@ export default function RestoreAccount() {
         }
 
         // 🔥 Replace with your real API call:
-        // const { data } = await restoreAccount({ token });
+        await restoreEmail(token);
         // setAccountEmail(data.email);
 
         // Demo
