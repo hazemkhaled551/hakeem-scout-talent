@@ -381,7 +381,7 @@ export default function ApplicantInterviews() {
                   </span>
                   <span className="ai-next-meta-item">
                     <Clock size={13} />
-                    {fmtTime(nextIv.scheduledAt)}
+                    {nextIv.scheduledAt}
                   </span>
                   {nextIv.meetingLink && (
                     <span className="ai-next-meta-item">

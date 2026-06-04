@@ -233,7 +233,7 @@ export default function JobSuggestions() {
                 <div
                   key={job.id}
                   className={`jl-job-card js-job-card au d${Math.min(i + 2, 6)}`}
-                  onClick={() => navigate(`/jobs/${job.id}`)}
+                  onClick={() => navigate(`/jobs/${job.job.id}`)}
                 >
                   {/* AI Pick ribbon */}
                   <div className="js-ribbon">

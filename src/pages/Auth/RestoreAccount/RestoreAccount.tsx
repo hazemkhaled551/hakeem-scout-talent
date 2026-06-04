@@ -50,7 +50,7 @@ export default function RestoreAccount() {
   /* ── Run on mount ───────────────────────────────────────── */
   useEffect(() => {
     async function restore() {
-      if (token) {
+      if (!token) {
         setStatus("error");
         setMessage(
           "No restore token found. Please use the link sent to your email, or request a new restoration email.",

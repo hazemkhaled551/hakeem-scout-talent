@@ -34,7 +34,6 @@ import {
   getCandidateAnalysis,
 } from "../../../services/candidateService";
 
-
 /* ════════════════════════════════════════════════════════════
    TYPES
 ════════════════════════════════════════════════════════════ */
@@ -142,8 +141,8 @@ function statusBadgeClass(s: CandidateStatus) {
     New: "ce-badge--review",
     "Under Review": "ce-badge--review",
     Screening: "ce-badge--screening",
-    "Interview": "ce-badge--interview",
-    "Offered": "ce-badge--offer",
+    Interview: "ce-badge--interview",
+    Offered: "ce-badge--offer",
     Hired: "ce-badge--hired",
     Rejected: "ce-badge--rejected",
   };
@@ -385,7 +384,7 @@ export default function CandidateEvaluation() {
         case "interview":
           await interviewCandidate(id, {
             type: ivType,
-            scheduledAt: formatDateWithTimezone(ivDate),
+            scheduledAt: ivDate,
             meetingLink: ivLink || undefined,
             durationMin: ivDuration,
           });
@@ -435,7 +434,6 @@ export default function CandidateEvaluation() {
   if (analysisLoading) {
     return (
       <div className="ce-page">
-      
         <main className="ce-main">
           <div className="ce-loading-state">
             <Loader2 size={32} className="ce-loading-spin" />
@@ -450,7 +448,6 @@ export default function CandidateEvaluation() {
   if (analysisError) {
     return (
       <div className="ce-page">
-       
         <main className="ce-main">
           <div className="ce-error-state">
             <AlertCircle size={32} style={{ color: "var(--danger)" }} />
@@ -464,7 +461,6 @@ export default function CandidateEvaluation() {
   /* ── Main render ─────────────────────────────────────── */
   return (
     <div className="ce-page">
-      
       <main className="ce-main">
         {/* ── Hero ── */}
         <div className="ce-hero mb-4">
