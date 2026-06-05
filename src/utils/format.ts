@@ -15,13 +15,10 @@ export const companyIntiatal = (name: string | undefined) => {
 };
 
 export const fmtTime = (iso: string) => {
-  console.log(iso);
-
   return new Date(iso).toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
-    timeZone: "UTC",
   });
 };
 export const fmtDate = (iso: string) => {
@@ -50,10 +47,10 @@ export const fmtDateLong = (iso: string) => {
   });
 };
 
-export const formatDateWithTimezone = (value :any) => {
+export const formatDateWithTimezone = (value: any) => {
   const date = new Date(value);
 
-  const pad = (num : any) => String(num).padStart(2, "0");
+  const pad = (num: any) => String(num).padStart(2, "0");
 
   const year = date.getFullYear();
   const month = pad(date.getMonth() + 1);

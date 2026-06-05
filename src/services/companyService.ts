@@ -12,7 +12,7 @@ export const getCompanyBasicInfo = () => {
 
 /* Update Basic Info */
 export const updateCompanyBasicInfo = (data: any) => {
-  return api.put("/company/me/basic_info", data);
+  return api.patch("/company/me/basic_info", data);
 };
 
 /* Update About Company */

@@ -396,7 +396,7 @@ export default function ApplicantOffers() {
                           </div>
                           <div className="of-salary">
                             {fmtSalary(offer.offeredSalary)}
-                            <span className="of-salary-unit">/yr</span>
+                            {/* <span className="of-salary-unit">/yr</span> */}
                           </div>
                         </div>
                         <div className="col-6 col-sm-4">
@@ -599,7 +599,7 @@ export default function ApplicantOffers() {
                       color: "var(--success)",
                     }}
                   >
-                    {fmtSalary(acceptTarget.offeredSalary)}/yr
+                    {fmtSalary(acceptTarget.offeredSalary)}
                   </div>
                 </div>
                 <div>

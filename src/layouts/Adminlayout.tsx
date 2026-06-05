@@ -4,8 +4,7 @@ import {
   LayoutDashboard,
   Users,
   Briefcase,
-  // CreditCard,
-  // BarChart2,
+
  
   LogOut,
  
@@ -14,10 +13,13 @@ import {
   Menu,
   X,
   BadgeDollarSign,
-  // BarChart3,
+  BarChart3,
   Building2,
   Receipt,
   Feather,
+  ShieldCheck,
+  Settings,
+  Shield,
 
 } from "lucide-react";
 import "../styles/Admin.css";
@@ -35,16 +37,16 @@ const NAV_GROUPS = [
         icon: <LayoutDashboard size={16} />,
         to: "/admin",
       },
-      // {
-      //   label: "Admins",
-      //   icon: <ShieldCheck size={16} />,
-      //   to: "/admin/admins",
-      // },
-      // {
-      //   label: "Admin Roles",
-      //   icon: <Shield size={16} />,
-      //   to: "/admin/roles",
-      // },
+      {
+        label: "Admins",
+        icon: <ShieldCheck size={16} />,
+        to: "/admin/admins",
+      },
+      {
+        label: "Admin Roles",
+        icon: <Shield size={16} />,
+        to: "/admin/roles",
+      },
       {
         label: "Users",
         icon: <Users size={16} />,
@@ -89,21 +91,21 @@ const NAV_GROUPS = [
     ],
   },
 
-  // {
-  //   label: "System",
-  //   items: [
-  //     {
-  //       label: "Analytics",
-  //       icon: <BarChart3 size={16} />,
-  //       to: "/admin/analytics",
-  //     },
-  //     {
-  //       label: "Settings",
-  //       icon: <Settings size={16} />,
-  //       to: "/admin/settings",
-  //     },
-  //   ],
-  // },
+  {
+    label: "System",
+    items: [
+      {
+        label: "Analytics",
+        icon: <BarChart3 size={16} />,
+        to: "/admin/analytics",
+      },
+      {
+        label: "Settings",
+        icon: <Settings size={16} />,
+        to: "/admin/settings",
+      },
+    ],
+  },
 ];
 
 /* ════════════════════════════════════════════════════════════

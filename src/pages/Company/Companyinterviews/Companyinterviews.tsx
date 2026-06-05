@@ -1,10 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 import {
-  ChevronLeft,
-  ChevronRight,
-  Calendar,
-  List,
+
+  // Calendar,
+  // List,
   Search,
   Video,
   MapPin,
@@ -67,31 +66,31 @@ function badgeClass(s: InterviewStatus) {
 function rowClass(s: InterviewStatus) {
   return `ci-row ci-row--${s.toLowerCase()}`;
 }
-function calEvtClass(s: InterviewStatus) {
-  return `ci-cal-event ci-cal-event--${s.toLowerCase()}`;
-}
+// function calEvtClass(s: InterviewStatus) {
+//   return `ci-cal-event ci-cal-event--${s.toLowerCase()}`;
+// }
 
-const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-function daysInMonth(y: number, m: number) {
-  return new Date(y, m + 1, 0).getDate();
-}
-function firstDay(y: number, m: number) {
-  return new Date(y, m, 1).getDay();
-}
+// const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+// const MONTHS = [
+//   "January",
+//   "February",
+//   "March",
+//   "April",
+//   "May",
+//   "June",
+//   "July",
+//   "August",
+//   "September",
+//   "October",
+//   "November",
+//   "December",
+// ];
+// function daysInMonth(y: number, m: number) {
+//   return new Date(y, m + 1, 0).getDate();
+// }
+// function firstDay(y: number, m: number) {
+//   return new Date(y, m, 1).getDay();
+// }
 const TODAY = new Date();
 
 // function emptyForm() {
@@ -115,7 +114,7 @@ export default function CompanyInterviews() {
   // const navigate = useNavigate();
   // const [scrolled, setScrolled] = useState(false);
   const [interviews, setInterviews] = useState<any[]>([]);
-  const [view, setView] = useState<"list" | "calendar">("list");
+  // const [view, setView] = useState<"list" | "calendar">("list");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<InterviewStatus | "All">(
     "All",
@@ -123,9 +122,7 @@ export default function CompanyInterviews() {
   const [typeFilter, setTypeFilter] = useState<InterviewType | "All">("All");
   const [modalType, setModalType] = useState<ModalType>(null);
   const [selected, setSelected] = useState<any | null>(null);
-  const [calYear, setCalYear] = useState(TODAY.getFullYear());
-  const [calMonth, setCalMonth] = useState(TODAY.getMonth());
-  const [calDay, setCalDay] = useState<number | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -201,18 +198,7 @@ export default function CompanyInterviews() {
   );
 
   /* ── Calendar ───────────────────────────────────────────── */
-  const calMap = useMemo(() => {
-    const m: Record<number, InterviewDTO[]> = {};
-    interviews.forEach((iv) => {
-      const d = new Date(iv.scheduledAt);
-      if (d.getFullYear() === calYear && d.getMonth() === calMonth) {
-        const day = d.getDate();
-        if (!m[day]) m[day] = [];
-        m[day].push(iv);
-      }
-    });
-    return m;
-  }, [interviews, calYear, calMonth]);
+
 
   /* ── Modal helpers ──────────────────────────────────────── */
   function openModal(type: ModalType, iv?: InterviewDTO) {
@@ -477,7 +463,7 @@ export default function CompanyInterviews() {
               )}
             </div>
             <div className="col-6 col-md-2 d-flex justify-content-end">
-              <div className="ci-view-toggle">
+              {/* <div className="ci-view-toggle">
                 <button
                   className={`ci-view-btn ${view === "list" ? "ci-view-btn--active" : ""}`}
                   onClick={() => setView("list")}
@@ -490,13 +476,13 @@ export default function CompanyInterviews() {
                 >
                   <Calendar size={14} /> Cal
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
 
         {/* LIST VIEW */}
-        {view === "list" && (
+        
           <div className="d-flex flex-column gap-3 au d3">
             {filtered.length === 0 ? (
               <div className="ci-empty">
@@ -700,182 +686,10 @@ export default function CompanyInterviews() {
               ))
             )}
           </div>
-        )}
+      
 
-        {/* CALENDAR VIEW */}
-        {view === "calendar" && (
-          <div className="ci-card au d3">
-            <div className="ci-card-header">
-              <div className="d-flex align-items-center gap-3">
-                <button
-                  className="ci-cal-nav-btn"
-                  onClick={() => {
-                    if (calMonth === 0) {
-                      setCalMonth(11);
-                      setCalYear((y) => y - 1);
-                    } else setCalMonth((m) => m - 1);
-                    setCalDay(null);
-                  }}
-                >
-                  <ChevronLeft size={15} />
-                </button>
-                <span className="ci-cal-month">
-                  {MONTHS[calMonth]} {calYear}
-                </span>
-                <button
-                  className="ci-cal-nav-btn"
-                  onClick={() => {
-                    if (calMonth === 11) {
-                      setCalMonth(0);
-                      setCalYear((y) => y + 1);
-                    } else setCalMonth((m) => m + 1);
-                    setCalDay(null);
-                  }}
-                >
-                  <ChevronRight size={15} />
-                </button>
-              </div>
-              <button
-                className="ci-btn ci-btn--outline ci-btn--sm"
-                onClick={() => {
-                  setCalYear(TODAY.getFullYear());
-                  setCalMonth(TODAY.getMonth());
-                  setCalDay(TODAY.getDate());
-                }}
-              >
-                Today
-              </button>
-            </div>
-            <div className="ci-card-body">
-              <div className="ci-cal-grid mb-1">
-                {DAYS_OF_WEEK.map((d) => (
-                  <div key={d} className="ci-cal-dow">
-                    {d}
-                  </div>
-                ))}
-              </div>
-              <div className="ci-cal-grid">
-                {Array.from({ length: firstDay(calYear, calMonth) }, (_, i) => (
-                  <div
-                    key={`e-${i}`}
-                    className="ci-cal-day ci-cal-day--empty"
-                  />
-                ))}
-                {Array.from(
-                  { length: daysInMonth(calYear, calMonth) },
-                  (_, i) => {
-                    const day = i + 1,
-                      isToday =
-                        day === TODAY.getDate() &&
-                        calMonth === TODAY.getMonth() &&
-                        calYear === TODAY.getFullYear(),
-                      isSel = day === calDay,
-                      evts = calMap[day] ?? [];
-                    return (
-                      <div
-                        key={day}
-                        className={`ci-cal-day ${isToday ? "ci-cal-day--today" : ""} ${isSel ? "ci-cal-day--selected" : ""}`}
-                        onClick={() => setCalDay(day === calDay ? null : day)}
-                      >
-                        <div className="ci-cal-day-num">{day}</div>
-                        {evts.slice(0, 2).map((iv) => (
-                          <div
-                            key={iv.id}
-                            className={calEvtClass(iv.status)}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openModal("view", iv);
-                            }}
-                          >
-                            {fmtTime(iv.scheduledAt)}{" "}
-                            {iv.candidateName.split(" ")[0]}
-                          </div>
-                        ))}
-                        {evts.length > 2 && (
-                          <div className="ci-cal-more">
-                            +{evts.length - 2} more
-                          </div>
-                        )}
-                      </div>
-                    );
-                  },
-                )}
-              </div>
-              {calDay && (calMap[calDay] ?? []).length > 0 && (
-                <div className="ci-day-detail mt-4 asd">
-                  <div className="ci-day-detail-title">
-                    <CalendarDays
-                      size={14}
-                      style={{
-                        marginRight: ".4rem",
-                        verticalAlign: "middle",
-                        color: "var(--primary)",
-                      }}
-                    />
-                    {MONTHS[calMonth]} {calDay}, {calYear} ·{" "}
-                    {(calMap[calDay] ?? []).length} interview(s)
-                  </div>
-                  <div className="d-flex flex-column gap-2">
-                    {(calMap[calDay] ?? []).map((iv) => (
-                      <div
-                        key={iv.id}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          background: "var(--surface)",
-                          borderRadius: 10,
-                          padding: ".7rem 1rem",
-                          border: "1px solid var(--border)",
-                        }}
-                      >
-                        <div className="d-flex align-items-center gap-2">
-                          <div
-                            className="ci-avatar"
-                            style={{ width: 32, height: 32, fontSize: ".7rem" }}
-                          >
-                            {iv.candidateInitials}
-                          </div>
-                          <div>
-                            <div
-                              style={{
-                                fontFamily: "Syne",
-                                fontWeight: 700,
-                                fontSize: ".85rem",
-                              }}
-                            >
-                              {iv.candidateName}
-                            </div>
-                            <div
-                              style={{
-                                fontSize: ".74rem",
-                                color: "var(--muted)",
-                              }}
-                            >
-                              {fmtTime(iv.scheduledAt)} · {iv.interviewType}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-center gap-2">
-                          <span className={`ci-badge ${badgeClass(iv.status)}`}>
-                            <span className="ci-badge-dot" />
-                            {iv.status}
-                          </span>
-                          <button
-                            className="ci-row-btn ci-row-btn--outline"
-                            onClick={() => openModal("view", iv)}
-                          >
-                            <Eye size={11} />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+       
+      
       </main>
 
       {/* ═══════════ MODALS ═══════════ */}

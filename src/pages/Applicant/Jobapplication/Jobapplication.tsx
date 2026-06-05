@@ -52,7 +52,7 @@ export default function JobApplication() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [coverLetter, setCoverLetter] = useState(
-    "I am excited to apply for the Senior Software Engineer position at TechCorp. With over 7 years of experience in full-stack development, I believe I am a strong match for this role…",
+    "",
   );
 
   useEffect(() => {
@@ -106,7 +106,7 @@ export default function JobApplication() {
 
       await applyJob(jobId, cvId, coverLetter);
 
-      navigate("/jobs");
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
     } finally {

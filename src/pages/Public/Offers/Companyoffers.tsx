@@ -346,7 +346,7 @@ export default function CompanyOffers() {
                       <div className="of-detail-label">Offered Salary</div>
                       <div className="of-salary" style={{ fontSize: "1.5rem" }}>
                         {fmtSalary(offer.offeredSalary)}
-                        <span className="of-salary-unit">/yr</span>
+                        {/* <span className="of-salary-unit">/yr</span> */}
                       </div>
                     </div>
                     <div className="col-6 col-sm-4">
