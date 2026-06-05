@@ -282,8 +282,8 @@ function timelineProgress(pipeline: ReturnType<typeof getPipeline>) {
 ════════════════════════════════════════════════════════════ */
 
 function AiAnalysisCard({ result }: { result: AiResult }) {
-  const r = result.analysis_report;
-  const score = r.match_score;
+  const r = result?.analysis_report;
+  const score = r?.match_score;
 
   const scoreColor =
     score >= 70
@@ -299,7 +299,7 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
         ? "linear-gradient(90deg,var(--warning))"
         : "linear-gradient(90deg,var(--danger))";
 
-  const rec = r.recommendation ?? "";
+  const rec = r?.recommendation ?? "";
   const isPositive =
     rec.toLowerCase().includes("proceed") ||
     rec.toLowerCase().includes("accept");
@@ -315,7 +315,13 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
     : isNegative
       ? "rgba(239,68,68,.22)"
       : "rgba(245,158,11,.22)";
-  const recColor = isPositive ? "var(--success)" : isNegative ? "var(--danger)" : "var(--warning)";
+  const recColor = isPositive
+    ? "var(--success)"
+    : isNegative
+      ? "var(--danger)"
+      : "var(--warning)";
+  if (!r) return null;
+  if (score === 0) return null;
 
   return (
     <div
@@ -473,33 +479,33 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
               <strong
                 style={{
                   color:
-                    r.job_relevance.title_match === "High"
+                    r?.job_relevance.title_match === "High"
                       ? "var(--success)"
                       : "var(--warning)",
                 }}
               >
-                {r.job_relevance.title_match}
+                {r?.job_relevance.title_match}
               </strong>
             </div>
             <div className="col-12 col-sm-4">
               <span style={{ color: "var(--muted)" }}>Experience: </span>
               <strong
                 style={{
-                  color: r.job_relevance.required_experience_met
+                  color: r?.job_relevance.required_experience_met
                     ? "var(--success)"
                     : "var(--danger)",
                 }}
               >
-                {r.job_relevance.required_experience_met
+                {r?.job_relevance.required_experience_met
                   ? "✓ Met"
                   : "✗ Not met"}
               </strong>
             </div>
-            {r.job_relevance.primary_framework_match && (
+            {r?.job_relevance.primary_framework_match && (
               <div className="col-12 col-sm-4">
                 <span style={{ color: "var(--muted)" }}>Framework: </span>
                 <strong style={{ color: "var(--text)" }}>
-                  {r.job_relevance.primary_framework_match}
+                  {r?.job_relevance.primary_framework_match}
                 </strong>
               </div>
             )}
@@ -508,7 +514,7 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
 
         {/* ── Skills ── */}
         <div className="row g-2">
-          {r.skill_assessment.matched_skills.length > 0 && (
+          {r?.skill_assessment.matched_skills.length > 0 && (
             <div className="col-12 col-sm-6">
               <div
                 style={{
@@ -524,10 +530,10 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
                 }}
               >
                 <CheckCircle size={11} /> Matched (
-                {r.skill_assessment.matched_skills.length})
+                {r?.skill_assessment?.matched_skills?.length})
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: ".3rem" }}>
-                {r.skill_assessment.matched_skills.map((s) => (
+                {r?.skill_assessment?.matched_skills?.map((s) => (
                   <span
                     key={s}
                     style={{
@@ -546,7 +552,7 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
               </div>
             </div>
           )}
-          {r.skill_assessment.missing_skills.length > 0 && (
+          {r?.skill_assessment?.missing_skills?.length > 0 && (
             <div className="col-12 col-sm-6">
               <div
                 style={{
@@ -562,10 +568,10 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
                 }}
               >
                 <XCircle size={11} /> Missing (
-                {r.skill_assessment.missing_skills.length})
+                {r?.skill_assessment?.missing_skills?.length})
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: ".3rem" }}>
-                {r.skill_assessment.missing_skills.map((s) => (
+                {r?.skill_assessment?.missing_skills?.map((s) => (
                   <span
                     key={s}
                     style={{
@@ -584,7 +590,7 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
               </div>
             </div>
           )}
-          {r.skill_assessment.soft_skills.length > 0 && (
+          {r?.skill_assessment?.soft_skills?.length > 0 && (
             <div className="col-12">
               <div
                 style={{
@@ -599,7 +605,7 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
                 Soft Skills
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: ".3rem" }}>
-                {r.skill_assessment.soft_skills.map((s) => (
+                {r?.skill_assessment?.soft_skills?.map((s) => (
                   <span
                     key={s}
                     style={{
@@ -647,30 +653,30 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
           <div className="row " style={{ fontSize: ".82rem" }}>
             <div className="col-12 col-sm-4">
               <span style={{ color: "var(--muted)" }}>Years: </span>
-              <strong>{r.experience_evaluation.years_of_experience}</strong>
+              <strong>{r?.experience_evaluation?.years_of_experience}</strong>
             </div>
             <div className="col-12 col-sm-4">
               <span style={{ color: "var(--muted)" }}>Seniorty: </span>
-              <strong>{r.experience_evaluation.industry_alignment}</strong>
+              <strong>{r?.experience_evaluation?.industry_alignment}</strong>
             </div>
             <div className="col-12 col-sm-4">
               <span style={{ color: "var(--muted)" }}>Proficiency: </span>
               <strong
                 style={{
                   color:
-                    r.experience_evaluation.technical_proficiency === "Strong"
+                    r?.experience_evaluation?.technical_proficiency === "Strong"
                       ? "var(--success)"
                       : "var(--text)",
                 }}
               >
-                {r.experience_evaluation.technical_proficiency}
+                {r?.experience_evaluation?.technical_proficiency}
               </strong>
             </div>
           </div>
         </div>
 
         {/* ── Summary ── */}
-        {r.summary && (
+        {r?.summary && (
           <div
             style={{
               background: "rgba(79,70,229,.04)",
@@ -701,7 +707,7 @@ function AiAnalysisCard({ result }: { result: AiResult }) {
                 lineHeight: 1.75,
               }}
             >
-              {r.summary}
+              {r?.summary}
             </p>
           </div>
         )}

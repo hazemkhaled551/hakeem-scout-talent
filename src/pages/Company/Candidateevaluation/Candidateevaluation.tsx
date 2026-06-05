@@ -893,14 +893,7 @@ export default function CandidateEvaluation() {
                   </button>
                 )}
                 <hr className="ce-action-divider" />
-                {status === "Interview" && (
-                  <button
-                    className="ce-action-btn ce-action-btn--success"
-                    onClick={() => setActionType("offer")}
-                  >
-                    <Gift size={15} /> Send Offer
-                  </button>
-                )}
+               
                 {status === "Offered" && (
                   <button
                     className="ce-action-btn ce-action-btn--hired"
